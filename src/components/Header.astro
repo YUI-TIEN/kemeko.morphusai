@@ -1,0 +1,167 @@
+---
+// Header component
+---
+
+<nav>
+    <div class="nav-container">
+        <a href="#hero" class="logo">
+            <img src="/images/KEMEKO-white.svg" alt="KEMEKO" class="logo-img">
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">關於</a></li>
+            <li><a href="#vtuber">AI Vtuber</a></li>
+            <li><a href="#art">設計美學</a></li>
+            <li><a href="#features">功能</a></li>
+            <li><a href="#pricing">預購</a></li>
+            <li><a href="#contact">聯繫</a></li>
+            <li><button class="language-toggle">中文</button></li>
+        </ul>
+    </div>
+</nav>
+
+
+<script>
+    // 開發環境日誌工具
+    const isDev = import.meta.env?.DEV || false;
+    const logger = {
+        log: (...args) => isDev && console.log(...args),
+        warn: (...args) => isDev && console.warn(...args),
+        error: (...args) => console.error(...args)
+    };
+    
+    // 等待 Locomotive Scroll 初始化後設定導航功能
+    document.addEventListener('DOMContentLoaded', function() {
+        logger.log('Header DOM Content Loaded');
+        
+        // 等待更久一點確保 Locomotive Scroll 完全初始化
+        const initNavigation = () => {
+            logger.log('Checking for Locomotive Scroll...', window.scroll);
+            
+            if (window.scroll) {
+                logger.log('Setting up navigation with Locomotive Scroll');
+                
+                // 導航欄顯示/隱藏控制 - 使用 Locomotive Scroll 事件
+                let lastScrollY = 0;
+                let scrollThreshold = 100;
+                
+                function updateNav(scrollY) {
+                    // 防禦性程式設計：檢查必要元素是否存在
+                    const nav = document.querySelector('nav');
+                    if (!nav) {
+                        logger.warn('Navigation element not found');
+                        return;
+                    }
+                    
+                    // 驗證滾動值的有效性
+                    if (typeof scrollY !== 'number' || isNaN(scrollY) || scrollY < 0) {
+                        logger.warn('Invalid scroll value:', scrollY);
+                        return;
+                    }
+                    
+                    // 獲取Hero section的高度
+                    const heroSection = document.querySelector('#hero');
+                    const heroHeight = heroSection ? heroSection.offsetHeight : window.innerHeight;
+                    
+                    // 新的導航邏輯：Hero區域隱藏，只有往上滑才顯示
+                    if (scrollY < heroHeight * 0.9) {
+                        // 在Hero區域內，完全隱藏導航
+                        nav.classList.remove('nav-visible', 'nav-at-top', 'nav-scrolling');
+                    } else {
+                        // 離開Hero區域後，只根據滾動方向決定顯示/隱藏
+                        const isScrollingUp = scrollY < lastScrollY;
+                        const isScrollingDown = scrollY > lastScrollY;
+                        const scrollDiff = Math.abs(scrollY - lastScrollY);
+                        
+                        if (isScrollingUp && scrollDiff > 3) {
+                            // 只有向上滾動時才顯示導航
+                            nav.classList.add('nav-visible', 'nav-scrolling');
+                            nav.classList.remove('nav-at-top');
+                        } else if (isScrollingDown && scrollDiff > 3) {
+                            // 向下滾動時隱藏導航
+                            nav.classList.remove('nav-visible', 'nav-at-top', 'nav-scrolling');
+                        }
+                        
+                        // 移除自動顯示邏輯 - 離開Hero後不會自動顯示，只有往上滑才顯示
+                    }
+                    
+                    lastScrollY = scrollY;
+                }
+                
+                // 統一滾動管理器 - 避免重複事件監聽
+                class ScrollManager {
+                    constructor(callback) {
+                        this.callback = callback;
+                        this.isInitialized = false;
+                        this.bindEvents();
+                    }
+                    
+                    bindEvents() {
+                        // 優先使用Locomotive Scroll，否則回退到原生滾動
+                        if (window.scroll && !this.isInitialized) {
+                            window.scroll.on('scroll', (args) => {
+                                this.callback(args.scroll.y);
+                            });
+                            this.isInitialized = true;
+                        } else if (!this.isInitialized) {
+                            // 原生滾動事件作為備用
+                            window.addEventListener('scroll', () => {
+                                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                                this.callback(scrollY);
+                            }, { passive: true });
+                            this.isInitialized = true;
+                        }
+                    }
+                }
+                
+                // 初始化滾動管理器
+                const scrollManager = new ScrollManager(updateNav);
+                
+                // 初始化導航狀態 - 確保在Hero時隱藏
+                setTimeout(() => {
+                    const initialScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                    updateNav(initialScrollY);
+                    
+                    // 確保頁面載入時導航是隱藏的（在Hero區域）
+                    const nav = document.querySelector('nav');
+                    if (nav && initialScrollY === 0) {
+                        nav.classList.remove('nav-visible', 'nav-at-top', 'nav-scrolling');
+                    }
+                }, 100);
+                
+                // 語言切換按鈕事件（防禦性程式設計）
+                const langToggle = document.querySelector('.language-toggle');
+                if (langToggle && langToggle instanceof HTMLElement) {
+                    langToggle.addEventListener('click', function(event) {
+                        // 防止意外的事件冒泡
+                        event.preventDefault();
+                        
+                        const currentLang = this.textContent?.trim();
+                        if (!currentLang) {
+                            logger.warn('Language toggle text content is empty');
+                            return;
+                        }
+                        
+                        // 安全的文字切換
+                        try {
+                            if (currentLang === '中文') {
+                                this.textContent = 'EN';
+                            } else {
+                                this.textContent = '中文';
+                            }
+                        } catch (error) {
+                            logger.error('Error updating language toggle:', error);
+                        }
+                    });
+                } else {
+                    logger.warn('Language toggle button not found or not a valid HTML element');
+                }
+            } else {
+                logger.log('Locomotive Scroll not ready, retrying...');
+                setTimeout(initNavigation, 100);
+            }
+        };
+        
+        // 等待 500ms 確保 Locomotive Scroll 完全初始化
+        setTimeout(initNavigation, 500);
+    });
+</script>
