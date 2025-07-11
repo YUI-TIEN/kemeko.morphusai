@@ -37,67 +37,125 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </section>
 
         <!-- 為何她被創造？ -->
-        <section class="section">
-            <div class="content-section fade-in">
-                <h2 class="section-title">為何她被創造？</h2>
-                <h3 class="section-subtitle">在人與科技之間，種下一朵花</h3>
-                
-                <div class="section-text">
-                    <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
-                </div>
-                
-                <div class="features-list">
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>傾聽你的話語</span>
+        <section class="section why-section">
+            <div class="why-layout fade-in">
+                    <div class="why-content">
+                        <h2 class="section-title">為何她被創造？</h2>
+                        <h3 class="section-subtitle">在人與科技之間，種下一朵花</h3>
+                        
+                        <div class="section-text">
+                            <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
+                        </div>
+                        
+                        <div class="features-list">
+                            <div class="feature-item">
+                                <span class="feature-bullet">•</span>
+                                <span>傾聽你的話語</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-bullet">•</span>
+                                <span>感受你的情緒</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-bullet">•</span>
+                                <span>陪伴你的角色，活在你身邊</span>
+                            </div>
+                        </div>
+                        
+                        <div class="section-text">
+                            <p>她不是冷冰冰的科技產品，她是一個能理解你的 AI 存在。</p>
+                        </div>
                     </div>
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>感受你的情緒</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>陪伴你的角色，活在你身邊</span>
+                    <div class="why-decoration">
+                        <div class="floating-elements">
+                            <div class="floating-circle"></div>
+                            <div class="floating-circle"></div>
+                            <div class="floating-circle"></div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="section-text">
-                    <p>她不是冷冰冰的科技產品，她是一個能理解你的 AI 存在。</p>
-                </div>
-            </div>
         </section>
 
         <!-- AI Vtuber 的實體舞台 -->
-        <section class="section" id="vtuber">
-            <div class="content-section fade-in">
-                <h2 class="section-title">AI Vtuber 的實體舞台</h2>
-                <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
+        <section class="section vtuber-section" id="vtuber">
+            <div class="vtuber-grid fade-in">
+                    <div class="vtuber-text">
+                        <h2 class="section-title">AI Vtuber 的實體舞台</h2>
+                        <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
+                        
+                        <div class="section-text">
+                            <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演：</p>
+                        </div>
+                        
+                        <div class="vtuber-features">
+                            <div class="vtuber-feature">
+                                <div class="feature-icon">🎭</div>
+                                <div class="feature-text">
+                                    <h4>整合虛擬人格系統</h4>
+                                    <p>完整的AI人格載體</p>
+                                </div>
+                            </div>
+                            <div class="vtuber-feature">
+                                <div class="feature-icon">✨</div>
+                                <div class="feature-text">
+                                    <h4>表情與互動展示</h4>
+                                    <p>語音、表情、情緒完整呈現</p>
+                                </div>
+                            </div>
+                            <div class="vtuber-feature">
+                                <div class="feature-icon">🎬</div>
+                                <div class="feature-text">
+                                    <h4>多元應用場景</h4>
+                                    <p>主持、展演、拍攝、活動</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="section-text highlight-text">
+                            <p>她能夠真實呈現虛擬角色的靈魂與魅力，是內容創作者與粉絲共享的真實舞台。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="vtuber-visual">
+                        <div class="stage-mockup">
+                            <div class="stage-bg"></div>
+                            <div class="stage-light"></div>
+                            <div class="stage-light"></div>
+                            <div class="stage-light"></div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+    </div>
+    
+    <!-- KEMEKO Demo 影片區 -->
+    <section class="section demo-section">
+        <div class="demo-container">
+            <div class="demo-content fade-in">
+                <h2 class="section-title demo-title">看見 KEMEKO 的真實魅力</h2>
+                <p class="demo-subtitle">觀看完整展示影片，感受未來已來的震撼</p>
                 
-                <div class="section-text">
-                    <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演：</p>
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <iframe
+                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                            title="KEMEKO Demo Video"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
                 </div>
                 
-                <div class="features-list">
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>整合虛擬人格系統</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>可展示角色語音、表情、情緒與互動</span>
-                    </div>
-                    <div class="feature-item">
-                        <span class="feature-bullet">•</span>
-                        <span>支援現場主持、展演、拍攝、活動應用</span>
-                    </div>
-                </div>
-                
-                <div class="section-text">
-                    <p>她能夠真實呈現虛擬角色的靈魂與魅力，是內容創作者與粉絲共享的真實舞台。</p>
+                <div class="demo-description">
+                    <p>這不只是一個展示，而是一場科技與藝術的完美融合。</p>
+                    <p>見證 KEMEKO 如何將虛擬的靈魂帶入現實世界。</p>
                 </div>
             </div>
-        </section>
-
+        </div>
+    </section>
+    
+    <div class="container" data-scroll data-scroll-speed="0.2">
         <!-- 藝術 × 靈魂 × 科技美學 -->
         <section class="section" id="art">
             <div class="content-section fade-in">
@@ -127,48 +185,58 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </div>
             </div>
         </section>
-
-        <!-- 她能做什麼？ -->
-        <section class="section" id="features">
-            <div class="content-section fade-in">
-                <h2 class="section-title">她能做什麼？</h2>
-                
-                <div class="specs-table">
-                    <div class="spec-row">
-                        <div class="spec-name">語音辨識</div>
-                        <div class="spec-description">360度麥克風，遠場交談精準辨識</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">感知互動</div>
-                        <div class="spec-description">可讀取情緒、分析語境</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">自主學習</div>
-                        <div class="spec-description">學習使用者語調與風格</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">表情顯示</div>
-                        <div class="spec-description">4K 多點觸控螢幕，支援動態演出</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">整合系統</div>
-                        <div class="spec-description">TENSEI 舞台系統與虛擬人格協作</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">音效體驗</div>
-                        <div class="spec-description">沉浸式立體聲，音場定位精準</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">電池續航</div>
-                        <div class="spec-description">4 至 5 小時續航，支援快充</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-name">行動能力</div>
-                        <div class="spec-description">智能底座，自主移動與追蹤互動對象</div>
+    </div>
+    
+    <!-- 她能做什麼？ - 突破卡片限制的全寬設計 -->
+    <section class="section features-fullwidth" id="features">
+        <div class="features-background">
+            <h2 class="section-title features-title">她能做什麼？</h2>
+            
+            <div class="features-layout">
+                <div class="features-image">
+                    <img src="/images/tech.png" alt="KEMEKO 機器" class="machine-image">
+                </div>
+                <div class="features-content">
+                    <div class="specs-table">
+                        <div class="spec-row">
+                            <div class="spec-name">語音辨識</div>
+                            <div class="spec-description">360度麥克風，遠場交談精準辨識</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">感知互動</div>
+                            <div class="spec-description">可讀取情緒、分析語境</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">自主學習</div>
+                            <div class="spec-description">學習使用者語調與風格</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">表情顯示</div>
+                            <div class="spec-description">4K 多點觸控螢幕，支援動態演出</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">整合系統</div>
+                            <div class="spec-description">TENSEI 舞台系統與虛擬人格協作</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">音效體驗</div>
+                            <div class="spec-description">沉浸式立體聲，音場定位精準</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">電池續航</div>
+                            <div class="spec-description">4 至 5 小時續航，支援快充</div>
+                        </div>
+                        <div class="spec-row">
+                            <div class="spec-name">行動能力</div>
+                            <div class="spec-description">智能底座，自主移動與追蹤互動對象</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
+    
+    <div class="container" data-scroll data-scroll-speed="0.2">
 
         <!-- 預購資訊 -->
         <section class="section" id="pricing">
@@ -209,20 +277,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
+interface ArrowDiv extends HTMLDivElement {
+    centerX: number;
+    centerY: number;
+}
 // 箭頭背景效果
 document.addEventListener('DOMContentLoaded', function() {
-    const arrowSection = document.getElementById('arrow-section');
-    const arrowBackground = document.getElementById('arrow-background');
+    const arrowSection = document.getElementById('arrow-section')!;
+    const arrowBackground = document.getElementById('arrow-background')!;
+    const finalQuote = document.querySelector('.final-quote') as HTMLElement;
     
-    if (!arrowSection || !arrowBackground) return;
+    if (!arrowSection || !arrowBackground || !finalQuote) return;
     
-    let arrows = [];
+    let arrows: ArrowDiv[] = [];
     let isAnimating = false;
+    let isHoveringQuote = false;
     
     // 創建箭頭網格
     function createArrows() {
         const sectionRect = arrowSection.getBoundingClientRect();
-        const arrowSpacing = 70; // 箭頭間距
+        const arrowSpacing = 70; // 箭頭間距 - 恢復原始密度
         const cols = Math.ceil(sectionRect.width / arrowSpacing);
         const rows = Math.ceil(sectionRect.height / arrowSpacing);
         
@@ -231,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         for (let row = 0; row < rows; row++) {
             for (let col = 0; col < cols; col++) {
-                const arrow = document.createElement('div');
+                const arrow = document.createElement('div') as ArrowDiv;
                 arrow.className = 'arrow';
                 const x = col * arrowSpacing + arrowSpacing / 2;
                 const y = row * arrowSpacing + arrowSpacing / 2;
@@ -239,8 +313,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 arrow.style.top = y + 'px';
                 
                 // 存儲箭頭位置以提高性能
-                arrow.centerX = x + 12; // 箭頭中心X
-                arrow.centerY = y + 12; // 箭頭中心Y
+                arrow.centerX = x + 15; // 箭頭中心X (調整為新的箭頭大小)
+                arrow.centerY = y + 15; // 箭頭中心Y (調整為新的箭頭大小)
                 
                 arrowBackground.appendChild(arrow);
                 arrows.push(arrow);
@@ -248,9 +322,63 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 使用 RAF 優化動畫性能
-    function updateArrows(mouseX, mouseY) {
+    // 昇華效果 - 箭頭指向文字區域
+    function pointToQuote(): void {
         if (isAnimating) return;
+        
+        isAnimating = true;
+        requestAnimationFrame(() => {
+            const sectionRect = arrowSection.getBoundingClientRect();
+            const quoteRect = finalQuote.getBoundingClientRect();
+            
+            // 計算文字區域的中心點
+            const quoteCenterX = quoteRect.left + quoteRect.width / 2;
+            const quoteCenterY = quoteRect.top + quoteRect.height / 2;
+            
+            const sectionX = sectionRect.left;
+            const sectionY = sectionRect.top;
+            
+            arrows.forEach(arrow => {
+                // 計算箭頭指向文字中心的角度
+                const deltaX = quoteCenterX - (sectionX + arrow.centerX);
+                const deltaY = quoteCenterY - (sectionY + arrow.centerY);
+                const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                
+                // 計算箭頭距離文字中心的距離
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                const centerRadius = 350; // 圓形範圍的半徑
+                const fadeWidth = 100; // 漸層寬度
+                
+                // 創建圓形漸層效果
+                let opacity = 0.15;
+                let scale = 1;
+                
+                if (distance <= centerRadius) {
+                    // 在圓形範圍內，根據距離計算透明度
+                    const fadeStart = centerRadius - fadeWidth;
+                    if (distance >= fadeStart) {
+                        // 在漸層區域
+                        const fadeProgress = (centerRadius - distance) / fadeWidth;
+                        opacity = 0.15 + (0.65 * fadeProgress); // 0.15 到 0.8 的漸層
+                        scale = 1 + (0.2 * fadeProgress); // 1 到 1.2 的縮放
+                    } else {
+                        // 在核心區域
+                        opacity = 0.8;
+                        scale = 1.2;
+                    }
+                }
+                
+                arrow.style.transform = `rotate(${angle}deg) scale(${scale})`;
+                arrow.style.opacity = opacity.toString();
+            });
+            
+            isAnimating = false;
+        });
+    }
+    
+    // 使用 RAF 優化動畫性能
+    function updateArrows(mouseX: number, mouseY: number): void {
+        if (isAnimating || isHoveringQuote) return; // 昇華狀態時不執行鼠標跟隨
         
         isAnimating = true;
         requestAnimationFrame(() => {
@@ -274,8 +402,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 let opacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
                 opacity = Math.max(minOpacity, Math.min(maxOpacity, opacity));
                 
-                arrow.style.transform = `rotate(${angle}deg)`;
-                arrow.style.opacity = opacity;
+                arrow.style.transform = `rotate(${angle}deg) scale(1)`;
+                arrow.style.opacity = opacity.toString();
             });
             
             isAnimating = false;
@@ -283,20 +411,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 鼠標移動事件
-    function handleMouseMove(event) {
+    function handleMouseMove(event: MouseEvent): void {
         updateArrows(event.clientX, event.clientY);
     }
     
     // 鼠標離開時重置箭頭
     function handleMouseLeave() {
         arrows.forEach(arrow => {
-            arrow.style.transform = 'rotate(0deg)';
+            arrow.style.transform = 'rotate(0deg) scale(1)';
             arrow.style.opacity = '0.2'; // 重置為統一的低透明度
         });
     }
     
     // 初始化
     setTimeout(createArrows, 100); // 等待 DOM 完全載入
+    
+    // 文字區域 hover 事件 - 昇華效果
+    finalQuote.addEventListener('mouseenter', function() {
+        isHoveringQuote = true;
+        pointToQuote();
+    });
+    
+    finalQuote.addEventListener('mouseleave', function() {
+        isHoveringQuote = false;
+        handleMouseLeave();
+    });
     
     // 添加事件監聽器
     arrowSection.addEventListener('mousemove', handleMouseMove);

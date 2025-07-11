@@ -336,6 +336,7 @@ nav.nav-scrolling {
 .section {
     padding: 5rem 0;
     position: relative;
+    margin-bottom: 3rem;
 }
 
 /* 英雄區 */
@@ -932,6 +933,380 @@ nav.nav-scrolling {
     line-height: 1.6;
 }
 
+/* 為何她被創造區塊 */
+.why-section {
+    background: radial-gradient(circle at center, rgba(194, 175, 255, 0.05) 0%, transparent 70%);
+    border-radius: 30px;
+    margin: 2rem 0;
+    padding: 3rem 0;
+}
+
+.why-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.why-content {
+    position: relative;
+    z-index: 2;
+}
+
+.why-decoration {
+    position: relative;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.floating-elements {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.floating-circle {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(194, 175, 255, 0.3) 0%, rgba(194, 175, 255, 0.1) 70%);
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-circle:nth-child(1) {
+    top: 0;
+    left: 0;
+    animation-delay: 0s;
+}
+
+.floating-circle:nth-child(2) {
+    top: 50px;
+    right: 0;
+    animation-delay: -2s;
+}
+
+.floating-circle:nth-child(3) {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: -4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* VTuber 區塊 */
+.vtuber-section {
+    background: linear-gradient(135deg, rgba(193, 141, 138, 0.05) 0%, rgba(194, 175, 255, 0.05) 100%);
+    border-radius: 30px;
+    margin: 2rem 0;
+    padding: 4rem 2rem;
+    width: calc(100% + 4rem);
+    margin-left: -2rem;
+    margin-right: -2rem;
+}
+
+.vtuber-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.vtuber-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.vtuber-feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.vtuber-feature:hover {
+    background: rgba(194, 175, 255, 0.1);
+    transform: translateX(10px);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(194, 175, 255, 0.1);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.feature-text h4 {
+    color: #C2AFFF;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+}
+
+.feature-text p {
+    color: #A6AAB3;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.highlight-text {
+    background: rgba(194, 175, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 15px;
+    border-left: 4px solid #C2AFFF;
+    margin-top: 2rem;
+}
+
+/* 舞台視覺效果 */
+.vtuber-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+}
+
+.stage-mockup {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    perspective: 1000px;
+}
+
+.stage-bg {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2a2d33 0%, #1a1c20 100%);
+    border-radius: 20px;
+    position: relative;
+    transform: rotateY(-15deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.stage-light {
+    position: absolute;
+    width: 40px;
+    height: 6px;
+    background: linear-gradient(90deg, transparent, #C2AFFF, transparent);
+    animation: spotLight 3s ease-in-out infinite;
+}
+
+.stage-light:nth-child(2) {
+    top: 30px;
+    left: 20px;
+    animation-delay: 0s;
+}
+
+.stage-light:nth-child(3) {
+    top: 50px;
+    right: 30px;
+    animation-delay: -1s;
+}
+
+.stage-light:nth-child(4) {
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: -2s;
+}
+
+@keyframes spotLight {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Demo 影片區 */
+.demo-section {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: linear-gradient(135deg, #0a0b0d 0%, #1a1c20 50%, #0a0b0d 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 0;
+}
+
+.demo-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 20%, rgba(194, 175, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(193, 141, 138, 0.1) 0%, transparent 50%);
+    z-index: 1;
+}
+
+.demo-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center;
+}
+
+.demo-title {
+    font-size: 3.5rem;
+    color: #C2AFFF;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 40px rgba(194, 175, 255, 0.5);
+    background: linear-gradient(135deg, #C2AFFF 0%, #C18D8A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.demo-subtitle {
+    font-size: 1.3rem;
+    color: #A6AAB3;
+    margin-bottom: 3rem;
+    font-style: italic;
+    text-shadow: 0 0 20px rgba(166, 170, 179, 0.3);
+}
+
+.video-container {
+    margin: 3rem 0;
+    position: relative;
+}
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-bottom: 45%; /* 16:9 比例 */
+    height: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(194, 175, 255, 0.2);
+    border: 2px solid rgba(194, 175, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.video-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 35px 70px rgba(0, 0, 0, 0.6),
+        0 0 50px rgba(194, 175, 255, 0.3);
+    border-color: rgba(194, 175, 255, 0.5);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.demo-description {
+    margin-top: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.demo-description p {
+    font-size: 1.1rem;
+    color: #F6F7F8;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.demo-description p:last-child {
+    margin-bottom: 0;
+    font-style: italic;
+    color: #C2AFFF;
+    text-shadow: 0 0 20px rgba(194, 175, 255, 0.3);
+}
+
+/* 功能區塊全寬設計 */
+.features-fullwidth {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: linear-gradient(135deg, #1a1c20 0%, #2a2d33 50%, #1a1c20 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.features-fullwidth::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 50%, rgba(194, 175, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(193, 141, 138, 0.1) 0%, transparent 50%);
+    z-index: 1;
+}
+
+.features-background {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+}
+
+.features-title {
+    text-align: center;
+    font-size: 3rem;
+    color: #C2AFFF;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 30px rgba(194, 175, 255, 0.4);
+}
+
+.features-layout {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+    margin-top: 3rem;
+}
+
+.features-image {
+    flex: 1;
+    max-width: 40%;
+}
+
+.machine-image {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(194, 175, 255, 0.2);
+}
+
+.machine-image:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+}
+
+.features-content {
+    flex: 1;
+    max-width: 60%;
+}
+
 .specs-table {
     margin-top: 2rem;
 }
@@ -940,20 +1315,24 @@ nav.nav-scrolling {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(194, 175, 255, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: rgba(64, 68, 77, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(194, 175, 255, 0.2);
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
 }
 
 .spec-row:hover {
-    background: rgba(194, 175, 255, 0.05);
-    border-radius: 8px;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    background: rgba(194, 175, 255, 0.1);
+    border-color: rgba(194, 175, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .spec-row:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .spec-name {
@@ -1148,11 +1527,12 @@ nav.nav-scrolling {
 
 .arrow {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    transition: transform 0.15s ease-out, opacity 0.2s ease-out;
+    width: 30px;
+    height: 30px;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-out;
     opacity: 0.2;
     will-change: transform, opacity;
+    transform-origin: center;
 }
 
 .arrow::before {
@@ -1160,7 +1540,7 @@ nav.nav-scrolling {
     position: absolute;
     top: 50%;
     left: 50%;
-    font-size: 18px;
+    font-size: 22px;
     color: var(--color-primary);
     transform: translate(-50%, -50%);
     filter: drop-shadow(0 0 4px rgba(194, 175, 255, 0.5));
@@ -1180,7 +1560,6 @@ nav.nav-scrolling {
 .final-quote {
     font-size: 2.2rem;
     color: #C2AFFF;
-    font-style: italic;
     font-weight: 300;
     max-width: 800px;
     z-index: 2;
@@ -1191,6 +1570,16 @@ nav.nav-scrolling {
     border-radius: 20px;
     padding: 2.5rem;
     backdrop-filter: blur(10px);
+    border: 2px solid rgba(194, 175, 255, 0.3);
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+.final-quote:hover {
+    border-color: rgba(194, 175, 255, 0.8);
+    background: linear-gradient(135deg, rgba(32, 34, 38, 0.9), rgba(64, 68, 77, 0.9));
+    box-shadow: 0 0 40px rgba(194, 175, 255, 0.4);
+    transform: scale(1.02);
 }
 
 .final-quote p {
@@ -1251,14 +1640,22 @@ nav.nav-scrolling {
 .social-link {
     display: inline-block;
     padding: 0.5rem;
-    background: rgba(194, 175, 255, 0.1);
-    border-radius: 8px;
     transition: all 0.3s ease;
+    color: #A6AAB3;
 }
 
 .social-link:hover {
-    background: #C2AFFF;
+    color: #C2AFFF;
     transform: translateY(-2px);
+}
+
+.social-link svg {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 0 transparent);
+}
+
+.social-link:hover svg {
+    filter: drop-shadow(0 0 8px rgba(194, 175, 255, 0.6));
 }
 
 .footer-bottom {
@@ -1293,6 +1690,118 @@ nav.nav-scrolling {
     
     .nav-links {
         display: none;
+    }
+    
+    /* 功能區塊響應式設計 */
+    .features-fullwidth {
+        margin-left: -2rem;
+        margin-right: -2rem;
+        width: calc(100vw);
+    }
+    
+    .features-background {
+        padding: 3rem 1rem;
+    }
+    
+    .features-title {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .features-layout {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .features-image,
+    .features-content {
+        max-width: 100%;
+    }
+    
+    .machine-image {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    /* 其他區塊響應式設計 */
+    .why-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .why-decoration {
+        height: 200px;
+    }
+    
+    .floating-elements {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .floating-circle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .vtuber-section {
+        width: calc(100% + 2rem);
+        margin-left: -1rem;
+        margin-right: -1rem;
+        padding: 3rem 1rem;
+    }
+    
+    .vtuber-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .vtuber-feature {
+        padding: 0.8rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .stage-mockup {
+        width: 250px;
+        height: 150px;
+    }
+    
+    /* Demo 影片區響應式 */
+    .demo-section {
+        padding: 3rem 0;
+    }
+    
+    .demo-container {
+        padding: 0 1rem;
+    }
+    
+    .demo-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .demo-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .video-wrapper {
+        padding-bottom: 56.25%; /* 16:9 比例 */
+        border-radius: 15px;
+    }
+    
+    .demo-description {
+        margin-top: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .demo-description p {
+        font-size: 1rem;
     }
     
     /* 語言按鈕響應式調整 */
