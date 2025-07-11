@@ -10,7 +10,7 @@ export default defineConfig({
     host: true
   },
   preview: {
-    allowedHosts: ['kemeko-morphusai-156eb03f8830.herokuapp.com', '.herokuapp.com'],
+    host: true,
   },
   vite: {
     server: {
