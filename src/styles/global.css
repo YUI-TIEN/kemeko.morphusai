@@ -54,6 +54,14 @@
     --radius-md: 15px;
     --radius-lg: 20px;
     --radius-pill: 50px;
+    
+    /* 動畫配置 */
+    --arrow-spacing: 70px;
+    --arrow-center-radius: 350px;
+    --arrow-fade-width: 100px;
+    --arrow-transition-duration: 0.5s;
+    --arrow-min-opacity: 0.15;
+    --arrow-max-opacity: 0.8;
 }
 
 * {
@@ -72,6 +80,10 @@ body {
     color: var(--color-text-primary);
     line-height: 1.6;
     overflow-x: hidden;
+    /* 性能優化 */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Locomotive Scroll 容器樣式 */
@@ -1529,10 +1541,17 @@ nav.nav-scrolling {
     position: absolute;
     width: 30px;
     height: 30px;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease-out;
-    opacity: 0.2;
+    transition: transform var(--arrow-transition-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                opacity var(--arrow-transition-duration) ease-out;
+    opacity: var(--arrow-min-opacity);
     will-change: transform, opacity;
     transform-origin: center;
+    /* 硬體加速 */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+    /* CSS 包含性能優化 */
+    contain: layout style paint;
 }
 
 .arrow::before {
@@ -1664,6 +1683,78 @@ nav.nav-scrolling {
     margin-top: 2rem;
     border-top: 1px solid rgba(194, 175, 255, 0.2);
     color: #A6AAB3;
+}
+
+/* 無障礙功能 - 減少動畫 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .arrow {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .reduced-motion .arrow {
+        opacity: var(--arrow-min-opacity) !important;
+        transform: none !important;
+    }
+    
+    .floating-circle {
+        animation: none !important;
+    }
+    
+    .stage-light {
+        animation: none !important;
+    }
+}
+
+/* 高對比度支援 */
+@media (prefers-contrast: high) {
+    :root {
+        --color-primary: #E6D7FF;
+        --color-secondary: #FFB3B3;
+        --color-text-primary: #FFFFFF;
+        --color-border: rgba(255, 255, 255, 0.8);
+    }
+}
+
+/* 焦點可見性 */
+*:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+*:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* 跳過連結 */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--color-primary);
+    color: var(--color-background);
+    padding: 8px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 10000;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
 }
 
 /* 響應式設計 */
@@ -2008,5 +2099,68 @@ nav.nav-scrolling {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Email Protection Styles */
+.protected-email {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.protected-email:hover {
+    color: var(--color-secondary);
+    text-shadow: 0 0 8px rgba(194, 175, 255, 0.4);
+}
+
+.protected-email:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.footer-email-link {
+    font-size: var(--font-size-base);
+    font-weight: 400;
+}
+
+.form-success {
+    background-color: rgba(194, 175, 255, 0.1);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+    margin-top: 1rem;
+    text-align: center;
+    font-size: var(--font-size-sm);
+}
+
+/* Loading state for email protection */
+.protected-email.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.protected-email.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
