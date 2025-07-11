@@ -1,9 +1,9 @@
-feat: Implement interactive image switching for VTuber section
+feat: Enhance VTuber section layout for full-width options and increased height
 
-This commit adds interactive functionality to the "AI Vtuber 的實體舞台" section, allowing users to switch the displayed image by clicking on different feature options.
+This commit modifies the "AI Vtuber 的實體舞台" section to allow its options to span the full width of the page on smaller screens and increases the overall height of the section.
 
 Key changes:
-- Added `data-image` attributes to `.vtuber-feature` elements in `src/pages/index.astro` to specify the image path for each option.
-- Introduced a new `<img>` tag with `id="vtuber-model-image"` within the `.stage-mockup` to serve as the image display area.
-- Implemented JavaScript logic in `src/pages/index.astro` to handle click events on `.vtuber-feature` elements, update the `src` of `vtuber-model-image`, and apply a fade-in/fade-out transition.
-- Added CSS in `src/styles/global.css` for `.vtuber-feature` (including `cursor: pointer` and `.active` state styling) and `.vtuber-model-image` (for positioning and transition effects).
+- Increased the vertical padding of `.vtuber-section` in `src/styles/global.css` to make the section appear taller.
+- Modified `.vtuber-grid` to use a single-column layout by default, ensuring the feature options take up the full width.
+- Added a media query to `src/styles/global.css` to revert `.vtuber-grid` to a two-column layout on screens wider than 768px, maintaining responsiveness.
+- Adjusted the `margin-top` for `.vtuber-visual` to ensure proper spacing between content and image in both single-column and two-column layouts.

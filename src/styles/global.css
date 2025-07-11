@@ -1395,7 +1395,7 @@ nav.nav-scrolling {
     background: linear-gradient(135deg, rgba(193, 141, 138, 0.05) 0%, rgba(194, 175, 255, 0.05) 100%);
     border-radius: 30px;
     margin: 2rem 0;
-    padding: 4rem 2rem;
+    padding: 8rem 2rem; /* 增加垂直內距 */
     width: calc(100% + 4rem);
     margin-left: -2rem;
     margin-right: -2rem;
@@ -1403,9 +1403,22 @@ nav.nav-scrolling {
 
 .vtuber-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr; /* 改為單欄 */
     gap: 4rem;
     align-items: center;
+}
+
+.vtuber-visual {
+    margin-top: 4rem; /* 在單欄佈局下增加圖片與文字的間距 */
+}
+
+@media (min-width: 769px) {
+    .vtuber-grid {
+        grid-template-columns: 1fr 1fr; /* 在大螢幕上恢復雙欄 */
+    }
+    .vtuber-visual {
+        margin-top: 0;
+    }
 }
 
 .vtuber-features {
