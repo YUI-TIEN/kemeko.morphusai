@@ -9,13 +9,12 @@ export default defineConfig({
     port: process.env.PORT || 4321,
     host: true
   },
+  preview: {
+    allowedHosts: ['kemeko-morphusai-156eb03f8830.herokuapp.com', '.herokuapp.com'],
+  },
   vite: {
     server: {
       host: true
-    },
-    preview: {
-      host: true,
-      allowedHosts: ['kemeko-morphusai-156eb03f8830.herokuapp.com', '.herokuapp.com']
     }
   }
 });
