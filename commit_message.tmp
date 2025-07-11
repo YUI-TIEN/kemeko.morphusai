@@ -1,10 +1,11 @@
-revert: Temporarily disable advanced features and security for debugging
+refactor: Adjust layout for VTuber section headings and revert some styling changes
 
-This commit temporarily disables several advanced features and security configurations to aid in debugging and simplify the deployment process.
+This commit refactors the layout of the VTuber section headings and reverts some previous styling modifications.
 
-Changes include:
-- Disabling performance monitoring, debug mode, Content Security Policy (CSP), email obfuscation, and integrity checks in `src/config/animation.ts`.
-- Removing all security headers, meta tags, performance hints, and the `initializeKemekoSystem` call from `src/layouts/BaseLayout.astro`.
-- Simplifying the Locomotive Scroll initialization script by removing custom logging and the dynamic import of `simpleInit.ts`.
-
-These changes are intended for troubleshooting and will be re-enabled or refined in future updates.
+Key changes:
+- Moved "AI Vtuber 的實體舞台" and "你曾想過，Vtuber 也能走到你面前嗎？" headings to a new `centered-heading` div in `src/pages/index.astro` for better layout control and centering.
+- Added CSS for `.centered-heading` in `src/styles/global.css` to ensure proper text alignment.
+- Reverted previous changes in `src/pages/index.astro` and `src/styles/global.css` related to the `why-section` and `vtuber-section` to their original state, including:
+    - Restoring `floating-elements` in `why-decoration` and removing `rose-petals`.
+    - Re-adding `feature-bullet` to `feature-item` in `why-content`.
+    - Reverting some animation and performance optimization CSS in `global.css`.

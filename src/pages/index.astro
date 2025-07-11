@@ -38,27 +38,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- 為何她被創造？ -->
         <section class="section why-section">
+            <h2 class="section-title">為何她被創造？</h2>
+            <h3 class="section-subtitle">在人與科技之間，種下一朵花</h3>
+            
             <div class="why-layout fade-in">
                     <div class="why-content">
-                        <h2 class="section-title">為何她被創造？</h2>
-                        <h3 class="section-subtitle">在人與科技之間，種下一朵花</h3>
-                        
                         <div class="section-text">
                             <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
                         </div>
                         
                         <div class="features-list">
                             <div class="feature-item">
-                                <span class="feature-bullet">•</span>
-                                <span>傾聽你的話語</span>
+                                <div class="feature-content">
+                                    <div class="feature-icon">👂</div>
+                                    <div class="feature-text">傾聽你的話語</div>
+                                </div>
                             </div>
                             <div class="feature-item">
-                                <span class="feature-bullet">•</span>
-                                <span>感受你的情緒</span>
+                                <div class="feature-content">
+                                    <div class="feature-icon">💝</div>
+                                    <div class="feature-text">感受你的情緒</div>
+                                </div>
                             </div>
                             <div class="feature-item">
-                                <span class="feature-bullet">•</span>
-                                <span>陪伴你的角色，活在你身邊</span>
+                                <div class="feature-content">
+                                    <div class="feature-icon">🌸</div>
+                                    <div class="feature-text">陪伴你的角色，活在你身邊</div>
+                                </div>
                             </div>
                         </div>
                         
@@ -67,10 +73,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                         </div>
                     </div>
                     <div class="why-decoration">
-                        <div class="floating-elements">
-                            <div class="floating-circle"></div>
-                            <div class="floating-circle"></div>
-                            <div class="floating-circle"></div>
+                        <div class="rose-petals">
+                            <div class="rose-petal"></div>
+                            <div class="rose-petal"></div>
+                            <div class="rose-petal"></div>
+                            <div class="rose-petal"></div>
+                            <div class="rose-petal"></div>
+                            <div class="rose-petal"></div>
                         </div>
                     </div>
                 </div>
@@ -78,11 +87,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- AI Vtuber 的實體舞台 -->
         <section class="section vtuber-section" id="vtuber">
+            <div class="centered-heading">
+                <h2 class="section-title">AI Vtuber 的實體舞台</h2>
+                <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
+            </div>
             <div class="vtuber-grid fade-in">
                     <div class="vtuber-text">
-                        <h2 class="section-title">AI Vtuber 的實體舞台</h2>
-                        <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
-                        
                         <div class="section-text">
                             <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演：</p>
                         </div>
@@ -138,7 +148,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <div class="video-container">
                     <div class="video-wrapper">
                         <iframe
-                            src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                            src="https://www.youtube.com/embed/ZOcvIoPLMbg?si=u9U1IyV_ECPhzczO"
                             title="KEMEKO Demo Video"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
