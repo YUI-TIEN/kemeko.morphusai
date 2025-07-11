@@ -2,35 +2,12 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SECURITY_CONFIG } from '../config/animation';
 
 export interface Props {
   title?: string;
 }
 
 const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
-
-// Content Security Policy
-const cspPolicy = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.googleapis.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com",
-  "font-src 'self' https://fonts.gstatic.com",
-  "connect-src 'self'",
-  "img-src 'self' data: https:",
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'"
-].join('; ');
-
-// Set security headers (disabled in development)
-if (SECURITY_CONFIG.enableCSP && import.meta.env.PROD) {
-  Astro.response.headers.set('Content-Security-Policy', cspPolicy);
-}
-Astro.response.headers.set('X-Frame-Options', 'DENY');
-Astro.response.headers.set('X-Content-Type-Options', 'nosniff');
-Astro.response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
 ---
 
 <!DOCTYPE html>
@@ -39,26 +16,12 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    
-    <!-- Security Meta Tags -->
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="format-detection" content="telephone=no">
-    
-    <!-- Performance and Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.css" 
-          integrity="sha256-3KWvdXPOgcQaD5mxJYhZskNvYDhZtKJVWMrGbqgbSZ8=" 
-          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.css">
     
     <!-- Google Fonts - Noto Sans TC 圓體替代方案 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" 
-          rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <Header />
@@ -69,28 +32,18 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
         <Footer />
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js" 
-            integrity="sha256-l0hWBfuSCOmXFTaJVZoUoLEGKrHe6pIFgZjPz8NvhMg=" 
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
     <script>
         // 初始化 Locomotive Scroll - 設為全域變數
         window.scroll = null;
         
-        // 開發環境日誌工具
-        const isDev = import.meta.env.DEV || false;
-        const logger = {
-            log: (...args) => isDev && console.log(...args),
-            warn: (...args) => isDev && console.warn(...args),
-            error: (...args) => console.error(...args) // 錯誤總是顯示
-        };
-        
         document.addEventListener('DOMContentLoaded', function() {
-            logger.log('DOM Content Loaded');
+            console.log('DOM Content Loaded');
             
             // 等待一下確保 DOM 完全準備好
             setTimeout(() => {
                 const container = document.querySelector('[data-scroll-container]');
-                logger.log('Scroll container found:', container);
+                console.log('Scroll container found:', container);
                 
                 if (container) {
                     // 初始化 Locomotive Scroll
@@ -103,22 +56,10 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
                     
                     // 確保初始化完成後再綁定事件
                     if (window.scroll) {
-                        logger.log('Locomotive Scroll initialized successfully');
-                        
-                        // 在 Locomotive Scroll 初始化完成後，初始化基本 KEMEKO 系統
-                        setTimeout(async () => {
-                            try {
-                                // 動態導入簡化的初始化
-                                const { initializeBasicSystem } = await import('/src/utils/simpleInit.js');
-                                await initializeBasicSystem();
-                                console.log('🎉 KEMEKO website ready');
-                            } catch (error) {
-                                console.warn('⚠️ KEMEKO initialization failed (non-critical):', error);
-                            }
-                        }, 200);
+                        console.log('Locomotive Scroll initialized successfully');
                     }
                 } else {
-                    logger.error('Scroll container not found');
+                    console.error('Scroll container not found');
                 }
             }, 100);
 
@@ -159,7 +100,7 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
                 setTimeout(() => {
                     if (window.scroll) {
                         window.scroll.update();
-                        logger.log('Locomotive Scroll updated');
+                        console.log('Locomotive Scroll updated');
                     }
                 }, 200);
             });

@@ -22,8 +22,8 @@ export const ANIMATION_CONFIG: AnimationConfig = {
 export const COMPONENT_CONFIG: ComponentConfig = {
   enableAnimations: true,
   enableAccessibility: true,
-  enablePerformanceMonitoring: import.meta.env.DEV,
-  debugMode: import.meta.env.DEV
+  enablePerformanceMonitoring: false, // 暫時禁用
+  debugMode: false // 暫時禁用
 } as const;
 
 export const PERFORMANCE_THRESHOLDS = {
@@ -44,9 +44,9 @@ export const ACCESSIBILITY_CONFIG = {
 } as const;
 
 export const SECURITY_CONFIG = {
-  enableCSP: true,
-  emailObfuscation: true,
-  integrityChecks: true
+  enableCSP: false, // 暫時禁用
+  emailObfuscation: false, // 暫時禁用
+  integrityChecks: false // 暫時禁用
 } as const;
 
 export const BREAKPOINTS = {

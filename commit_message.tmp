@@ -1,9 +1,10 @@
-refactor: Decouple system initialization and improve stability
+revert: Temporarily disable advanced features and security for debugging
 
-This commit refactors the system initialization process for better performance and robustness.
+This commit temporarily disables several advanced features and security configurations to aid in debugging and simplify the deployment process.
 
-Key changes:
-- Decoupled the main system initialization from the initial page load by introducing a new `simpleInit.ts` module. This allows for a faster initial render, with non-critical components loading asynchronously.
-- Updated the Content Security Policy (CSP) to include `'unsafe-eval'` for compatibility and restricted its application to production environments only.
-- Enhanced the stability of the email protection and system integration modules with more robust error handling and logging.
-- Removed server-side rendering of the protected email in the footer, making it fully client-side.
+Changes include:
+- Disabling performance monitoring, debug mode, Content Security Policy (CSP), email obfuscation, and integrity checks in `src/config/animation.ts`.
+- Removing all security headers, meta tags, performance hints, and the `initializeKemekoSystem` call from `src/layouts/BaseLayout.astro`.
+- Simplifying the Locomotive Scroll initialization script by removing custom logging and the dynamic import of `simpleInit.ts`.
+
+These changes are intended for troubleshooting and will be re-enabled or refined in future updates.
