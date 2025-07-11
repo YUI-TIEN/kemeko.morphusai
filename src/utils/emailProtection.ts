@@ -128,11 +128,19 @@ export class EmailProtection {
    * Initialize email protection for existing elements
    */
   public initializeEmailProtection(): void {
-    if (!SECURITY_CONFIG.emailObfuscation) return;
+    if (!SECURITY_CONFIG.emailObfuscation) {
+      console.log('📧 Email protection disabled by configuration');
+      return;
+    }
 
     try {
       // Replace all mailto links with protected versions
       const mailtoLinks = document.querySelectorAll('a[href^="mailto:"]');
+      
+      if (mailtoLinks.length === 0) {
+        console.log('📧 No mailto links found to protect');
+        return;
+      }
       
       mailtoLinks.forEach(link => {
         const href = link.getAttribute('href');
@@ -147,6 +155,8 @@ export class EmailProtection {
         const protectedLink = this.createProtectedMailtoLink(email, subject, body, className);
         link.outerHTML = protectedLink;
       });
+      
+      console.log(`📧 Protected ${mailtoLinks.length} email links`);
     } catch (error) {
       ErrorHandler.getInstance().logError('Failed to initialize email protection', error);
     }

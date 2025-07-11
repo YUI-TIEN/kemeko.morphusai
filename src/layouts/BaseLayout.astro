@@ -13,7 +13,7 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
 // Content Security Policy
 const cspPolicy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://fonts.googleapis.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com",
   "font-src 'self' https://fonts.gstatic.com",
   "connect-src 'self'",
@@ -23,8 +23,8 @@ const cspPolicy = [
   "form-action 'self'"
 ].join('; ');
 
-// Set security headers
-if (SECURITY_CONFIG.enableCSP) {
+// Set security headers (disabled in development)
+if (SECURITY_CONFIG.enableCSP && import.meta.env.PROD) {
   Astro.response.headers.set('Content-Security-Policy', cspPolicy);
 }
 Astro.response.headers.set('X-Frame-Options', 'DENY');
@@ -72,19 +72,6 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
     <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js" 
             integrity="sha256-l0hWBfuSCOmXFTaJVZoUoLEGKrHe6pIFgZjPz8NvhMg=" 
             crossorigin="anonymous"></script>
-    <script type="module">
-        import { initializeKemekoSystem } from '/src/utils/systemIntegration.js';
-        
-        // Initialize complete KEMEKO system
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                await initializeKemekoSystem();
-                console.log('🎉 KEMEKO website fully initialized');
-            } catch (error) {
-                console.error('🚨 KEMEKO initialization failed:', error);
-            }
-        });
-    </script>
     <script>
         // 初始化 Locomotive Scroll - 設為全域變數
         window.scroll = null;
@@ -117,6 +104,18 @@ Astro.response.headers.set('Permissions-Policy', 'geolocation=(), microphone=(),
                     // 確保初始化完成後再綁定事件
                     if (window.scroll) {
                         logger.log('Locomotive Scroll initialized successfully');
+                        
+                        // 在 Locomotive Scroll 初始化完成後，初始化基本 KEMEKO 系統
+                        setTimeout(async () => {
+                            try {
+                                // 動態導入簡化的初始化
+                                const { initializeBasicSystem } = await import('/src/utils/simpleInit.js');
+                                await initializeBasicSystem();
+                                console.log('🎉 KEMEKO website ready');
+                            } catch (error) {
+                                console.warn('⚠️ KEMEKO initialization failed (non-critical):', error);
+                            }
+                        }, 200);
                     }
                 } else {
                     logger.error('Scroll container not found');

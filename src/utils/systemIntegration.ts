@@ -43,6 +43,9 @@ export class SystemIntegration {
     try {
       console.log('🚀 KEMEKO System Initialization Started');
       
+      // Wait for Locomotive Scroll to be available
+      await this.waitForLocomotiveScroll();
+      
       // Start performance monitoring
       if (COMPONENT_CONFIG.enablePerformanceMonitoring) {
         this.performanceMonitor.startMonitoring();
@@ -70,6 +73,25 @@ export class SystemIntegration {
       this.errorHandler.logError('System initialization failed', error);
       throw error;
     }
+  }
+
+  /**
+   * Wait for Locomotive Scroll to be initialized
+   */
+  private async waitForLocomotiveScroll(): Promise<void> {
+    return new Promise((resolve) => {
+      const checkLocomotiveScroll = () => {
+        if (window.scroll) {
+          console.log('✅ Locomotive Scroll detected');
+          resolve();
+        } else {
+          setTimeout(checkLocomotiveScroll, 100);
+        }
+      };
+      
+      // Start checking immediately
+      checkLocomotiveScroll();
+    });
   }
 
   /**
@@ -312,7 +334,10 @@ export async function initializeKemekoSystem(): Promise<void> {
     
   } catch (error) {
     console.error('🚨 Failed to initialize KEMEKO system:', error);
-    throw error;
+    // Don't throw error in production to avoid breaking the site
+    if (COMPONENT_CONFIG.debugMode) {
+      throw error;
+    }
   }
 }
 

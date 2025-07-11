@@ -1,14 +1,6 @@
 ---
 // Footer component
-import { EmailProtection } from '../utils/emailProtection';
-
-const emailProtection = EmailProtection.getInstance();
-const protectedEmail = emailProtection.createProtectedMailtoLink(
-  'nick@morphusai.com',
-  undefined,
-  undefined,
-  'footer-email-link'
-);
+// Email protection will be handled by the client-side system
 ---
 
 <footer class="footer" id="contact">
@@ -18,7 +10,7 @@ const protectedEmail = emailProtection.createProtectedMailtoLink(
                 <img src="/images/KEMEKO-white.svg" alt="KEMEKO" class="footer-logo">
             </h3>
             <p class="footer-slogan">The Soul Beyond the Code.</p>
-            <Fragment set:html={protectedEmail} />
+            <a href="mailto:nick@morphusai.com">nick@morphusai.com</a>
         </div>
         <div class="footer-section">
             <h3>聯絡我們</h3>
