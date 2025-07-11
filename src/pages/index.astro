@@ -98,21 +98,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                         </div>
                         
                         <div class="vtuber-features">
-                            <div class="vtuber-feature">
+                            <div class="vtuber-feature active" data-image="/images/正視圖-03141632.png">
                                 <div class="feature-icon">🎭</div>
                                 <div class="feature-text">
                                     <h4>整合虛擬人格系統</h4>
                                     <p>完整的AI人格載體</p>
                                 </div>
                             </div>
-                            <div class="vtuber-feature">
+                            <div class="vtuber-feature" data-image="/images/左視圖-03141636.png">
                                 <div class="feature-icon">✨</div>
                                 <div class="feature-text">
                                     <h4>表情與互動展示</h4>
                                     <p>語音、表情、情緒完整呈現</p>
                                 </div>
                             </div>
-                            <div class="vtuber-feature">
+                            <div class="vtuber-feature" data-image="/images/後視圖-03141643.png">
                                 <div class="feature-icon">🎬</div>
                                 <div class="feature-text">
                                     <h4>多元應用場景</h4>
@@ -129,6 +129,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     <div class="vtuber-visual">
                         <div class="stage-mockup">
                             <div class="stage-bg"></div>
+                            <img id="vtuber-model-image" src="/images/正視圖-03141632.png" alt="KEMEKO Model" class="vtuber-model-image">
                             <div class="stage-light"></div>
                             <div class="stage-light"></div>
                             <div class="stage-light"></div>
@@ -456,4 +457,34 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(createArrows, 100);
     });
 });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const featureItems = document.querySelectorAll('.vtuber-feature');
+        const modelImage = document.getElementById('vtuber-model-image') as HTMLImageElement;
+
+        featureItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // 移除所有 feature item 的 active 類別
+                featureItems.forEach(f => f.classList.remove('active'));
+                // 為當前點擊的 feature item 添加 active 類別
+                item.classList.add('active');
+
+                const newImageSrc = item.getAttribute('data-image');
+                if (newImageSrc) {
+                    // 添加淡出類別
+                    modelImage.classList.add('fade-out');
+
+                    // 等待淡出動畫完成後切換圖片並淡入
+                    modelImage.addEventListener('transitionend', function handler() {
+                        modelImage.src = newImageSrc;
+                        modelImage.classList.remove('fade-out');
+                        // 移除事件監聽器以避免重複觸發
+                        modelImage.removeEventListener('transitionend', handler);
+                    });
+                }
+            });
+        });
+    });
 </script>

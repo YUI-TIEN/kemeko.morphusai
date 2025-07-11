@@ -1,11 +1,9 @@
-refactor: Adjust layout for VTuber section headings and revert some styling changes
+feat: Implement interactive image switching for VTuber section
 
-This commit refactors the layout of the VTuber section headings and reverts some previous styling modifications.
+This commit adds interactive functionality to the "AI Vtuber 的實體舞台" section, allowing users to switch the displayed image by clicking on different feature options.
 
 Key changes:
-- Moved "AI Vtuber 的實體舞台" and "你曾想過，Vtuber 也能走到你面前嗎？" headings to a new `centered-heading` div in `src/pages/index.astro` for better layout control and centering.
-- Added CSS for `.centered-heading` in `src/styles/global.css` to ensure proper text alignment.
-- Reverted previous changes in `src/pages/index.astro` and `src/styles/global.css` related to the `why-section` and `vtuber-section` to their original state, including:
-    - Restoring `floating-elements` in `why-decoration` and removing `rose-petals`.
-    - Re-adding `feature-bullet` to `feature-item` in `why-content`.
-    - Reverting some animation and performance optimization CSS in `global.css`.
+- Added `data-image` attributes to `.vtuber-feature` elements in `src/pages/index.astro` to specify the image path for each option.
+- Introduced a new `<img>` tag with `id="vtuber-model-image"` within the `.stage-mockup` to serve as the image display area.
+- Implemented JavaScript logic in `src/pages/index.astro` to handle click events on `.vtuber-feature` elements, update the `src` of `vtuber-model-image`, and apply a fade-in/fade-out transition.
+- Added CSS in `src/styles/global.css` for `.vtuber-feature` (including `cursor: pointer` and `.active` state styling) and `.vtuber-model-image` (for positioning and transition effects).
