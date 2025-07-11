@@ -9,9 +9,7 @@ export default defineConfig({
     port: process.env.PORT || 4321,
     host: true
   },
-  preview: {
-    host: true,
-  },
+  
   vite: {
     server: {
       host: true
