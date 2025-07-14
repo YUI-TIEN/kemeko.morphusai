@@ -1,5 +1,6 @@
 ---
 // Header component
+import { Astro } from 'astro';
 ---
 
 <nav>
@@ -8,7 +9,7 @@
         <ul class="nav-links">
             <li>
                 <a href="#hero" class="nav-logo-link">
-                    <img src="/images/logo01.svg" alt="KEMEKO Auxiliary Logo" class="nav-aux-logo">
+                    <img src={Astro.resolve('/images/logo01.svg')} alt="KEMEKO Auxiliary Logo" class="nav-aux-logo">
                 </a>
             </li>
             <li><a href="#about">關於</a></li>
