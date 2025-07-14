@@ -13,16 +13,13 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.css">
-    
-    <!-- Google Fonts - Noto Sans TC 圓體替代方案 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-</head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    </head>
 <body>
     <Header />
     
@@ -30,81 +27,17 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         <slot />
 
         <Footer />
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
-    <script>
-        // 初始化 Locomotive Scroll - 設為全域變數
-        window.scroll = null;
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM Content Loaded');
-            
-            // 等待一下確保 DOM 完全準備好
-            setTimeout(() => {
-                const container = document.querySelector('[data-scroll-container]');
-                console.log('Scroll container found:', container);
-                
-                if (container) {
-                    // 初始化 Locomotive Scroll
-                    window.scroll = new LocomotiveScroll({
-                        el: container,
-                        smooth: true,
-                        multiplier: 1,
-                        lerp: 0.1
-                    });
-                    
-                    // 確保初始化完成後再綁定事件
-                    if (window.scroll) {
-                        console.log('Locomotive Scroll initialized successfully');
-                    }
-                } else {
-                    console.error('Scroll container not found');
-                }
-            }, 100);
-
-            // 滾動動畫
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -100px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.fade-in').forEach(el => {
-                observer.observe(el);
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                loop: true,
+                slidesPerView: 'auto',
+                spaceBetween: 0, // 圖片之間沒有間距
+                autoplay: {
+                    delay: 2000, // 加快輪播速度
+                    disableOnInteraction: false,
+                },
             });
-
-            // 平滑滾動 - 使用 Locomotive Scroll
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target && window.scroll) {
-                        window.scroll.scrollTo(target, {
-                            offset: -100,
-                            duration: 1000
-                        });
-                    }
-                });
-            });
-
-            // 確保頁面完全載入後更新 Locomotive Scroll
-            window.addEventListener('load', () => {
-                setTimeout(() => {
-                    if (window.scroll) {
-                        window.scroll.update();
-                        console.log('Locomotive Scroll updated');
-                    }
-                }, 200);
-            });
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

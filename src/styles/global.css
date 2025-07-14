@@ -14,14 +14,22 @@
 
 /* CSS 自定義屬性 - 設計系統 */
 :root {
-    /* 顏色系統 */
+    /* 顏色系統 - 更新灰階色彩 */
     --color-primary: #C2AFFF;
     --color-secondary: #C18D8A;
     --color-background: #202226;
     --color-surface: #40444D;
     --color-text-primary: #F6F7F8;
     --color-text-secondary: #A6AAB3;
+    --color-text-white: #FFFFFF;
     --color-border: rgba(194, 175, 255, 0.3);
+    
+    /* 灰階色彩系統 */
+    --gray-darkest: #202226;
+    --gray-dark: #40444D;
+    --gray-medium: #A6AAB3;
+    --gray-light: #F6F7F8;
+    --gray-white: #FFFFFF;
     
     /* 導航專用 */
     --nav-bg: rgba(32, 34, 38, 0.95);
@@ -129,7 +137,7 @@ body {
 }
 
 #smooth-content {
-    background-color: #202226;
+    background-color: var(--gray-darkest);
 }
 
 /* 確保 Locomotive Scroll 容器正確顯示 */
@@ -210,41 +218,41 @@ nav {
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    background: var(--nav-bg);
-    backdrop-filter: blur(15px);
+    background: transparent; /* 完全透明背景 */
     z-index: var(--nav-z-index) !important;
     padding: var(--spacing-sm) 0;
     transition: var(--transition-nav);
     pointer-events: all !important;
-    /* 預設隱藏 */
-    transform: translateY(-100%);
-    opacity: 0;
-    /* 性能優化 */
+    /* 確保預設可見 */
+    transform: translateY(0) !important;
+    opacity: 1 !important;
     will-change: transform, opacity;
 }
 
-nav.nav-visible {
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-}
+/* 移除 nav.nav-visible 規則，因為不再需要它來控制可見性 */
+/* nav.nav-visible { */
+/*     transform: translateY(0) !important; */
+/*     opacity: 1 !important; */
+/* } */
 
-/* 導航狀態樣式 */
+/* 導航狀態樣式 - 移除固定的透明背景，讓 nav 的樣式生效 */
 nav.nav-at-top {
-    background: var(--nav-bg);
+    /* background: transparent; */ /* 此行已移除 */
 }
 
 nav.nav-scrolling {
-    background: var(--nav-bg-scroll);
+    /* background: transparent; */ /* 此行已移除 */
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 改為置中 */
     align-items: center;
     padding: 0 var(--spacing-lg);
-    height: 60px; /* 固定高度確保對齊 */
+    height: 80px; /* 從60px增加到80px */
+    gap: 2rem; /* logo和導航之間的間距 */
 }
 
 .logo {
@@ -263,7 +271,7 @@ nav.nav-scrolling {
 }
 
 .logo-img {
-    height: 2.5rem;
+    height: 3rem; /* 從2.5rem增加到3rem */
     width: auto;
     transition: all 0.6s ease;
 }
@@ -286,7 +294,7 @@ nav.nav-scrolling {
 .nav-links {
     display: flex;
     list-style: none;
-    gap: 0;
+    gap: 0.5rem; /* 緊湊間距 */
     align-items: center;
     height: 100%;
 }
@@ -294,81 +302,102 @@ nav.nav-scrolling {
 .nav-links li {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: auto; /* 不強制100%高度 */
     position: relative;
-    min-width: 100px;
+    min-width: auto; /* 不設最小寬度 */
     justify-content: center;
 }
 
+/* 移除分隔線 */
 .nav-links li:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1px;
-    height: 20px;
-    background: rgba(246, 247, 248, 0.2);
+    display: none;
 }
 
 .nav-links a {
-    color: #F6F7F8;
+    color: var(--gray-white); /* 文字改為白色 */
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     position: relative;
     font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 100%;
-    text-align: center;
+    height: 44px;
+    padding: 0 1.2rem;
+    background: rgba(32, 34, 38, 0.5); /* 半透明背景 */
+    backdrop-filter: blur(10px); /* 背景模糊 */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--gray-white); /* 添加白色邊框 */
+    border-radius: 22px;
+    white-space: nowrap;
+    font-size: 1rem;
+    box-shadow: none; /* 移除陰影 */
 }
 
 .nav-links a:hover {
-    color: #C2AFFF;
+    background: var(--color-primary); /* hover時變為品牌色 */
+    color: var(--gray-white); /* hover時文字變白 */
+    border-color: var(--color-primary); /* hover時邊框顏色變為品牌色 */
+    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3);
 }
 
+/* 移除底線效果 */
 .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(45deg, #C2AFFF, #C18D8A);
-    transition: width 0.3s ease;
+    display: none;
 }
 
+/* 移除hover底線效果 */
 .nav-links a:hover::after {
-    width: 100%;
+    display: none;
 }
 
-/* 語言切換按鈕 */
+.nav-logo-link {
+    background: var(--color-primary); /* 預設填滿品牌色 */
+    border: 1px solid var(--color-primary); /* 邊框與背景同色 */
+    border-radius: 22px;
+    padding: 0 1.2rem;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3); /* 預設就帶有陰影 */
+}
+
+.nav-aux-logo {
+    height: 1.5rem;
+    width: auto;
+    filter: brightness(0) invert(1); /* 將 SVG 變為白色以確保可見性 */
+}
+
+/* 語言切換按鈕 - 統一樣式 */
 .language-toggle {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-primary);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-lg);
+    background: rgba(32, 34, 38, 0.5); /* 半透明背景 */
+    backdrop-filter: blur(10px); /* 背景模糊 */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--gray-white); /* 添加白色邊框 */
+    color: var(--gray-white); /* 文字改為白色 */
+    padding: 0 1.2rem; /* 與導航按鈕一致 */
+    border-radius: 22px; /* 與導航按鈕一致 */
     cursor: pointer;
-    font-size: var(--font-size-sm);
+    font-size: 1rem; /* 與導航按鈕一致 */
     font-weight: 500;
-    transition: var(--transition-button);
-    margin-left: var(--spacing-md);
-    min-width: 60px;
+    transition: all 0.3s ease;
+    min-width: auto;
     text-align: center;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 36px; /* 固定按鈕高度 */
+    height: 44px; /* 與導航按鈕一致 */
+    box-shadow: none; /* 移除陰影 */
+    white-space: nowrap;
 }
 
 .language-toggle:hover {
-    background: rgba(194, 175, 255, 0.1);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    transform: translateY(-1px);
+    background: var(--color-primary);
+    color: var(--gray-white);
+    border-color: var(--color-primary); /* hover時邊框顏色變為品牌色 */
+    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3);
 }
 
 .language-toggle:active {
@@ -397,7 +426,7 @@ nav.nav-scrolling {
     text-align: center;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #202226 0%, #40444D 50%, #202226 100%);
+    background: linear-gradient(135deg, var(--gray-darkest) 0%, var(--gray-dark) 50%, var(--gray-darkest) 100%);
 }
 
 .hero::before {
@@ -433,21 +462,21 @@ nav.nav-scrolling {
 .hero-subtitle {
     font-size: 1.8rem;
     margin-bottom: 3rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     font-weight: 500;
 }
 
 .hero-description {
     font-size: 1.6rem;
     margin-bottom: 1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     font-weight: 300;
 }
 
 .hero-tagline {
     font-size: 1.4rem;
     margin-bottom: 3rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     font-style: italic;
 }
 
@@ -471,7 +500,7 @@ nav.nav-scrolling {
 
 .cta-primary {
     background: #C2AFFF;
-    color: #202226;
+    color: var(--gray-darkest);
     box-shadow: 0 4px 20px rgba(194, 175, 255, 0.3);
     border: none;
 }
@@ -523,7 +552,7 @@ nav.nav-scrolling {
 .section-subtitle {
     font-size: 2rem;
     margin-bottom: 1.5rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     font-weight: bold;
 }
 
@@ -535,7 +564,7 @@ nav.nav-scrolling {
 .subsection-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -546,7 +575,7 @@ nav.nav-scrolling {
     font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 1.5rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
 }
 
 .highlight-text {
@@ -625,7 +654,7 @@ nav.nav-scrolling {
 
 .origin-content p {
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     margin-bottom: 0.8rem;
     opacity: 0.9;
     transition: opacity 0.3s ease;
@@ -689,7 +718,7 @@ nav.nav-scrolling {
 
 .inspiration-text p {
     font-size: 1.2rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     margin-bottom: 1rem;
     opacity: 0.95;
     text-shadow: 0 0 10px rgba(246, 247, 248, 0.1);
@@ -829,7 +858,7 @@ nav.nav-scrolling {
 
 .content-text p {
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     margin-bottom: 0.8rem;
     opacity: 0.9;
 }
@@ -876,7 +905,7 @@ nav.nav-scrolling {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(32, 34, 38, 0.6);
+    background: rgba(32, 34, 38, 0);
     z-index: 1;
 }
 
@@ -906,7 +935,7 @@ nav.nav-scrolling {
 
 .art-description p {
     font-size: 1.3rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     margin-bottom: 1.2rem;
     opacity: 0.95;
     text-shadow: 0 0 10px rgba(246, 247, 248, 0.1);
@@ -974,7 +1003,7 @@ nav.nav-scrolling {
 }
 
 .feature-bullet {
-    color: #A6AAB3;
+    color: var(--gray-medium);
     font-size: 1.2rem;
     margin-right: 1rem;
     min-width: 20px;
@@ -982,7 +1011,7 @@ nav.nav-scrolling {
 
 .feature-item span:last-child {
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     line-height: 1.6;
 }
 
@@ -1224,7 +1253,7 @@ nav.nav-scrolling {
 .why-content .feature-item .feature-text {
     flex: 1;
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     font-weight: 500;
     transition: all 0.5s ease;
 }
@@ -1484,7 +1513,7 @@ nav.nav-scrolling {
 }
 
 .feature-text p {
-    color: #A6AAB3;
+    color: var(--gray-medium);
     margin: 0;
     font-size: 0.9rem;
 }
@@ -1599,7 +1628,7 @@ nav.nav-scrolling {
 
 .demo-subtitle {
     font-size: 1.3rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     margin-bottom: 3rem;
     font-style: italic;
     text-shadow: 0 0 20px rgba(166, 170, 179, 0.3);
@@ -1644,7 +1673,7 @@ nav.nav-scrolling {
 
 .demo-description p {
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     line-height: 1.8;
     margin-bottom: 1rem;
     opacity: 0.9;
@@ -1695,38 +1724,98 @@ nav.nav-scrolling {
 }
 
 .features-layout {
-    display: flex;
-    align-items: center;
-    gap: 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr; /* 三欄佈局：選項 | 圖片 | 選項 */
+    gap: 3rem;
     margin-top: 3rem;
+    align-items: stretch; /* 確保等高 */
+}
+
+.features-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 確保填滿父容器高度 */
+    justify-content: space-between; /* 內容垂直均勻分佈 */
 }
 
 .features-image {
-    flex: 1;
-    max-width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* 確保填滿父容器高度 */
+}
+
+/* 強制移除 features-fullwidth 區塊中圖片的陰影和 hover 動畫 */
+/* 強制移除 features-fullwidth 區塊中圖片的陰影和 hover 動畫 */
+/* 強制移除 features-fullwidth 區塊中圖片的陰影和 hover 動畫 */
+.features-fullwidth img,
+.features-fullwidth .machine-image,
+.features-fullwidth .machine-image:hover {
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* 強制移除 features-fullwidth 區塊中圖片的陰影和 hover 動畫 */
+.features-fullwidth .features-image img {
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+.features-fullwidth .features-image img:hover {
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
 }
 
 .machine-image {
     width: 100%;
-    height: auto;
+    height: 100%; /* 確保圖片填滿其容器 */
+    object-fit: contain;
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease;
     border: 1px solid rgba(194, 175, 255, 0.2);
 }
 
-.machine-image:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+.features-fullwidth .features-image .machine-image {
+    width: 100%;
+    height: 100%; /* 確保圖片填滿其容器 */
+    object-fit: contain;
+    border-radius: 20px;
+    border: 1px solid rgba(194, 175, 255, 0.2);
 }
 
-.features-content {
-    flex: 1;
-    max-width: 60%;
+
+
+/* 響應式調整 */
+@media (max-width: 1024px) {
+    .features-layout {
+        grid-template-columns: 1fr; /* 在小螢幕上改為單欄 */
+    }
+    .features-image {
+        order: -1; /* 圖片移到最上方 */
+        margin-bottom: 2rem;
+    }
+    .features-content {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .features-layout {
+        gap: 2rem;
+    }
+    .machine-image {
+        max-height: 300px;
+    }
 }
 
 .specs-table {
-    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* 確保填滿父容器高度 */
+    justify-content: space-around; /* 垂直均勻分佈 spec-row */
+    margin-top: 0; /* 移除原有的 margin-top */
 }
 
 .spec-row {
@@ -1734,12 +1823,13 @@ nav.nav-scrolling {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0; /* 移除原有的 margin-bottom */
     background: rgba(64, 68, 77, 0.4);
     border-radius: 12px;
     border: 1px solid rgba(194, 175, 255, 0.2);
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    flex-grow: 1; /* 讓每個 spec-row 均勻佔據空間 */
 }
 
 .spec-row:hover {
@@ -1749,20 +1839,20 @@ nav.nav-scrolling {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-.spec-row:last-child {
-    margin-bottom: 0;
+.spec-row:not(:last-child) {
+    margin-bottom: 1rem; /* 重新添加除了最後一個之外的 margin-bottom */
 }
 
 .spec-name {
     font-size: 1.2rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     font-weight: bold;
     min-width: 150px;
 }
 
 .spec-description {
     font-size: 1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     text-align: right;
     flex: 1;
     padding-left: 2rem;
@@ -1784,7 +1874,7 @@ nav.nav-scrolling {
 
 .price-label {
     font-size: 1.2rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     margin-bottom: 1rem;
 }
 
@@ -1801,7 +1891,7 @@ nav.nav-scrolling {
 
 .price-includes p {
     font-size: 1.1rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     margin-bottom: 0.8rem;
     line-height: 1.6;
 }
@@ -1843,7 +1933,7 @@ nav.nav-scrolling {
 }
 
 .feature-description {
-    color: #A6AAB3;
+    color: var(--gray-medium);
     line-height: 1.6;
 }
 
@@ -1877,13 +1967,13 @@ nav.nav-scrolling {
 
 .spec-value {
     font-size: 1.1rem;
-    color: #F6F7F8;
+    color: var(--gray-light);
     margin-bottom: 0.5rem;
 }
 
 .spec-description {
     font-size: 0.9rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
 }
 
 /* 價格區塊 */
@@ -1912,7 +2002,7 @@ nav.nav-scrolling {
 
 .price-currency {
     font-size: 1.5rem;
-    color: #A6AAB3;
+    color: var(--gray-medium);
 }
 
 .price-buttons {
@@ -1931,6 +2021,76 @@ nav.nav-scrolling {
     margin-left: calc(-50vw + 50%);
     min-height: 100vh;
     background: linear-gradient(45deg, #1a1c20, #2a2d33);
+}
+
+.image-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.gallery-item {
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+.full-width-image-section {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+.full-width-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 250px; /* 降低高度 */
+    margin-top: 0; /* 移除上方間距 */
+    margin-bottom: 5rem;
+    position: relative; /* 確保箭頭相對於此容器定位 */
+}
+
+/* 輪播左右箭頭樣式 */
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--color-primary) !important; /* 使用品牌主色 */
+    transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+    color: var(--color-text-white) !important; /* Hover 時變為白色 */
+    transform: scale(1.1);
+}
+
+.swiper-slide {
+    width: 300px; /* 設定固定寬度 */
+    height: 100%;
+    margin: 0; /* 移除 slide 之間的間距 */
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .arrow-background {
@@ -2013,7 +2173,7 @@ nav.nav-scrolling {
 
 .final-quote p:last-child {
     margin-bottom: 0;
-    color: #A6AAB3;
+    color: var(--gray-medium);
     text-shadow: 0 0 20px rgba(166, 170, 179, 0.3);
 }
 
@@ -2041,7 +2201,7 @@ nav.nav-scrolling {
 
 .footer-section p,
 .footer-section a {
-    color: #A6AAB3;
+    color: var(--gray-medium);
     text-decoration: none;
     line-height: 1.8;
 }
@@ -2052,7 +2212,7 @@ nav.nav-scrolling {
 
 .footer-slogan {
     font-style: italic;
-    color: #A6AAB3 !important;
+    color: var(--gray-medium) !important;
     font-weight: 500;
 }
 
@@ -2066,7 +2226,7 @@ nav.nav-scrolling {
     display: inline-block;
     padding: 0.5rem;
     transition: all 0.3s ease;
-    color: #A6AAB3;
+    color: var(--gray-medium);
 }
 
 .social-link:hover {
@@ -2088,7 +2248,7 @@ nav.nav-scrolling {
     padding-top: 2rem;
     margin-top: 2rem;
     border-top: 1px solid rgba(194, 175, 255, 0.2);
-    color: #A6AAB3;
+    color: var(--gray-medium);
 }
 
 /* 無障礙功能 - 減少動畫 */
@@ -2124,7 +2284,7 @@ nav.nav-scrolling {
     :root {
         --color-primary: #E6D7FF;
         --color-secondary: #FFB3B3;
-        --color-text-primary: #FFFFFF;
+        --color-text-primary: var(--gray-white);
         --color-border: rgba(255, 255, 255, 0.8);
     }
 }
@@ -2166,7 +2326,7 @@ nav.nav-scrolling {
 /* 響應式設計 */
 @media (max-width: 768px) {
     .hero {
-        background: linear-gradient(135deg, #202226 0%, #40444D 50%, #202226 100%);
+        background: linear-gradient(135deg, var(--gray-darkest) 0%, var(--gray-dark) 50%, var(--gray-darkest) 100%);
     }
     
     .hero h1 {
@@ -2186,7 +2346,12 @@ nav.nav-scrolling {
     }
     
     .nav-links {
-        display: none;
+        display: none; /* 手機版暫時隱藏，後續可實作漢堡選單 */
+    }
+    
+    /* 手機版logo調整 */
+    .logo-img {
+        height: 2rem;
     }
     
     /* 功能區塊響應式設計 */
@@ -2568,5 +2733,118 @@ nav.nav-scrolling {
 @keyframes spin {
     to {
         transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* 藝術區塊重新設計 */
+.art-section {
+    background: #000000; /* 純黑色背景 */
+    width: 100%;
+    padding: 4rem 0;
+    margin: 0; /* 移除邊距確保全寬 */
+    border-radius: 0;
+}
+
+.art-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    text-align: center; /* 文字置中對齊 */
+}
+
+.art-text {
+    margin-bottom: 3rem;
+}
+
+.art-text .section-title {
+    color: #C2AFFF;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.art-text .section-text {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.art-text .section-text p {
+    font-size: 1.2rem;
+    color: var(--gray-light);
+    line-height: 1.8;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+/* 藝術區塊的特色列表 - 移除hover效果，保持簡潔 */
+.art-section .features-list {
+    margin: 2.5rem 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.art-section .feature-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+    transition: none; /* 移除hover過渡效果 */
+}
+
+.art-section .feature-item:hover {
+    /* 移除所有hover效果 */
+    transform: none;
+    background: none;
+}
+
+.art-section .feature-bullet {
+    color: #C2AFFF;
+    font-size: 1.3rem;
+    margin-right: 1rem;
+    min-width: 20px;
+}
+
+.art-section .feature-item span:last-child {
+    font-size: 1.1rem;
+    color: var(--gray-light);
+    line-height: 1.6;
+    text-align: left;
+}
+
+/* 花朵圖片樣式 */
+.art-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.flower-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    /* 移除螢光色陰影 */
+}
+
+/* 移除圖片hover效果 */
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .art-content {
+        padding: 0 1rem;
+    }
+    
+    .art-text .section-title {
+        font-size: 2rem;
+    }
+    
+    .art-text .section-text p {
+        font-size: 1.1rem;
+    }
+    
+    .flower-image {
+        max-height: 350px;
     }
 }

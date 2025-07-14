@@ -7,10 +7,14 @@
     "start": "serve dist/",
     "build": "astro build",
     "preview": "astro preview",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "astro": "^5.11.0",
     "serve": "^14.2.3"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }
