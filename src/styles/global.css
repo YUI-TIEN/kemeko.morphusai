@@ -780,7 +780,7 @@ nav.nav-scrolling {
     align-items: center;
     justify-content: center;
     position: relative;
-    background: url('/images/俯視-03141708.png') center center / cover no-repeat;
+    background: url('images/俯視-03141708.png') center center / cover no-repeat;
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -892,7 +892,7 @@ nav.nav-scrolling {
     align-items: center;
     justify-content: flex-end;
     position: relative;
-    background: url('/images/Art.png') center center / cover no-repeat;
+    background: url('images/Art.png') center center / cover no-repeat;
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);

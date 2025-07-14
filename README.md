@@ -1,6 +1,6 @@
 # KEMEKO - 一場有溫度的未來對話
 
-![KEMEKO Banner](public/images/KEMEKO-banner.png)
+![KEMEKO Banner](public/images/俯視-03141708.png)
 
 > **KEMEKO** 是一個先進的 AI Vtuber 概念網站，展示了現代 Web 技術與互動設計的完美結合。
 
