@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "heroku-postbuild": "npm run build",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && git add -f dist && git commit -m \"Deploy to GitHub Pages\" && git subtree push --prefix dist origin main"
   },
   "dependencies": {
     "astro": "^5.11.0",
