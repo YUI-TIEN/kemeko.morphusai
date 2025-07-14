@@ -1,5 +1,5 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -15,7 +15,7 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
 <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -28,7 +28,74 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         <slot />
 
         <Footer />
-        <link rel="stylesheet" href="../styles/global.css" />
-        <script src="../scripts/initSwiper.js" defer></script>
+        
+        <script>
+        // Initialize Swiper
+        window.onload = function() {
+            // 檢查 Swiper 是否已載入
+            if (typeof window.Swiper === 'undefined') {
+                console.error('Swiper library not loaded. Please check the CDN link and network connection.');
+                return;
+            }
+
+            const swiper = new Swiper('.swiper-container', {
+                // 基本設定
+                direction: 'horizontal',
+                loop: true,
+                centeredSlides: true,
+                
+                // 每次顯示的slide數量
+                slidesPerView: 'auto',
+                spaceBetween: 30,
+                
+                // 自動播放
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+                
+                // 分頁點
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                
+                // 導航箭頭
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                
+                // 響應式設定
+                breakpoints: {
+                    640: {
+                        slidesPerView: 1,
+                        spaceBetween: 20,
+                    },
+                    768: {
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 40,
+                    },
+                },
+                
+                // 效果
+                effect: 'slide',
+                speed: 600,
+                
+                // 觸控設定
+                simulateTouch: true,
+                allowTouchMove: true,
+            });
+
+            // 錯誤處理
+            swiper.on('error', function(error: any) {
+                console.error('Swiper error:', error);
+            });
+        };
+        </script>
     </body>
 </html>
