@@ -557,7 +557,7 @@ body {
     text-align: center;
     position: relative;
     overflow: hidden;
-    background-image: url('images/11DSC_6371.png');
+    background-image: url('/kemeko.morphusai/images/11DSC_6371.png');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -929,7 +929,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    background: url('images/俯視-03141708.png') center center / cover no-repeat;
+    background: url('/kemeko.morphusai/images/俯視-03141708.png') center center / cover no-repeat;
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -1040,7 +1040,7 @@ body {
     align-items: center;
     justify-content: flex-end;
     position: relative;
-    background: url('images/Art.png') center center / cover no-repeat;
+    background: url('/kemeko.morphusai/images/Art.png') center center / cover no-repeat;
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -2474,7 +2474,7 @@ body {
 /* 響應式設計 */
 @media (max-width: 768px) {
     .hero {
-        background-image: url('images/11DSC_6371.png');
+        background-image: url('/kemeko.morphusai/images/11DSC_6371.png');
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;

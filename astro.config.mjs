@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://your-github-username.github.io',
-  base: process.env.NODE_ENV === 'production' ? '/kemeko.morphusai/' : '/',
+  base: '/kemeko.morphusai/',
   output: 'static',
   build: {
     assets: '_astro'
