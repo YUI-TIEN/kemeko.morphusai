@@ -1123,6 +1123,8 @@ body {
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
 }
 
 .breathing-section::before {
@@ -1699,10 +1701,8 @@ body {
 }
 
 .highlight-text {
-    background: rgba(228, 195, 193, 0.1);
-    padding: 1.5rem;
-    border-radius: 15px;
-    border-left: 4px solid var(--color-secondary);
+    color: var(--color-secondary);
+    font-weight: bold;
     margin-top: 2rem;
 }
 
@@ -2784,6 +2784,8 @@ body {
         min-height: 80vh;
         padding: 6rem 2rem;
         background-attachment: scroll; /* 移動設備上使用scroll而非fixed */
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
     }
     
     .breathing-quote {
