@@ -31,10 +31,17 @@
     --gray-light: #F6F7F8;
     --gray-white: #FFFFFF;
     
-    /* 導航專用 */
-    --nav-bg: rgba(32, 34, 38, 0.95);
-    --nav-bg-scroll: rgba(32, 34, 38, 0.9);
+    /* 導航專用 - 重構後的設計系統 */
     --nav-z-index: 1000;
+    --nav-blur: 15px;
+    --nav-bg-alpha: 0.05;
+    --nav-border-alpha: 0.4;
+    --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    --nav-shadow-hover: 0 4px 12px rgba(194, 175, 255, 0.3);
+    --nav-glass-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --nav-height: 44px;
+    --nav-padding: 0 1.2rem;
+    --nav-border-radius: 22px;
     
     /* 過渡效果 - 性能優化版本 */
     --transition-smooth: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -146,10 +153,10 @@ body {
 }
 
 
-/* 修正 fade-in 動畫 */
+/* 修正 fade-in 動畫 - 暫時顯示所有內容 */
 .fade-in {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1; /* 暫時顯示所有內容 */
+    transform: translateY(0); /* 暫時移除位移 */
     transition: all 0.8s ease;
 }
 
@@ -212,74 +219,311 @@ body {
     50% { opacity: 0.8; transform: scale(1.2); }
 }
 
-/* 導航欄 */
-nav {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    background: transparent; /* 完全透明背景 */
-    z-index: var(--nav-z-index) !important;
+/* ===== HEADER NAVIGATION - 重構後的乾淨架構 ===== */
+
+/* Header容器 */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: transparent;
+    z-index: var(--nav-z-index);
     padding: var(--spacing-sm) 0;
-    transition: var(--transition-nav);
-    pointer-events: all !important;
-    /* 確保預設可見 */
-    transform: translateY(0) !important;
-    opacity: 1 !important;
+    transition: var(--transition-fast);
+    pointer-events: all;
+    transform: translateY(0);
+    opacity: 1;
     will-change: transform, opacity;
 }
 
-/* 移除 nav.nav-visible 規則，因為不再需要它來控制可見性 */
-/* nav.nav-visible { */
-/*     transform: translateY(0) !important; */
-/*     opacity: 1 !important; */
-/* } */
-
-/* 導航狀態樣式 - 移除固定的透明背景，讓 nav 的樣式生效 */
-nav.nav-at-top {
-    /* background: transparent; */ /* 此行已移除 */
-}
-
-nav.nav-scrolling {
-    /* background: transparent; */ /* 此行已移除 */
-}
-
-.nav-container {
+/* 導航容器 */
+.header__nav {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: center; /* 改為置中 */
+    justify-content: center;
     align-items: center;
     padding: 0 var(--spacing-lg);
-    height: 80px; /* 從60px增加到80px */
-    gap: 2rem; /* logo和導航之間的間距 */
+    height: 80px;
+    gap: 2rem;
 }
 
-.logo {
-    font-size: var(--font-size-2xl);
-    font-weight: bold;
-    color: var(--color-primary);
-    text-decoration: none;
-    transition: var(--transition-fast);
+/* 導航列表 */
+.nav {
     display: flex;
+    list-style: none;
+    gap: 0.5rem;
     align-items: center;
     height: 100%;
 }
 
-.logo:hover {
-    color: var(--color-secondary);
+/* 導航項目 */
+.nav__item {
+    display: flex;
+    align-items: center;
+    height: auto;
+    position: relative;
+    justify-content: center;
+    border-radius: var(--nav-border-radius);
+    overflow: hidden; /* Clip the progress fill */
+    transition: box-shadow 0.3s ease, transform 0.3s ease, z-index 0s; /* Add transition for shadow */
 }
 
-.logo-img {
-    height: 3rem; /* 從2.5rem增加到3rem */
+.nav__item:hover {
+    box-shadow: var(--nav-shadow-hover); /* Apply shadow on item hover */
+    z-index: 2; /* Bring item to front on hover */
+}
+
+.nav__item--lang {
+    overflow: visible; /* Allow dropdown to show */
+}
+
+.nav-item-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: var(--color-text-white);
+    z-index: 0;
+    transition: width 0.1s linear;
+    border-radius: var(--nav-border-radius);
+}
+
+/* 基礎導航鏈接樣式 */
+.nav__link {
+    color: var(--color-text-white);
+    text-decoration: none;
+    transition: var(--transition-fast);
+    position: relative;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--nav-height);
+    padding: var(--nav-padding);
+    background: rgba(255, 255, 255, var(--nav-bg-alpha));
+    border: 1px solid rgba(255, 255, 255, var(--nav-border-alpha));
+    border-radius: var(--nav-border-radius);
+    white-space: nowrap;
+    font-size: var(--font-size-base);
+    box-shadow: var(--nav-shadow);
+    /* GPU加速優化 */
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    z-index: 1;
+    /* 遮罩效果將由 @supports 規則處理 */
+}
+
+/* 支援backdrop-filter的瀏覽器 */
+@supports (backdrop-filter: blur(1px)) {
+    .nav__link,
+    .nav__toggle {
+        backdrop-filter: blur(var(--nav-blur)) saturate(120%);
+        -webkit-backdrop-filter: blur(var(--nav-blur)) saturate(120%);
+    }
+}
+
+/* 支援 background-clip: text 的瀏覽器 */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .nav__link {
+        background-image: linear-gradient(90deg, 
+            var(--color-background) 0%, 
+            var(--color-background) var(--progress-text-start, 0%), 
+            var(--color-text-white) var(--progress-text-start, 0%), 
+            var(--color-text-white) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+}
+
+/* 不支援 background-clip: text 的瀏覽器備用方案 */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+    .nav__link {
+        color: var(--color-text-white);
+    }
+    
+    .nav__link.progress-filled {
+        color: var(--color-background);
+    }
+}
+
+/* 進度條完成時的樣式在 @supports 規則中處理 */
+
+/* 導航鏈接懸停效果 */
+.nav__link:hover,
+.nav__toggle:hover {
+    background: var(--color-text-white);
+    color: var(--color-background);
+    box-shadow: 0 0 12px 2px var(--color-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    /* 懸停時取消遮罩效果 */
+    background-image: none;
+    -webkit-text-fill-color: var(--color-background);
+}
+
+/* Logo專用樣式 */
+.nav__link--logo {
+    background: var(--color-text-white);
+    border-color: var(--color-text-white);
+    box-shadow: var(--nav-shadow-hover);
+    color: var(--color-background);
+}
+
+.nav__link--logo:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+/* Logo圖片樣式 */
+.nav__logo {
+    height: 1.5rem;
     width: auto;
-    transition: all 0.6s ease;
+    transition: filter 0.3s ease;
 }
 
-.logo:hover .logo-img {
-    filter: drop-shadow(0 0 8px rgba(194, 175, 255, 0.6)) drop-shadow(0 0 16px rgba(194, 175, 255, 0.3));
+.nav__link--logo:hover .nav__logo {
+    filter: brightness(0) invert(1);
 }
 
+/* 語言切換按鈕 */
+.nav__toggle {
+    background: rgba(255, 255, 255, var(--nav-bg-alpha));
+    border: 1px solid rgba(255, 255, 255, var(--nav-border-alpha));
+    color: var(--color-text-white);
+    padding: var(--nav-padding);
+    border-radius: var(--nav-border-radius);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    transition: var(--transition-fast);
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--nav-height);
+    box-shadow: var(--nav-shadow);
+    white-space: nowrap;
+    background-image: var(--nav-glass-gradient);
+    /* GPU加速優化 */
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+/* 支援backdrop-filter的語言按鈕 */
+@supports (backdrop-filter: blur(1px)) {
+    .nav__toggle {
+        backdrop-filter: blur(var(--nav-blur)) saturate(120%);
+        -webkit-backdrop-filter: blur(var(--nav-blur)) saturate(120%);
+    }
+}
+
+.nav__toggle:active {
+    transform: translateY(0);
+}
+
+
+/* 語言下拉選單 */
+.lang-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+    list-style: none;
+    margin-top: var(--spacing-xs);
+    box-shadow: var(--nav-shadow);
+    z-index: 10;
+}
+
+.lang-dropdown.show {
+    display: block;
+}
+
+.lang-dropdown li a {
+    display: block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s ease;
+}
+
+.lang-dropdown li a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+/* ===== 響應式設計 ===== */
+@media (max-width: 768px) {
+    .header__nav {
+        padding: 0 var(--spacing-md);
+        height: 70px;
+        gap: 1rem;
+    }
+    
+    .nav {
+        gap: 0.25rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav__link,
+    .nav__toggle {
+        height: 36px;
+        padding: 0 0.8rem;
+        font-size: 0.9rem;
+        border-radius: 18px;
+    }
+    
+    .nav__logo {
+        height: 1.2rem;
+    }
+    
+    /* 在小螢幕上隱藏部分導航項目 */
+    .nav__item:nth-child(n+6):not(:last-child) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .header__nav {
+        height: 60px;
+        gap: 0.5rem;
+    }
+    
+    .nav {
+        gap: 0.125rem;
+    }
+    
+    .nav__link,
+    .nav__toggle {
+        height: 32px;
+        padding: 0 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 16px;
+    }
+    
+    .nav__logo {
+        height: 1rem;
+    }
+    
+    /* 在極小螢幕上只顯示Logo和語言切換 */
+    .nav__item:not(:first-child):not(:last-child) {
+        display: none;
+    }
+}
+
+/* 舊版樣式已移除 - 使用上面的新BEM架構 */
+
+/* 保留的實用樣式 */
 .hero-logo {
     height: 5.5rem;
     width: auto;
@@ -291,119 +535,6 @@ nav.nav-scrolling {
     width: auto;
 }
 
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 0.5rem; /* 緊湊間距 */
-    align-items: center;
-    height: 100%;
-}
-
-.nav-links li {
-    display: flex;
-    align-items: center;
-    height: auto; /* 不強制100%高度 */
-    position: relative;
-    min-width: auto; /* 不設最小寬度 */
-    justify-content: center;
-}
-
-/* 移除分隔線 */
-.nav-links li:not(:last-child)::after {
-    display: none;
-}
-
-.nav-links a {
-    color: var(--gray-white); /* 文字改為白色 */
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px;
-    padding: 0 1.2rem;
-    background: rgba(32, 34, 38, 0.5); /* 半透明背景 */
-    backdrop-filter: blur(10px); /* 背景模糊 */
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--gray-white); /* 添加白色邊框 */
-    border-radius: 22px;
-    white-space: nowrap;
-    font-size: 1rem;
-    box-shadow: none; /* 移除陰影 */
-}
-
-.nav-links a:hover {
-    background: var(--color-primary); /* hover時變為品牌色 */
-    color: var(--gray-white); /* hover時文字變白 */
-    border-color: var(--color-primary); /* hover時邊框顏色變為品牌色 */
-    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3);
-}
-
-/* 移除底線效果 */
-.nav-links a::after {
-    display: none;
-}
-
-/* 移除hover底線效果 */
-.nav-links a:hover::after {
-    display: none;
-}
-
-.nav-logo-link {
-    background: var(--color-primary); /* 預設填滿品牌色 */
-    border: 1px solid var(--color-primary); /* 邊框與背景同色 */
-    border-radius: 22px;
-    padding: 0 1.2rem;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3); /* 預設就帶有陰影 */
-}
-
-.nav-aux-logo {
-    height: 1.5rem;
-    width: auto;
-    filter: brightness(0) invert(1); /* 將 SVG 變為白色以確保可見性 */
-}
-
-/* 語言切換按鈕 - 統一樣式 */
-.language-toggle {
-    background: rgba(32, 34, 38, 0.5); /* 半透明背景 */
-    backdrop-filter: blur(10px); /* 背景模糊 */
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--gray-white); /* 添加白色邊框 */
-    color: var(--gray-white); /* 文字改為白色 */
-    padding: 0 1.2rem; /* 與導航按鈕一致 */
-    border-radius: 22px; /* 與導航按鈕一致 */
-    cursor: pointer;
-    font-size: 1rem; /* 與導航按鈕一致 */
-    font-weight: 500;
-    transition: all 0.3s ease;
-    min-width: auto;
-    text-align: center;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 44px; /* 與導航按鈕一致 */
-    box-shadow: none; /* 移除陰影 */
-    white-space: nowrap;
-}
-
-.language-toggle:hover {
-    background: var(--color-primary);
-    color: var(--gray-white);
-    border-color: var(--color-primary); /* hover時邊框顏色變為品牌色 */
-    box-shadow: 0 4px 12px rgba(194, 175, 255, 0.3);
-}
-
-.language-toggle:active {
-    transform: translateY(0);
-}
-
 /* 主要內容區 */
 .container {
     max-width: 1200px;
@@ -412,7 +543,7 @@ nav.nav-scrolling {
 }
 
 .section {
-    padding: 5rem 0;
+    padding: 12rem 0;
     position: relative;
     margin-bottom: 3rem;
 }
@@ -426,7 +557,11 @@ nav.nav-scrolling {
     text-align: center;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--gray-darkest) 0%, var(--gray-dark) 50%, var(--gray-darkest) 100%);
+    background-image: url('images/11DSC_6371.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .hero::before {
@@ -436,15 +571,14 @@ nav.nav-scrolling {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(32, 34, 38, 0.2);
+    background: rgba(32, 34, 38, 0.7);
     z-index: 2;
     pointer-events: none;
 }
 
 .hero-content {
     z-index: 10;
-    opacity: 0;
-    animation: heroFadeIn 2s ease-out forwards;
+    opacity: 1; /* 立即顯示英雄內容 */
     position: relative;
 }
 
@@ -535,6 +669,20 @@ nav.nav-scrolling {
     position: relative;
 }
 
+.text-center-content {
+    text-align: center;
+}
+
+.text-center-content .section-text {
+    text-align: center;
+}
+
+.text-center-content .section-text p {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 800px;
+}
+
 .content-section:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(194, 175, 255, 0.15);
@@ -554,6 +702,7 @@ nav.nav-scrolling {
     margin-bottom: 1.5rem;
     color: var(--gray-medium);
     font-weight: bold;
+    text-align: center;
 }
 
 .centered-heading {
@@ -828,13 +977,12 @@ nav.nav-scrolling {
 }
 
 .content-item {
-    opacity: 0;
-    transform: translateY(20px);
+    opacity: 1; /* 立即顯示內容 */
+    transform: translate(-50%, -50%) translateY(0); /* 移除位移 */
     transition: all 0.6s ease;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) translateY(20px);
     width: calc(100% - 6rem);
     text-align: center;
 }
@@ -2105,8 +2253,8 @@ nav.nav-scrolling {
 
 .arrow {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 70px;
+    height: 70px;
     transition: transform var(--arrow-transition-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94), 
                 opacity var(--arrow-transition-duration) ease-out;
     opacity: var(--arrow-min-opacity);
@@ -2125,10 +2273,10 @@ nav.nav-scrolling {
     position: absolute;
     top: 50%;
     left: 50%;
-    font-size: 22px;
+    font-size: 48px;
     color: var(--color-primary);
     transform: translate(-50%, -50%);
-    filter: drop-shadow(0 0 4px rgba(194, 175, 255, 0.5));
+    filter: drop-shadow(0 0 6px rgba(194, 175, 255, 0.5));
     font-weight: bold;
 }
 
@@ -2168,7 +2316,7 @@ nav.nav-scrolling {
 }
 
 .final-quote p {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .final-quote p:last-child {
@@ -2326,7 +2474,11 @@ nav.nav-scrolling {
 /* 響應式設計 */
 @media (max-width: 768px) {
     .hero {
-        background: linear-gradient(135deg, var(--gray-darkest) 0%, var(--gray-dark) 50%, var(--gray-darkest) 100%);
+        background-image: url('images/11DSC_6371.png');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: scroll; /* 移動設備上使用scroll而非fixed */
     }
     
     .hero h1 {
@@ -2345,14 +2497,9 @@ nav.nav-scrolling {
         font-size: 1.1rem;
     }
     
-    .nav-links {
-        display: none; /* 手機版暫時隱藏，後續可實作漢堡選單 */
-    }
+    /* 移除舊版 nav-links 隱藏 - 現在使用新的響應式設計 */
     
-    /* 手機版logo調整 */
-    .logo-img {
-        height: 2rem;
-    }
+    /* 舊版logo樣式已移除 - 現在使用 .nav__logo */
     
     /* 功能區塊響應式設計 */
     .features-fullwidth {
@@ -2466,13 +2613,7 @@ nav.nav-scrolling {
         font-size: 1rem;
     }
     
-    /* 語言按鈕響應式調整 */
-    .language-toggle {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
-        margin-left: 0.5rem;
-        min-width: 50px;
-    }
+    /* 舊版語言按鈕樣式已移除 - 現在使用新的響應式設計 */
     
     .content-section {
         padding: 2rem;

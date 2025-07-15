@@ -3,51 +3,130 @@
 import { Astro } from 'astro';
 ---
 
-<nav>
-    <div class="nav-container">
-        
-        <ul class="nav-links">
-            <li>
-                <a href="#hero" class="nav-logo-link">
-                    <img src='images/logo01.svg' alt="KEMEKO Auxiliary Logo" class="nav-aux-logo">
+<header class="header" role="banner">
+    <nav class="header__nav" role="navigation">
+        <ul class="nav">
+            <li class="nav__item">
+                <a href="#hero" class="nav__link nav__link--logo">
+                    <img src='images/logo01-black.svg' alt="KEMEKO Logo" class="nav__logo">
                 </a>
             </li>
-            <li><a href="#about">關於</a></li>
-            <li><a href="#vtuber">AI Vtuber</a></li>
-            <li><a href="#art">設計美學</a></li>
-            <li><a href="#features">功能</a></li>
-            <li><a href="#pricing">預購</a></li>
-            <li><a href="#contact">聯繫</a></li>
-            <li><button class="language-toggle">中文</button></li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#about" class="nav__link">關於</a>
+            </li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#vtuber" class="nav__link">AI Vtuber</a>
+            </li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#art" class="nav__link">設計美學</a>
+            </li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#features" class="nav__link">功能</a>
+            </li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#pricing" class="nav__link">預購</a>
+            </li>
+            <li class="nav__item">
+                <div class="nav-item-progress"></div>
+                <a href="#contact" class="nav__link">聯繫</a>
+            </li>
+            <li class="nav__item nav__item--lang">
+                <button class="nav__toggle" aria-label="語言切換">中文</button>
+                <ul class="lang-dropdown">
+                    <li><a href="#" data-lang="zh">中文</a></li>
+                    <li><a href="#" data-lang="en">English</a></li>
+                    <li><a href="#" data-lang="ja">日本語</a></li>
+                </ul>
+            </li>
         </ul>
-    </div>
-</nav>
-
+    </nav>
+</header>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const nav = document.querySelector('nav');
-        if (nav) {
-            nav.classList.add('nav-visible');
+        // 語言切換功能
+        const langToggle = document.querySelector('.nav__toggle');
+        const langDropdown = document.querySelector('.lang-dropdown');
+
+        if (langToggle && langDropdown) {
+            langToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                langDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!langToggle.contains(e.target as Node)) {
+                    langDropdown.classList.remove('show');
+                }
+            });
         }
 
-        const langToggle = document.querySelector('.language-toggle');
-        if (langToggle && langToggle instanceof HTMLElement) {
-            langToggle.addEventListener('click', function(event) {
-                event.preventDefault();
-                const currentLang = this.textContent?.trim();
-                if (!currentLang) {
-                    return;
-                }
-                try {
-                    if (currentLang === '中文') {
-                        this.textContent = 'EN';
-                    } else {
-                        this.textContent = '中文';
+        // 平滑滾動至錨點
+        const navLinks = document.querySelectorAll('.nav__link[href^="#"]');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = e.currentTarget as HTMLAnchorElement;
+                const targetId = target.getAttribute('href')?.substring(1);
+                if (targetId) {
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
                     }
-                } catch (error) {
-                    console.error('Error updating language toggle:', error);
                 }
+            });
+        });
+
+        // 滾動進度條
+        const navItems = Array.from(document.querySelectorAll('.nav__item:not(:has(.nav__link--logo)):not(.nav__item--lang)'));
+        const progressFillers = navItems.map(item => item.querySelector('.nav-item-progress'));
+        const links = navItems.map(item => item.querySelector('.nav__link'));
+
+        if (navItems.length > 0) {
+            window.addEventListener('scroll', () => {
+                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolledPercent = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) : 0;
+
+                const totalItems = navItems.length;
+                const progressAcrossItems = scrolledPercent * totalItems;
+
+                const filledItems = Math.floor(progressAcrossItems);
+                const partialFillPercent = (progressAcrossItems - filledItems) * 100;
+
+                navItems.forEach((item, index) => {
+                    const filler = progressFillers[index];
+                    const link = links[index];
+
+                    if (!filler || !link) return;
+
+                    let currentFill = 0;
+                    if (index < filledItems) {
+                        currentFill = 100;
+                    } else if (index === filledItems) {
+                        currentFill = partialFillPercent;
+                    }
+
+                    (filler as HTMLElement).style.width = currentFill + '%';
+
+                    // 計算文字遮罩的漸變停止點
+                    const progressTextStart = currentFill;
+
+                    (link as HTMLElement).style.setProperty('--progress-text-start', progressTextStart + '%');
+
+                    if (currentFill === 100) { // 當進度條完全填滿時，添加 class
+                        link.classList.add('progress-filled');
+                    } else {
+                        link.classList.remove('progress-filled');
+                    }
+                });
             });
         }
     });

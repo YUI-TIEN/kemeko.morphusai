@@ -17,29 +17,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
     </section>
 
-    <!-- 圖片輪播 -->
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="images/俯視-03141708.png" alt="KEMEKO 輪播圖 1"></div>
-            <div class="swiper-slide"><img src="images/Art.png" alt="KEMEKO 輪播圖 2"></div>
-            <div class="swiper-slide"><img src="images/flower-03061710.png" alt="KEMEKO 輪播圖 3"></div>
-            <div class="swiper-slide"><img src="images/hero-03131201.png" alt="KEMEKO 輪播圖 4"></div>
-            <div class="swiper-slide"><img src="images/solo-03141749.png" alt="KEMEKO 輪播圖 5"></div>
-            <div class="swiper-slide"><img src="images/tech.png" alt="KEMEKO 輪播圖 6"></div>
-            <div class="swiper-slide"><img src="images/topdrop-03141710.png" alt="KEMEKO 輪播圖 7"></div>
-            <div class="swiper-slide"><img src="images/touch-03131625.png" alt="KEMEKO 輪播圖 8"></div>
-        </div>
-        <!-- Add Pagination -->
-        <div class="swiper-pagination"></div>
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-    </div>
+    
 
     <div class="container" data-scroll data-scroll-speed="1">
         <!-- KEMEKO 是什麼？ -->
         <section class="section" id="about" data-scroll data-scroll-speed="1">
-            <div class="content-section fade-in" data-scroll data-scroll-speed="1">
+            <div class="content-section fade-in text-center-content" data-scroll data-scroll-speed="1">
                 <h2 class="section-title">KEMEKO 是什麼？</h2>
                 <h3 class="section-subtitle">一場有溫度的未來對話</h3>
 
@@ -48,12 +31,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     <p>她是一台實體 AI 裝置，卻擁有理解語言、學習風格、與你互動的能力。</p>
                     <p>更重要的是，她可以承載你最熟悉的 Vtuber 角色，把螢幕裡的她，帶到現實世界。</p>
                 </div>
-                
-                <div class="highlight-box">
-                    <p class="highlight-text">KEMEKO 是虛擬角色的實體化載體，是未來共演的起點。</p>
-                </div>
+            </div>
+        </section>
 
-                
+        <!-- 留白呼吸區塊 -->
+        <section class="section breathing-section">
+            <div class="highlight-box">
+                <p class="highlight-text">KEMEKO 是虛擬角色的實體化載體，是未來共演的起點。</p>
             </div>
         </section>
 
@@ -108,9 +92,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- 全寬圖片展示 -->
         <section class="full-width-image-section">
-            <img src="images/1DSC_5155.JPG" alt="KEMEKO 全寬展示圖 1" class="full-width-image">
-            <img src="images/5DSC_6336.JPG" alt="KEMEKO 全寬展示圖 2" class="full-width-image">
-            <img src="images/9DSC_6367.JPG" alt="KEMEKO 全寬展示圖 3" class="full-width-image">
+            <img src="images/1DSC_5155.png" alt="KEMEKO 全寬展示圖 1" class="full-width-image">
+            <img src="images/5DSC_6336.png" alt="KEMEKO 全寬展示圖 2" class="full-width-image">
+            <img src="images/9DSC_6367.png" alt="KEMEKO 全寬展示圖 3" class="full-width-image">
         </section>
 
         <!-- AI Vtuber 的實體舞台 -->
@@ -329,6 +313,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 interface ArrowDiv extends HTMLDivElement {
     centerX: number;
     centerY: number;
+    currentAngle: number;
 }
 // 箭頭背景效果
 document.addEventListener('DOMContentLoaded', function() {
@@ -341,11 +326,48 @@ document.addEventListener('DOMContentLoaded', function() {
     let arrows: ArrowDiv[] = [];
     let isAnimating = false;
     let isHoveringQuote = false;
+    let animationId: number | null = null;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+    let animationMode: 'idle' | 'mouse' | 'quote' = 'idle';
+    
+    // 穩健的角度過渡系統
+    function smoothAngleTransition(currentAngle: number, targetAngle: number, maxStep: number = 8): number {
+        // 正規化角度到 -180 到 180 範圍
+        const normalizeAngle = (angle: number) => {
+            let normalized = angle % 360;
+            if (normalized > 180) normalized -= 360;
+            if (normalized < -180) normalized += 360;
+            return normalized;
+        };
+        
+        const current = normalizeAngle(currentAngle);
+        const target = normalizeAngle(targetAngle);
+        
+        // 計算最短路徑差異
+        let diff = target - current;
+        
+        // 確保選擇最短路徑
+        if (diff > 180) {
+            diff -= 360;
+        } else if (diff < -180) {
+            diff += 360;
+        }
+        
+        // 如果差異很小，直接到達目標
+        if (Math.abs(diff) <= maxStep) {
+            return target;
+        }
+        
+        // 否則按步長移動
+        const step = diff > 0 ? maxStep : -maxStep;
+        return normalizeAngle(current + step);
+    }
     
     // 創建箭頭網格
     function createArrows() {
         const sectionRect = arrowSection.getBoundingClientRect();
-        const arrowSpacing = 70; // 箭頭間距 - 恢復原始密度
+        const arrowSpacing = 120; // 箭頭間距 - 增加以降低密度
         const cols = Math.ceil(sectionRect.width / arrowSpacing);
         const rows = Math.ceil(sectionRect.height / arrowSpacing);
         
@@ -362,8 +384,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 arrow.style.top = y + 'px';
                 
                 // 存儲箭頭位置以提高性能
-                arrow.centerX = x + 15; // 箭頭中心X (調整為新的箭頭大小)
-                arrow.centerY = y + 15; // 箭頭中心Y (調整為新的箭頭大小)
+                arrow.centerX = x + 35; // 箭頭中心X (70px / 2)
+                arrow.centerY = y + 35; // 箭頭中心Y (70px / 2)
+                arrow.currentAngle = 0; // 初始角度
                 
                 arrowBackground.appendChild(arrow);
                 arrows.push(arrow);
@@ -371,105 +394,124 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 昇華效果 - 箭頭指向文字區域
-    function pointToQuote(): void {
-        if (isAnimating) return;
+    // 統一的動畫管理系統
+    function startAnimation() {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
         
         isAnimating = true;
-        requestAnimationFrame(() => {
+        
+        function animate() {
+            if (!isAnimating) return;
+            
             const sectionRect = arrowSection.getBoundingClientRect();
-            const quoteRect = finalQuote.getBoundingClientRect();
-            
-            // 計算文字區域的中心點
-            const quoteCenterX = quoteRect.left + quoteRect.width / 2;
-            const quoteCenterY = quoteRect.top + quoteRect.height / 2;
-            
             const sectionX = sectionRect.left;
             const sectionY = sectionRect.top;
             
+            let shouldContinue = false;
+            
             arrows.forEach(arrow => {
-                // 計算箭頭指向文字中心的角度
-                const deltaX = quoteCenterX - (sectionX + arrow.centerX);
-                const deltaY = quoteCenterY - (sectionY + arrow.centerY);
-                const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                let targetAngle: number;
+                let targetOpacity: number;
+                let targetScale: number = 1;
                 
-                // 計算箭頭距離文字中心的距離
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const centerRadius = 350; // 圓形範圍的半徑
-                const fadeWidth = 100; // 漸層寬度
-                
-                // 創建圓形漸層效果
-                let opacity = 0.15;
-                let scale = 1;
-                
-                if (distance <= centerRadius) {
-                    // 在圓形範圍內，根據距離計算透明度
-                    const fadeStart = centerRadius - fadeWidth;
-                    if (distance >= fadeStart) {
-                        // 在漸層區域
-                        const fadeProgress = (centerRadius - distance) / fadeWidth;
-                        opacity = 0.15 + (0.65 * fadeProgress); // 0.15 到 0.8 的漸層
-                        scale = 1 + (0.2 * fadeProgress); // 1 到 1.2 的縮放
-                    } else {
-                        // 在核心區域
-                        opacity = 0.8;
-                        scale = 1.2;
+                if (animationMode === 'quote' && isHoveringQuote) {
+                    // 文字指向模式
+                    const quoteRect = finalQuote.getBoundingClientRect();
+                    const quoteCenterX = quoteRect.left + quoteRect.width / 2;
+                    const quoteCenterY = quoteRect.top + quoteRect.height / 2;
+                    
+                    const deltaX = quoteCenterX - (sectionX + arrow.centerX);
+                    const deltaY = quoteCenterY - (sectionY + arrow.centerY);
+                    targetAngle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                    
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const centerRadius = 450;
+                    const fadeWidth = 150;
+                    
+                    targetOpacity = 0.15;
+                    if (distance <= centerRadius) {
+                        const fadeStart = centerRadius - fadeWidth;
+                        if (distance >= fadeStart) {
+                            const fadeProgress = (centerRadius - distance) / fadeWidth;
+                            targetOpacity = 0.15 + (0.65 * fadeProgress);
+                            targetScale = 1 + (0.2 * fadeProgress);
+                        } else {
+                            targetOpacity = 0.8;
+                            targetScale = 1.2;
+                        }
                     }
+                    
+                    const newAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 5);
+                    if (Math.abs(newAngle - targetAngle) > 1) {
+                        shouldContinue = true;
+                    }
+                    arrow.currentAngle = newAngle;
+                    
+                } else if (animationMode === 'mouse') {
+                    // 鼠標跟隨模式
+                    const deltaX = lastMouseX - (sectionX + arrow.centerX);
+                    const deltaY = lastMouseY - (sectionY + arrow.centerY);
+                    targetAngle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                    
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const maxDistance = 400;
+                    const minOpacity = 0.1;
+                    const maxOpacity = 0.6;
+                    
+                    targetOpacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
+                    targetOpacity = Math.max(minOpacity, Math.min(maxOpacity, targetOpacity));
+                    
+                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 12);
+                    
+                } else {
+                    // 空閒模式
+                    targetAngle = 0;
+                    targetOpacity = 0.2;
+                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 8);
                 }
                 
-                arrow.style.transform = `rotate(${angle}deg) scale(${scale})`;
-                arrow.style.opacity = opacity.toString();
+                arrow.style.transform = `rotate(${arrow.currentAngle}deg) scale(${targetScale})`;
+                arrow.style.opacity = targetOpacity.toString();
             });
             
-            isAnimating = false;
-        });
-    }
-    
-    // 使用 RAF 優化動畫性能
-    function updateArrows(mouseX: number, mouseY: number): void {
-        if (isAnimating || isHoveringQuote) return; // 昇華狀態時不執行鼠標跟隨
+            if (shouldContinue || animationMode === 'mouse') {
+                animationId = requestAnimationFrame(animate);
+            } else {
+                isAnimating = false;
+                animationId = null;
+            }
+        }
         
-        isAnimating = true;
-        requestAnimationFrame(() => {
-            const sectionRect = arrowSection.getBoundingClientRect();
-            const sectionX = sectionRect.left;
-            const sectionY = sectionRect.top;
-            
-            arrows.forEach(arrow => {
-                // 計算箭頭指向鼠標的角度
-                const deltaX = mouseX - (sectionX + arrow.centerX);
-                const deltaY = mouseY - (sectionY + arrow.centerY);
-                const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-                
-                // 計算距離並調整透明度
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = 300; // 最大影響距離
-                const minOpacity = 0.1; // 最小透明度
-                const maxOpacity = 0.6; // 最大透明度
-                
-                // 距離越遠透明度越低
-                let opacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
-                opacity = Math.max(minOpacity, Math.min(maxOpacity, opacity));
-                
-                arrow.style.transform = `rotate(${angle}deg) scale(1)`;
-                arrow.style.opacity = opacity.toString();
-            });
-            
-            isAnimating = false;
-        });
+        animate();
     }
     
-    // 鼠標移動事件
-    function handleMouseMove(event: MouseEvent): void {
-        updateArrows(event.clientX, event.clientY);
+    // 設置動畫模式
+    function setAnimationMode(mode: 'idle' | 'mouse' | 'quote') {
+        if (animationMode !== mode) {
+            animationMode = mode;
+            if (!isAnimating) {
+                startAnimation();
+            }
+        }
+    }
+    
+    // 鼠標移動處理
+    function updateArrows(mouseX: number, mouseY: number): void {
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        setAnimationMode('mouse');
+    }
+    
+    // 文字指向處理
+    function pointToQuote(): void {
+        setAnimationMode('quote');
     }
     
     // 鼠標離開時重置箭頭
     function handleMouseLeave() {
-        arrows.forEach(arrow => {
-            arrow.style.transform = 'rotate(0deg) scale(1)';
-            arrow.style.opacity = '0.2'; // 重置為統一的低透明度
-        });
+        setAnimationMode('idle');
     }
     
     // 初始化
@@ -485,6 +527,11 @@ document.addEventListener('DOMContentLoaded', function() {
         isHoveringQuote = false;
         handleMouseLeave();
     });
+    
+    // 鼠標移動事件處理器
+    function handleMouseMove(event: MouseEvent) {
+        updateArrows(event.clientX, event.clientY);
+    }
     
     // 添加事件監聽器
     arrowSection.addEventListener('mousemove', handleMouseMove);
@@ -535,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!finalQuoteElement) return;
     
     // 原始文字內容
-    const originalTexts = Array.from(finalQuoteElement.querySelectorAll('p')).map(p => p.textContent.trim());
+    const originalTexts = Array.from(finalQuoteElement.querySelectorAll('p')).map(p => (p.textContent ?? '').trim());
     
     // 初始化時清空所有文字
     finalQuoteElement.querySelectorAll('p').forEach(p => p.textContent = '');
@@ -552,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 打字機動畫 - 從空白開始逐字顯示
-    async function typewriterEffect(element, targetText, delay = 50) {
+    async function typewriterEffect(element: HTMLElement, targetText: string, delay = 50) {
         return new Promise((resolve) => {
             let currentIndex = 0;
             const totalLength = targetText.length;
@@ -595,6 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 觸發動畫
     async function triggerGlitchTypewriter() {
         if (isAnimating || hasTriggered) return;
+        if (!finalQuoteElement) return;
         
         isAnimating = true;
         hasTriggered = true;

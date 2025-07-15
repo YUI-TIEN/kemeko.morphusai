@@ -31,14 +31,14 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         
         <script>
         // Initialize Swiper
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // 檢查 Swiper 是否已載入
             if (typeof window.Swiper === 'undefined') {
                 console.error('Swiper library not loaded. Please check the CDN link and network connection.');
                 return;
             }
 
-            const swiper = new Swiper('.swiper-container', {
+            const swiper = new window.Swiper('.swiper-container', {
                 // 基本設定
                 direction: 'horizontal',
                 loop: true,
@@ -95,7 +95,34 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
             swiper.on('error', function(error: any) {
                 console.error('Swiper error:', error);
             });
-        };
+        });
+
+        // 確保所有內容都可見 - 修復動畫問題
+        function initializeAnimations() {
+            // 立即顯示所有 fade-in 元素
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(element => {
+                element.classList.add('visible');
+            });
+
+            // 立即顯示英雄內容
+            const heroContent = document.querySelector('.hero-content') as HTMLElement | null;
+            if (heroContent) {
+                heroContent.style.opacity = '1';
+            }
+
+            // 確保第一個 content-item 顯示
+            const firstContentItem = document.querySelector('.content-item');
+            if (firstContentItem) {
+                firstContentItem.classList.add('active');
+            }
+        }
+
+        // 立即執行動畫初始化
+        initializeAnimations();
+        
+        // 也在 DOM 載入完成後執行
+        document.addEventListener('DOMContentLoaded', initializeAnimations);
         </script>
     </body>
 </html>
