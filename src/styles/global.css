@@ -140,7 +140,7 @@ html {
 }
 
 body {
-    font-family: 'cwTeXYen', 'Noto Sans TC', 'PingFang TC', 'Hiragino Sans GB', 'Microsoft JhengHei', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text-primary);
     line-height: 1.6;
@@ -714,7 +714,7 @@ body {
 .section-subtitle {
     font-size: 2rem;
     margin-bottom: 1.5rem;
-    color: var(--color-secondary); /* 使用乾燥玫瑰色表現情感連結 */
+    color: var(--color-text-secondary);
     font-weight: bold;
     text-align: center;
 }
@@ -1117,6 +1117,24 @@ body {
     align-items: center;
     justify-content: center;
     padding: 8rem 2rem;
+    position: relative;
+    background-image: url('/kemeko.morphusai/images/2DSC_6255.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.breathing-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(32, 34, 38, 0.7);
+    z-index: 1;
+    pointer-events: none;
 }
 
 .breathing-content {
@@ -1139,19 +1157,19 @@ body {
 
 /* 新內容結構樣式 */
 .highlight-box {
-    background: linear-gradient(135deg, rgba(228, 195, 193, 0.1), rgba(227, 219, 248, 0.1));
-    border-radius: 15px;
     padding: 2rem;
     margin: 2rem 0;
-    border: 1px solid rgba(227, 219, 248, 0.3);
     text-align: center;
+    position: relative;
+    z-index: 2;
 }
 
 .highlight-box .highlight-text {
-    font-size: 1.3rem;
-    color: var(--color-secondary); /* 使用新的粉色 */
+    font-size: 2.5rem;
+    color: var(--color-text-invert);
     font-weight: bold;
-    text-shadow: 0 0 15px rgba(227, 219, 248, 0.3);
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    line-height: 1.3;
 }
 
 .features-list {
@@ -2765,6 +2783,7 @@ body {
     .breathing-section {
         min-height: 80vh;
         padding: 6rem 2rem;
+        background-attachment: scroll; /* 移動設備上使用scroll而非fixed */
     }
     
     .breathing-quote {
@@ -2802,7 +2821,7 @@ body {
     }
     
     .highlight-box .highlight-text {
-        font-size: 1.1rem;
+        font-size: 1.8rem;
     }
 }
 
