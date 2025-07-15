@@ -12,24 +12,37 @@
 }
 */
 
-/* CSS 自定義屬性 - 設計系統 */
+/* KEMEKO 設計系統色彩方案 */
 :root {
-    /* 顏色系統 - 更新灰階色彩 */
-    --color-primary: #FFC0CB; /* Light Pink */
-    --color-secondary: #FF69B4; /* Hot Pink */
-    --color-background: #202226;
-    --color-surface: #40444D;
-    --color-text-primary: #F6F7F8;
-    --color-text-secondary: #A6AAB3;
-    --color-text-white: #FFFFFF;
-    --color-border: rgba(194, 175, 255, 0.3);
-    
-    /* 灰階色彩系統 */
+    /* 主色系 - 雙主色概念 */
+    --color-primary: #C2AFFF;  /* 薰衣草紫 - 表現KEMEKO本體與科技溫柔面向 */
+    --color-secondary: #C18D8A; /* 乾燥玫瑰色 - 表現人文互動與情感連結 */
+
+    /* 背景與表面色彩 */
+    --color-background: #202226;  /* 深色背景 - 賦予科技未來感 */
+    --color-surface: #40444D;     /* 次層背景或卡片色彩 */
+
+    /* 文字色彩系統 */
+    --color-text-primary: #F6F7F8;  /* 主要文字 */
+    --color-text-secondary: #A6AAB3;  /* 次要說明文字 */
+    --color-text-invert: #FFFFFF;  /* 白色文字用於深色背景 */
+
+    /* 邊框與輔助 */
+    --color-border: rgba(194, 175, 255, 0.3); /* 薰衣草紫系邊框，用於細節點綴 */
+
+    /* 灰階色系 */
     --gray-darkest: #202226;
     --gray-dark: #40444D;
     --gray-medium: #A6AAB3;
     --gray-light: #F6F7F8;
     --gray-white: #FFFFFF;
+
+    /* 特殊輔助用途（圖像背景用或故事區塊） */
+    --color-soft-blush: #E4C3C1; /* 溫柔的粉紅灰，用於圖像化背景或情感故事模塊 */
+    --color-lavender-soft: #E3DBF8; /* 淺紫背景塊，協助內容視覺分區 */
+    
+    /* 向後兼容性 */
+    --color-text-white: var(--color-text-invert);
     
     /* 導航專用 - 重構後的設計系統 */
     --nav-z-index: 1000;
@@ -190,7 +203,7 @@ body {
     position: absolute;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(255, 192, 203, 0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(228, 195, 193, 0.1) 0%, transparent 70%);
     border-radius: 50%;
     animation: lightPulse 15s ease-in-out infinite;
     z-index: 1;
@@ -635,13 +648,14 @@ body {
 .cta-primary {
     background: var(--color-primary);
     color: var(--gray-darkest);
-    box-shadow: 0 4px 20px rgba(255, 192, 203, 0.3);
+    box-shadow: 0 4px 20px rgba(194, 175, 255, 0.3);
     border: none;
 }
 
 .cta-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 25px rgba(255, 192, 203, 0.4);
+    box-shadow: 0 6px 25px rgba(194, 175, 255, 0.4);
+    background: var(--color-secondary);
 }
 
 .cta-secondary {
@@ -651,20 +665,20 @@ body {
 }
 
 .cta-secondary:hover {
-    background: rgba(255, 192, 203, 0.1);
-    color: var(--color-primary);
+    background: rgba(193, 141, 138, 0.1);
+    color: var(--color-secondary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(255, 192, 203, 0.2);
+    box-shadow: 0 4px 20px rgba(193, 141, 138, 0.2);
 }
 
 /* 內容區塊 */
 .content-section {
-    background: rgba(255, 192, 203, 0.2); /* Light Pink with transparency */
+    background: rgba(64, 68, 77, 0.4); /* 使用 surface 色彩 */
     border-radius: 20px;
     padding: 3rem;
     margin-bottom: 3rem;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 105, 180, 0.4); /* Hot Pink with transparency */
+    border: 1px solid rgba(227, 219, 248, 0.4); /* Hot Pink with transparency */
     transition: all 0.3s ease;
     position: relative;
 }
@@ -700,7 +714,7 @@ body {
 .section-subtitle {
     font-size: 2rem;
     margin-bottom: 1.5rem;
-    color: var(--color-primary); /* 使用新的粉色 */
+    color: var(--color-secondary); /* 使用乾燥玫瑰色表現情感連結 */
     font-weight: bold;
     text-align: center;
 }
@@ -728,7 +742,7 @@ body {
 }
 
 .highlight-text {
-    color: #C18D8A;
+    color: var(--color-secondary);
     font-weight: bold;
 }
 
@@ -754,9 +768,9 @@ body {
     width: 1px;
     background: linear-gradient(to bottom, 
         transparent 0%, 
-        rgba(255, 192, 203, 0.3) 20%, 
-        rgba(255, 192, 203, 0.8) 50%, 
-        rgba(255, 192, 203, 0.3) 80%, 
+        rgba(228, 195, 193, 0.3) 20%, 
+        rgba(228, 195, 193, 0.8) 50%, 
+        rgba(228, 195, 193, 0.3) 80%, 
         transparent 100%
     );
     margin: 2rem 0;
@@ -773,7 +787,7 @@ body {
     background: var(--color-primary);
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(255, 192, 203, 0.5);
+    box-shadow: 0 0 10px rgba(228, 195, 193, 0.5);
 }
 
 .origin-title {
@@ -847,7 +861,7 @@ body {
     color: var(--color-primary);
     font-weight: bold;
     margin-bottom: 1rem;
-    text-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+    text-shadow: 0 0 20px rgba(228, 195, 193, 0.4);
 }
 
 .inspiration-subtitle {
@@ -856,7 +870,7 @@ body {
     font-weight: 300;
     margin-bottom: 2.5rem;
     font-style: italic;
-    text-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+    text-shadow: 0 0 15px rgba(227, 219, 248, 0.3);
 }
 
 .inspiration-text {
@@ -877,7 +891,7 @@ body {
     margin-bottom: 0;
     font-weight: 500;
     color: var(--color-primary);
-    text-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 15px rgba(228, 195, 193, 0.3);
 }
 
 /* 詩意呼喚區 */
@@ -905,7 +919,7 @@ body {
     color: var(--color-primary);
     margin-bottom: 1rem;
     font-weight: 300;
-    text-shadow: 0 0 30px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 30px rgba(228, 195, 193, 0.3);
     letter-spacing: 0.02em;
 }
 
@@ -913,7 +927,7 @@ body {
     font-size: 2.8rem;
     margin-bottom: 2rem;
     color: var(--color-secondary);
-    text-shadow: 0 0 30px rgba(255, 105, 180, 0.3);
+    text-shadow: 0 0 30px rgba(227, 219, 248, 0.3);
 }
 
 .unveiling-text p:last-child {
@@ -959,7 +973,7 @@ body {
     border-radius: 20px;
     padding: 3rem;
     backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 192, 203, 0.3);
+    border: 1px solid rgba(228, 195, 193, 0.3);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -973,7 +987,7 @@ body {
 .content-box:hover {
     transform: translateY(-5px);
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 192, 203, 0.5);
+    border-color: rgba(228, 195, 193, 0.5);
 }
 
 .content-item {
@@ -997,7 +1011,7 @@ body {
     color: var(--color-primary);
     font-weight: bold;
     margin-bottom: 2rem;
-    text-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+    text-shadow: 0 0 20px rgba(228, 195, 193, 0.4);
 }
 
 .content-text {
@@ -1074,7 +1088,7 @@ body {
     color: var(--color-primary);
     font-weight: bold;
     margin-bottom: 2rem;
-    text-shadow: 0 0 20px rgba(255, 192, 203, 0.4);
+    text-shadow: 0 0 20px rgba(228, 195, 193, 0.4);
 }
 
 .art-description {
@@ -1093,7 +1107,7 @@ body {
     margin-bottom: 0;
     font-style: italic;
     color: var(--color-secondary);
-    text-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+    text-shadow: 0 0 15px rgba(227, 219, 248, 0.3);
 }
 
 /* 休息呼吸區 */
@@ -1116,7 +1130,7 @@ body {
     color: var(--color-primary);
     font-weight: 300;
     font-style: italic;
-    text-shadow: 0 0 25px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 25px rgba(228, 195, 193, 0.3);
     letter-spacing: 0.02em;
     line-height: 1.4;
     margin: 0;
@@ -1125,11 +1139,11 @@ body {
 
 /* 新內容結構樣式 */
 .highlight-box {
-    background: linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(255, 105, 180, 0.1));
+    background: linear-gradient(135deg, rgba(228, 195, 193, 0.1), rgba(227, 219, 248, 0.1));
     border-radius: 15px;
     padding: 2rem;
     margin: 2rem 0;
-    border: 1px solid rgba(255, 105, 180, 0.3);
+    border: 1px solid rgba(227, 219, 248, 0.3);
     text-align: center;
 }
 
@@ -1137,7 +1151,7 @@ body {
     font-size: 1.3rem;
     color: var(--color-secondary); /* 使用新的粉色 */
     font-weight: bold;
-    text-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+    text-shadow: 0 0 15px rgba(227, 219, 248, 0.3);
 }
 
 .features-list {
@@ -1165,7 +1179,7 @@ body {
 
 /* 為何她被創造區塊 */
 .why-section {
-    background: radial-gradient(circle at center, rgba(255, 192, 203, 0.05) 0%, transparent 70%);
+    background: radial-gradient(circle at center, rgba(228, 195, 193, 0.08) 0%, transparent 70%);
     border-radius: 30px;
     margin: 2rem 0;
     padding: 3rem 0;
@@ -1298,7 +1312,7 @@ body {
     margin: 2rem 0;
     border-radius: 15px;
     overflow: hidden;
-    border: 1px solid rgba(255, 192, 203, 0.2);
+    border: 1px solid rgba(228, 195, 193, 0.2);
 }
 
 .why-content .feature-item {
@@ -1350,7 +1364,7 @@ body {
     left: 0;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, rgba(255, 192, 203, 0.1), rgba(255, 105, 180, 0.1));
+    background: linear-gradient(90deg, rgba(228, 195, 193, 0.1), rgba(227, 219, 248, 0.1));
     transition: width 0.5s ease;
     z-index: 1;
 }
@@ -1384,7 +1398,7 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 192, 203, 0.2);
+    background: rgba(228, 195, 193, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1393,9 +1407,9 @@ body {
 }
 
 .why-content .feature-item:hover .feature-icon {
-    background: rgba(255, 105, 180, 0.4);
+    background: rgba(227, 219, 248, 0.4);
     transform: scale(1.2) rotate(8deg);
-    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+    box-shadow: 0 4px 15px rgba(227, 219, 248, 0.3);
 }
 
 .why-content .feature-item .feature-text {
@@ -1410,7 +1424,7 @@ body {
     color: var(--color-primary);
     font-size: 1.15rem;
     font-weight: 600;
-    text-shadow: 0 0 8px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 8px rgba(228, 195, 193, 0.3);
 }
 
 @keyframes float {
@@ -1617,7 +1631,7 @@ body {
 }
 
 .vtuber-feature:hover {
-    background: rgba(255, 192, 203, 0.1);
+    background: rgba(228, 195, 193, 0.1);
     transform: translateX(10px);
 }
 
@@ -1625,7 +1639,7 @@ body {
     background: rgba(255, 192, 203, 0.15);
     border-left: 4px solid var(--color-primary);
     transform: translateX(15px);
-    box-shadow: 0 4px 15px rgba(255, 192, 203, 0.2);
+    box-shadow: 0 4px 15px rgba(228, 195, 193, 0.2);
 }
 
 .vtuber-model-image {
@@ -1649,7 +1663,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 192, 203, 0.1);
+    background: rgba(228, 195, 193, 0.1);
     border-radius: 50%;
     flex-shrink: 0;
 }
@@ -1667,10 +1681,10 @@ body {
 }
 
 .highlight-text {
-    background: rgba(255, 192, 203, 0.1);
+    background: rgba(228, 195, 193, 0.1);
     padding: 1.5rem;
     border-radius: 15px;
-    border-left: 4px solid var(--color-primary);
+    border-left: 4px solid var(--color-secondary);
     margin-top: 2rem;
 }
 
@@ -1749,8 +1763,8 @@ body {
     right: 0;
     bottom: 0;
     background: 
-        radial-gradient(circle at 30% 20%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 70% 80%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 30% 20%, rgba(228, 195, 193, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(227, 219, 248, 0.1) 0%, transparent 50%);
     z-index: 1;
 }
 
@@ -1767,7 +1781,7 @@ body {
     font-size: 3.5rem;
     color: var(--color-primary);
     margin-bottom: 1rem;
-    text-shadow: 0 0 40px rgba(255, 192, 203, 0.5);
+    text-shadow: 0 0 40px rgba(228, 195, 193, 0.5);
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1798,8 +1812,8 @@ body {
     overflow: hidden;
     box-shadow: 
         0 30px 60px rgba(0, 0, 0, 0.5),
-        0 0 40px rgba(255, 192, 203, 0.2);
-    border: 2px solid rgba(255, 192, 203, 0.3);
+        0 0 40px rgba(228, 195, 193, 0.2);
+    border: 2px solid rgba(228, 195, 193, 0.3);
 }
 
 /* 移除 hover 效果以提升性能 */
@@ -1831,7 +1845,7 @@ body {
     margin-bottom: 0;
     font-style: italic;
     color: var(--color-primary);
-    text-shadow: 0 0 20px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 20px rgba(228, 195, 193, 0.3);
 }
 
 /* 功能區塊全寬設計 */
@@ -1850,8 +1864,8 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(255, 192, 203, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(255, 105, 180, 0.1) 0%, transparent 50%);
+    background: radial-gradient(circle at 20% 50%, rgba(228, 195, 193, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(227, 219, 248, 0.1) 0%, transparent 50%);
     z-index: 1;
 }
 
@@ -1868,7 +1882,7 @@ body {
     font-size: 3rem;
     color: var(--color-primary);
     margin-bottom: 3rem;
-    text-shadow: 0 0 30px rgba(255, 192, 203, 0.4);
+    text-shadow: 0 0 30px rgba(228, 195, 193, 0.4);
 }
 
 .features-layout {
@@ -1930,7 +1944,7 @@ body {
     height: 100%; /* 確保圖片填滿其容器 */
     object-fit: contain;
     border-radius: 20px;
-    border: 1px solid rgba(255, 192, 203, 0.2);
+    border: 1px solid rgba(228, 195, 193, 0.2);
 }
 
 
@@ -1972,17 +1986,17 @@ body {
     align-items: center;
     padding: 1.5rem;
     margin-bottom: 0; /* 移除原有的 margin-bottom */
-    background: rgba(255, 192, 203, 0.4);
+    background: rgba(228, 195, 193, 0.4);
     border-radius: 12px;
-    border: 1px solid rgba(255, 192, 203, 0.2);
+    border: 1px solid rgba(228, 195, 193, 0.2);
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     flex-grow: 1; /* 讓每個 spec-row 均勻佔據空間 */
 }
 
 .spec-row:hover {
-    background: rgba(255, 192, 203, 0.1);
-    border-color: rgba(255, 192, 203, 0.4);
+    background: rgba(228, 195, 193, 0.1);
+    border-color: rgba(228, 195, 193, 0.4);
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
@@ -2015,9 +2029,9 @@ body {
 .price-display {
     margin-bottom: 2rem;
     padding: 2rem;
-    background: linear-gradient(135deg, rgba(255, 192, 203, 0.1), rgba(255, 105, 180, 0.1));
+    background: linear-gradient(135deg, rgba(228, 195, 193, 0.1), rgba(227, 219, 248, 0.1));
     border-radius: 15px;
-    border: 1px solid rgba(255, 192, 203, 0.3);
+    border: 1px solid rgba(228, 195, 193, 0.3);
 }
 
 .price-label {
@@ -2030,7 +2044,7 @@ body {
     font-size: 3rem;
     color: var(--color-primary);
     font-weight: bold;
-    text-shadow: 0 0 20px rgba(255, 192, 203, 0.3);
+    text-shadow: 0 0 20px rgba(228, 195, 193, 0.3);
 }
 
 .price-includes {
@@ -2063,20 +2077,20 @@ body {
 
 .feature-card:hover {
     transform: translateY(-5px);
-    border-color: #C2AFFF;
+    border-color: var(--color-primary);
     box-shadow: 0 10px 25px rgba(194, 175, 255, 0.2);
 }
 
 .feature-icon {
     font-size: 3rem;
     margin-bottom: 1rem;
-    color: #C2AFFF;
+    color: var(--color-primary);
 }
 
 .feature-title {
     font-size: 1.3rem;
     margin-bottom: 1rem;
-    color: #C18D8A;
+    color: var(--color-secondary);
     font-weight: bold;
 }
 
@@ -2102,13 +2116,13 @@ body {
 }
 
 .spec-item:hover {
-    border-color: #C2AFFF;
+    border-color: var(--color-primary);
     transform: translateY(-3px);
 }
 
 .spec-title {
     font-size: 1.2rem;
-    color: #C2AFFF;
+    color: var(--color-primary);
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
@@ -2136,14 +2150,14 @@ body {
 
 .price-title {
     font-size: 2rem;
-    color: #C2AFFF;
+    color: var(--color-primary);
     margin-bottom: 1rem;
     font-weight: bold;
 }
 
 .price-amount {
     font-size: 3rem;
-    color: #C18D8A;
+    color: var(--color-secondary);
     font-weight: bold;
     margin-bottom: 2rem;
 }
@@ -2292,7 +2306,7 @@ body {
 
 .final-quote {
     font-size: 2.2rem;
-    color: #C2AFFF;
+    color: var(--color-primary);
     font-weight: 300;
     max-width: 800px;
     z-index: 2;
@@ -2342,7 +2356,7 @@ body {
 }
 
 .footer-section h3 {
-    color: #C2AFFF;
+    color: var(--color-primary);
     margin-bottom: 1rem;
     font-size: 1.2rem;
 }
@@ -2355,7 +2369,7 @@ body {
 }
 
 .footer-section a:hover {
-    color: #C2AFFF;
+    color: var(--color-primary);
 }
 
 .footer-slogan {
@@ -2378,7 +2392,7 @@ body {
 }
 
 .social-link:hover {
-    color: #C2AFFF;
+    color: var(--color-primary);
     transform: translateY(-2px);
 }
 
@@ -2898,7 +2912,7 @@ body {
 }
 
 .art-text .section-title {
-    color: #C2AFFF;
+    color: var(--color-primary);
     font-size: 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
@@ -2940,7 +2954,7 @@ body {
 }
 
 .art-section .feature-bullet {
-    color: #C2AFFF;
+    color: var(--color-primary);
     font-size: 1.3rem;
     margin-right: 1rem;
     min-width: 20px;
