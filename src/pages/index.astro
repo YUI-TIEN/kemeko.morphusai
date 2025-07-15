@@ -4,8 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout>
     <!-- 首頁 Hero Section -->
-    <section class="hero" id="hero" data-scroll data-scroll-speed="0.5">
-        <div class="hero-content">
+    <section class="hero" id="hero">
+        <div class="hero-content" data-scroll data-scroll-speed="1">
             <h1>
                 <img src="images/KEMEKO-white.svg" alt="KEMEKO" class="hero-logo">
             </h1>
@@ -19,9 +19,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     
 
-    <div class="container" data-scroll data-scroll-speed="1">
+    <div class="container">
         <!-- KEMEKO 是什麼？ -->
-        <section class="section" id="about" data-scroll data-scroll-speed="1">
+        <section class="section" id="about">
             <div class="content-section fade-in text-center-content" data-scroll data-scroll-speed="1">
                 <h2 class="section-title">KEMEKO 是什麼？</h2>
                 <h3 class="section-subtitle">一場有溫度的未來對話</h3>
@@ -36,18 +36,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         <!-- 留白呼吸區塊 -->
         <section class="section breathing-section">
-            <div class="highlight-box">
+            <div class="highlight-box" data-scroll data-scroll-speed="1">
                 <p class="highlight-text">KEMEKO 是虛擬角色的實體化載體，是未來共演的起點。</p>
             </div>
         </section>
 
         <!-- 為何她被創造？ -->
         <section class="section why-section">
-            <h2 class="section-title">為何她被創造？</h2>
-            <h3 class="section-subtitle">在人與科技之間，種下一朵花</h3>
-            
+            <h2 class="section-title" data-scroll data-scroll-speed="1">為何她被創造？</h2>
+            <h3 class="section-subtitle" data-scroll data-scroll-speed="1">在人與科技之間，種下一朵花</h3>
             <div class="why-layout fade-in">
-                    <div class="why-content">
+                    <div class="why-content" data-scroll data-scroll-speed="1">
                         <div class="section-text">
                             <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
                         </div>
@@ -77,14 +76,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                             <p>她不是冷冰冰的科技產品，她是一個能理解你的 AI 存在。</p>
                         </div>
                     </div>
-                    <div class="why-decoration">
-                        <div class="rose-petals">
-                            <div class="rose-petal"></div>
-                            <div class="rose-petal"></div>
-                            <div class="rose-petal"></div>
-                            <div class="rose-petal"></div>
-                            <div class="rose-petal"></div>
-                            <div class="rose-petal"></div>
+                    <div class="why-visual" data-scroll data-scroll-speed="1">
+                        <div class="why-accent-graphic">
+                            <div class="accent-circle"></div>
+                            <div class="accent-line"></div>
+                            <div class="accent-dot"></div>
                         </div>
                     </div>
                 </div>
@@ -97,86 +93,68 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <img src="images/9DSC_6367.png" alt="KEMEKO 全寬展示圖 3" class="full-width-image">
         </section>
 
-        <!-- AI Vtuber 的實體舞台 -->
-        <section class="section vtuber-section" id="vtuber">
-            <div class="centered-heading">
-                <h2 class="section-title">AI Vtuber 的實體舞台</h2>
-                <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
-            </div>
-            <div class="vtuber-grid fade-in">
-                    <div class="vtuber-text">
+        <!-- AI Vtuber 的實體舞台與展示 -->
+        <section class="section vtuber-demo-section" id="vtuber">
+            <div class="vtuber-demo-container" data-scroll data-scroll-speed="1">
+                <div class="vtuber-demo-content fade-in">
+                    <div class="centered-heading">
+                        <h2 class="section-title">AI Vtuber 的實體舞台</h2>
+                        <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
+                    </div>
+                    
+                    <div class="vtuber-intro">
                         <div class="section-text">
-                            <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演：</p>
-                        </div>
-                        
-                        <div class="vtuber-features">
-                            <div class="vtuber-feature active" data-image="images/正視圖-03141632.png">
-                                <div class="feature-icon">🎭</div>
-                                <div class="feature-text">
-                                    <h4>整合虛擬人格系統</h4>
-                                    <p>完整的AI人格載體</p>
-                                </div>
-                            </div>
-                            <div class="vtuber-feature" data-image="images/左視圖-03141636.png">
-                                <div class="feature-icon">✨</div>
-                                <div class="feature-text">
-                                    <h4>表情與互動展示</h4>
-                                    <p>語音、表情、情緒完整呈現</p>
-                                </div>
-                            </div>
-                            <div class="vtuber-feature" data-image="images/後視圖-03141643.png">
-                                <div class="feature-icon">🎬</div>
-                                <div class="feature-text">
-                                    <h4>多元應用場景</h4>
-                                    <p>主持、展演、拍攝、活動</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="section-text highlight-text">
-                            <p>她能夠真實呈現虛擬角色的靈魂與魅力，是內容創作者與粉絲共享的真實舞台。</p>
+                            <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演，見證虛擬與現實的完美融合。</p>
                         </div>
                     </div>
                     
-                    <div class="vtuber-visual">
-                        <div class="stage-mockup">
-                            <div class="stage-bg"></div>
-                            <img id="vtuber-model-image" src="images/正視圖-03141632.png" alt="KEMEKO Model" class="vtuber-model-image">
-                            <div class="stage-light"></div>
-                            <div class="stage-light"></div>
-                            <div class="stage-light"></div>
+                    <div class="vtuber-video-showcase">
+                        <div class="video-container">
+                            <div class="video-wrapper">
+                                <iframe
+                                    src="https://www.youtube.com/embed/ZOcvIoPLMbg?si=u9U1IyV_ECPhzczO"
+                                    title="KEMEKO Demo Video"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vtuber-features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🎭</div>
+                            <div class="feature-content">
+                                <h4>整合虛擬人格系統</h4>
+                                <p>完整的AI人格載體，真實呈現虛擬角色的靈魂</p>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">✨</div>
+                            <div class="feature-content">
+                                <h4>表情與互動展示</h4>
+                                <p>語音、表情、情緒完整呈現，生動的互動體驗</p>
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎬</div>
+                            <div class="feature-content">
+                                <h4>多元應用場景</h4>
+                                <p>主持、展演、拍攝、活動，無限可能的創作平台</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vtuber-closing">
+                        <div class="section-text highlight-text">
+                            <p>這不只是一個展示，而是一場科技與藝術的完美融合。</p>
                         </div>
                     </div>
                 </div>
+            </div>
         </section>
     </div>
-    
-    <!-- KEMEKO Demo 影片區 -->
-    <section class="section demo-section">
-        <div class="demo-container">
-            <div class="demo-content fade-in">
-                <h2 class="section-title demo-title">看見 KEMEKO 的真實魅力</h2>
-                <p class="demo-subtitle">觀看完整展示影片，感受未來已來的震撼</p>
-                
-                <div class="video-container">
-                    <div class="video-wrapper">
-                        <iframe
-                            src="https://www.youtube.com/embed/ZOcvIoPLMbg?si=u9U1IyV_ECPhzczO"
-                            title="KEMEKO Demo Video"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
-                </div>
-                
-                <div class="demo-description">
-                    <p>這不只是一個展示，而是一場科技與藝術的完美融合。</p>
-                    <p>見證 KEMEKO 如何將虛擬的靈魂帶入現實世界。</p>
-                </div>
-            </div>
-        </div>
-    </section>
     
     <!-- 藝術 × 靈魂 × 科技美學 - 獨立區塊，不使用container -->
     <section class="art-section" id="art" data-scroll data-scroll-speed="1">
@@ -367,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 創建箭頭網格
     function createArrows() {
         const sectionRect = arrowSection.getBoundingClientRect();
-        const arrowSpacing = 120; // 箭頭間距 - 增加以降低密度
+        const arrowSpacing = 150; // 增加箭頭間距以降低密度和計算負擔
         const cols = Math.ceil(sectionRect.width / arrowSpacing);
         const rows = Math.ceil(sectionRect.height / arrowSpacing);
         
@@ -497,8 +475,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 鼠標移動處理
+    // 鼠標移動處理（節流版本）
+    let lastMouseUpdateTime = 0;
     function updateArrows(mouseX: number, mouseY: number): void {
+        const now = Date.now();
+        if (now - lastMouseUpdateTime < 16) return; // 限制為 60fps
+        lastMouseUpdateTime = now;
+        
+        // 檢查鼠標是否有顯著移動
+        if (Math.abs(mouseX - lastMouseX) < 5 && Math.abs(mouseY - lastMouseY) < 5) return;
+        
         lastMouseX = mouseX;
         lastMouseY = mouseY;
         setAnimationMode('mouse');
@@ -544,35 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const featureItems = document.querySelectorAll('.vtuber-feature');
-        const modelImage = document.getElementById('vtuber-model-image') as HTMLImageElement;
-
-        featureItems.forEach(item => {
-            item.addEventListener('click', () => {
-                // 移除所有 feature item 的 active 類別
-                featureItems.forEach(f => f.classList.remove('active'));
-                // 為當前點擊的 feature item 添加 active 類別
-                item.classList.add('active');
-
-                const newImageSrc = item.getAttribute('data-image');
-                if (newImageSrc) {
-                    // 添加淡出類別
-                    modelImage.classList.add('fade-out');
-
-                    // 等待淡出動畫完成後切換圖片並淡入
-                    modelImage.addEventListener('transitionend', function handler() {
-                        modelImage.src = newImageSrc;
-                        modelImage.classList.remove('fade-out');
-                        // 移除事件監聽器以避免重複觸發
-                        modelImage.removeEventListener('transitionend', handler);
-                    });
-                }
-            });
-        });
-    });
-</script>
+<!-- 移除 VTuber 選項切換功能 - 已優化為靜態展示 -->
 
 <script>
 // 亂碼打字機效果

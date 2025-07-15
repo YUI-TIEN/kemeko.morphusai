@@ -66,7 +66,7 @@ import { Astro } from 'astro';
             });
         }
 
-        // 平滑滾動至錨點
+        // 平滑滾動至錨點 - 支援 Locomotive Scroll
         const navLinks = document.querySelectorAll('.nav__link[href^="#"]');
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -76,58 +76,138 @@ import { Astro } from 'astro';
                 if (targetId) {
                     const targetElement = document.getElementById(targetId);
                     if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                        // 優先使用 Locomotive Scroll 的滾動方法
+                        if (window.scroll) {
+                            window.scroll.scrollTo(targetElement);
+                        } else {
+                            // 回退到原生滾動
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
                     }
                 }
             });
         });
 
-        // 滾動進度條
-        const navItems = Array.from(document.querySelectorAll('.nav__item:not(:has(.nav__link--logo)):not(.nav__item--lang)'));
+        // 滾動進度條 - 支援 Locomotive Scroll
+        const navItems = Array.from(document.querySelectorAll('.nav__item:not(.nav__item--lang)'));
         const progressFillers = navItems.map(item => item.querySelector('.nav-item-progress'));
         const links = navItems.map(item => item.querySelector('.nav__link'));
+        
+        // 過濾掉沒有進度條的項目（如 logo）
+        const validItems = navItems.filter((item, index) => {
+            const filler = progressFillers[index];
+            const link = links[index];
+            const isLogo = link?.classList.contains('nav__link--logo');
+            return filler && link && !isLogo;
+        });
 
-        if (navItems.length > 0) {
-            window.addEventListener('scroll', () => {
-                const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const scrolledPercent = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) : 0;
+        // 緩存 DOM 元素引用以提升性能
+        const validItemsData = validItems.map((item, index) => {
+            const originalIndex = navItems.indexOf(item);
+            return {
+                item,
+                filler: progressFillers[originalIndex],
+                link: links[originalIndex]
+            };
+        });
 
-                const totalItems = navItems.length;
-                const progressAcrossItems = scrolledPercent * totalItems;
+        function updateProgressBar(locomotiveScrollData = null) {
+            if (validItemsData.length === 0) return;
 
-                const filledItems = Math.floor(progressAcrossItems);
-                const partialFillPercent = (progressAcrossItems - filledItems) * 100;
+            // 獲取當前滾動位置
+            let currentScrollY = window.scrollY;
+            let scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // 如果有 Locomotive Scroll 數據，使用它
+            if (locomotiveScrollData) {
+                currentScrollY = locomotiveScrollData.scroll.y;
+                scrollableHeight = locomotiveScrollData.limit.y;
+            }
 
-                navItems.forEach((item, index) => {
-                    const filler = progressFillers[index];
-                    const link = links[index];
+            const scrolledPercent = scrollableHeight > 0 ? (currentScrollY / scrollableHeight) : 0;
+            const totalItems = validItemsData.length;
+            const progressAcrossItems = scrolledPercent * totalItems;
+            const filledItems = Math.floor(progressAcrossItems);
+            const partialFillPercent = (progressAcrossItems - filledItems) * 100;
 
-                    if (!filler || !link) return;
+            // 批量更新 DOM 以提升性能
+            validItemsData.forEach(({filler, link}, index) => {
+                if (!filler || !link) return;
 
-                    let currentFill = 0;
-                    if (index < filledItems) {
-                        currentFill = 100;
-                    } else if (index === filledItems) {
-                        currentFill = partialFillPercent;
-                    }
+                let currentFill = 0;
+                if (index < filledItems) {
+                    currentFill = 100;
+                } else if (index === filledItems) {
+                    currentFill = partialFillPercent;
+                }
 
-                    (filler as HTMLElement).style.width = currentFill + '%';
+                // 只在值改變時更新 DOM
+                const fillerElement = filler as HTMLElement;
+                const linkElement = link as HTMLElement;
+                
+                const newWidth = currentFill + '%';
+                if (fillerElement.style.width !== newWidth) {
+                    fillerElement.style.width = newWidth;
+                }
 
-                    // 計算文字遮罩的漸變停止點
-                    const progressTextStart = currentFill;
+                const progressTextStart = currentFill + '%';
+                const currentProgressStart = linkElement.style.getPropertyValue('--progress-text-start');
+                if (currentProgressStart !== progressTextStart) {
+                    linkElement.style.setProperty('--progress-text-start', progressTextStart);
+                }
 
-                    (link as HTMLElement).style.setProperty('--progress-text-start', progressTextStart + '%');
-
-                    if (currentFill === 100) { // 當進度條完全填滿時，添加 class
-                        link.classList.add('progress-filled');
-                    } else {
-                        link.classList.remove('progress-filled');
-                    }
-                });
+                // 優化 class 切換
+                const shouldHaveFilled = currentFill === 100;
+                const hasFilled = linkElement.classList.contains('progress-filled');
+                if (shouldHaveFilled !== hasFilled) {
+                    linkElement.classList.toggle('progress-filled', shouldHaveFilled);
+                }
             });
         }
+
+        // 設置滾動監聽器 - 支援 Locomotive Scroll
+        function setupScrollListeners() {
+            let isUpdating = false;
+            let lastScrollY = -1;
+            
+            function throttledUpdateProgressBar(locomotiveScrollData = null) {
+                if (isUpdating) return;
+                
+                // 檢查滾動位置是否有顯著變化（減少不必要的更新）
+                const currentScrollY = locomotiveScrollData ? locomotiveScrollData.scroll.y : window.scrollY;
+                if (Math.abs(currentScrollY - lastScrollY) < 10) return;
+                
+                lastScrollY = currentScrollY;
+                isUpdating = true;
+                
+                requestAnimationFrame(() => {
+                    updateProgressBar(locomotiveScrollData);
+                    isUpdating = false;
+                });
+            }
+            
+            // 監聽 Locomotive Scroll 的自定義事件
+            window.addEventListener('locomotiveScroll', (event) => {
+                throttledUpdateProgressBar(event.detail);
+            });
+            
+            // 回退到傳統滾動監聽器（降低頻率）
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) return;
+                scrollTimeout = setTimeout(() => {
+                    throttledUpdateProgressBar();
+                    scrollTimeout = null;
+                }, 16); // 約 60fps
+            }, { passive: true });
+            
+            // 初始化時更新一次
+            updateProgressBar();
+        }
+
+        setupScrollListeners();
     });
 </script>

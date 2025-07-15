@@ -22,6 +22,9 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
             <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=LXGW+WenKai+TC&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
+        
+        <!-- Locomotive Scroll CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.css">
     </head>
 <body>
     <Header />
@@ -31,33 +34,107 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
 
         <Footer />
         
+        <!-- Locomotive Scroll JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+        
         <script>
-        // 確保所有內容都可見 - 修復動畫問題
-        function initializeAnimations() {
-            // 立即顯示所有 fade-in 元素
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach(element => {
-                element.classList.add('visible');
+        // 初始化 Locomotive Scroll
+        function initializeLocomotiveScroll() {
+            const scrollContainer = document.querySelector('[data-scroll-container]');
+            if (!scrollContainer) return;
+
+            // 初始化 Locomotive Scroll（性能優化版本）
+            const scroll = new LocomotiveScroll({
+                el: scrollContainer,
+                smooth: true,
+                lerp: 0.08, // 稍微降低 lerp 值以減少計算
+                multiplier: 1.0,
+                smartphone: {
+                    smooth: false, // 在手機上禁用平滑滾動以提升性能
+                    breakpoint: 767
+                },
+                tablet: {
+                    smooth: true,
+                    breakpoint: 1024
+                },
+                // 性能優化選項
+                reloadOnContextChange: false,
+                resetNativeScroll: true
             });
 
-            // 立即顯示英雄內容
-            const heroContent = document.querySelector('.hero-content') as HTMLElement | null;
-            if (heroContent) {
-                heroContent.style.opacity = '1';
-            }
+            // 將 scroll 實例掛載到 window 供其他腳本使用
+            window.scroll = scroll;
 
-            // 確保第一個 content-item 顯示
-            const firstContentItem = document.querySelector('.content-item');
-            if (firstContentItem) {
-                firstContentItem.classList.add('active');
-            }
+            // 頁面 resize 時更新 scroll
+            window.addEventListener('resize', () => {
+                scroll.update();
+            });
+
+            // 頁面載入完成後更新 scroll
+            window.addEventListener('load', () => {
+                scroll.update();
+            });
+
+            // 監聽 Locomotive Scroll 的滾動事件並觸發自定義事件（節流版本）
+            let lastEventTime = 0;
+            const throttleDelay = 16; // 約 60fps
+            
+            scroll.on('scroll', (instance) => {
+                const now = Date.now();
+                if (now - lastEventTime < throttleDelay) return;
+                lastEventTime = now;
+                
+                // 觸發自定義事件，讓 header 可以監聽
+                const customEvent = new CustomEvent('locomotiveScroll', {
+                    detail: {
+                        scroll: instance.scroll,
+                        limit: instance.limit,
+                        direction: instance.direction
+                    }
+                });
+                window.dispatchEvent(customEvent);
+            });
+
+            // Locomotive Scroll 初始化完成
+        }
+
+        // 確保所有內容都可見 - 修復動畫問題（性能優化版本）
+        function initializeAnimations() {
+            // 批量處理 DOM 更新以提升性能
+            const elementsToUpdate = [
+                { selector: '.fade-in', action: 'addClass', className: 'visible' },
+                { selector: '.hero-content', action: 'setOpacity', value: '1' },
+                { selector: '.content-item', action: 'addClass', className: 'active', firstOnly: true }
+            ];
+
+            elementsToUpdate.forEach(({ selector, action, className, value, firstOnly }) => {
+                const elements = firstOnly ? 
+                    [document.querySelector(selector)] : 
+                    Array.from(document.querySelectorAll(selector));
+                
+                elements.forEach(element => {
+                    if (!element) return;
+                    
+                    switch (action) {
+                        case 'addClass':
+                            element.classList.add(className);
+                            break;
+                        case 'setOpacity':
+                            (element as HTMLElement).style.opacity = value;
+                            break;
+                    }
+                });
+            });
         }
 
         // 立即執行動畫初始化
         initializeAnimations();
         
-        // 也在 DOM 載入完成後執行
-        document.addEventListener('DOMContentLoaded', initializeAnimations);
+        // DOM 載入完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAnimations();
+            initializeLocomotiveScroll();
+        });
         </script>
     </body>
 </html>
