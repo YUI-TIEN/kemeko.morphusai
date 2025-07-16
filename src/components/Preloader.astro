@@ -1,0 +1,122 @@
+<!-- src/components/Preloader.astro -->
+<div class="loading-container">
+    <div class="loading-wrapper">
+        <!-- 載入動畫的 SVG 內容 -->
+        <svg class="loading-svg" viewBox="0 0 58.6 68.54">
+            <defs>
+                <clipPath id="svgClipPath">
+                    <path d="M57.77,64.21l-.11-.11c-5.54-5.21-5.29-12.29-5.24-13.36V5.32c0-.21-.04-.64-.04-.64-.34-2.17-2.26-4.26-4.63-4.61-1.96-.29-3.75.3-4.98,1.42-.42.39-.77.82-1.04,1.31,0,.02-.04.06-.05.08-.36.66-.56,1.42-.56,2.23l.04,23.15c.02,7.13-5.76,12.92-12.89,12.92h-7.59c-1.79,0-3.25-1.47-3.25-3.27l.06-32.8c0-.81-.21-1.57-.57-2.23,0-.02-.66-1-1.08-1.39C14.61.37,12.81-.22,10.86.07c-2.38.35-4.29,2.44-4.63,4.61,0,0-.05.43-.05.64v45.42c.05,1.07.3,8.15-5.23,13.36-.04.03-.08.07-.12.11-1.68,1.55-.64,4.33,1.64,4.33h53.66c2.29,0,3.32-2.78,1.64-4.33ZM37.35,43.83c2.25,0,4.07,1.82,4.07,4.07s-1.82,4.07-4.07,4.07-4.07-1.82-4.07-4.07,1.83-4.07,4.07,4.07ZM17.01,49.94c0-3.38,2.73-6.11,6.1-6.11s6.11,2.73,6.11,6.11-2.74,6.1-6.11,6.1-6.1-2.73-6.1-6.1ZM34.37,63.13c-.15,0-.29,0-.43-.04-2.84,2.6-7.22,2.85-10.36.42-1.13-.88-1.12-2.69.29-3.52.73-.43,1.65-.28,2.32.23,1.65,1.25,4,.96,5.31-.63.59-.73,1.55-1.12,2.43-.78.11.04.21.09.31.15.07,0,.15-.02.23-.02,2.04-.06,3.69-1.71,3.75-3.75.02-.94.54-1.83,1.45-2.11,1.44-.43,2.75.64,2.75,2.01,0,4.43-3.61,8.04-8.05,8.04Z"/>
+                </clipPath>
+            </defs>
+            <g clip-path="url(#svgClipPath)">
+                <rect class="filling-rect" x="0" y="68.54" width="58.6" height="68.54" fill="var(--color-primary, #C2AFFF)"/>
+            </g>
+        </svg>
+        <div class="loading-percentage">0%</div>
+    </div>
+</div>
+
+<style>
+    :root {
+        /* 確保顏色變數可用 */
+        --color-background: #202226;
+        --color-primary: #C2AFFF;
+        --color-text-primary: #F6F7F8;
+    }
+
+    .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-background);
+        z-index: 9999;
+        transition: opacity 0.5s ease-out;
+    }
+
+    .loading-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem; /* SVG 和文字之間的間距 */
+    }
+
+    .loading-svg {
+        width: 100px; /* 調整 SVG 大小 */
+        height: 100px;
+        display: block;
+    }
+
+    .filling-rect {
+        transform: translateY(0);
+        transition: transform 0.2s ease-out;
+    }
+
+    .loading-percentage {
+        font-family: 'Noto Sans TC', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: var(--color-text-primary);
+        transition: opacity 0.3s ease-out;
+    }
+</style>
+
+<script>
+    const fillingRect = document.querySelector('.filling-rect');
+    const loadingContainer = document.querySelector('.loading-container');
+    const percentageText = document.querySelector('.loading-percentage');
+
+    if (fillingRect && loadingContainer && percentageText) {
+        const svgHeight = 68.54;
+        let animationFrameId;
+
+        // 模擬載入進度
+        let loadProgress = 0;
+        const updateInterval = 50; // 每 50ms 更新一次進度
+        const loadTime = 3000; // 模擬總載入時間 3 秒
+        const increment = 100 / (loadTime / updateInterval);
+
+        const updateLoader = () => {
+            loadProgress += increment;
+            if (loadProgress > 100) {
+                loadProgress = 100;
+            }
+
+            const progress = loadProgress / 100;
+            const translateYValue = svgHeight * progress;
+            
+            fillingRect.style.transform = `translateY(-${translateYValue}px)`;
+            percentageText.textContent = `${Math.round(loadProgress)}%`;
+
+            if (loadProgress < 100) {
+                animationFrameId = requestAnimationFrame(updateLoader);
+            }
+        };
+        
+        // 開始模擬載入
+        animationFrameId = requestAnimationFrame(updateLoader);
+
+        window.addEventListener('load', () => {
+            // 取消模擬動畫
+            cancelAnimationFrame(animationFrameId);
+
+            // 確保動畫達到 100%
+            const finalFillDuration = 300;
+            fillingRect.style.transition = `transform ${finalFillDuration / 1000}s ease-out`;
+            fillingRect.style.transform = `translateY(-${svgHeight}px)`;
+            percentageText.textContent = '100%';
+
+            // 延遲後淡出
+            setTimeout(() => {
+                loadingContainer.style.opacity = '0';
+                setTimeout(() => {
+                    loadingContainer.style.display = 'none';
+                }, 500);
+            }, finalFillDuration + 1200); // 增加 1000ms 的停留時間
+        });
+    }
+</script>

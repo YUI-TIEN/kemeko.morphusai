@@ -1040,9 +1040,15 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
+    text-align: center;
     position: relative;
-    background: url('/kemeko.morphusai/images/Art.png') center center / cover no-repeat;
+    background-image: url('images/21DSC_6386.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: transparent; /* 確保沒有實色背景 */
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -1055,20 +1061,20 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(32, 34, 38, 0);
+    background: rgba(32, 34, 38, 0.7);
     z-index: 1;
 }
 
 .art-content {
     position: relative;
     z-index: 2;
-    padding: 2rem 8rem 2rem 2rem;
+    padding: 2rem;
     max-width: 800px;
     width: 100%;
 }
 
 .art-text {
-    text-align: right;
+    text-align: center;
 }
 
 .art-title {
@@ -1089,6 +1095,7 @@ body {
     margin-bottom: 1.2rem;
     opacity: 0.95;
     text-shadow: 0 0 10px rgba(246, 247, 248, 0.1);
+    text-align: center; /* 確保文字置中 */
 }
 
 .art-description p:last-child {
@@ -1315,6 +1322,7 @@ body {
 .why-content .features-list {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0;
     margin: 2rem 0;
     border-radius: 15px;
@@ -1652,20 +1660,15 @@ body {
     border: 2px solid rgba(194, 175, 255, 0.3);
 }
 
-.vtuber-video-showcase .video-wrapper {
+
+
+.vtuber-video-showcase iframe {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* 移除 video-wrapper 的邊框和圓角 */
-}
-
-.vtuber-video-showcase iframe {
-    width: 100%;
-    height: 100%;
     border: none;
-    border-radius: 25px; /* 讓iframe貼合container的圓角 */
 }
 
 .vtuber-features-grid {
@@ -2967,115 +2970,3 @@ body {
     }
 }
 
-/* 藝術區塊重新設計 */
-.art-section {
-    background: #000000; /* 純黑色背景 */
-    width: 100%;
-    padding: 4rem 0;
-    margin: 0; /* 移除邊距確保全寬 */
-    border-radius: 0;
-}
-
-.art-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    text-align: center; /* 文字置中對齊 */
-}
-
-.art-text {
-    margin-bottom: 3rem;
-}
-
-.art-text .section-title {
-    color: var(--color-primary);
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.art-text .section-text {
-    margin: 2rem 0;
-    text-align: center;
-}
-
-.art-text .section-text p {
-    font-size: 1.2rem;
-    color: var(--gray-light);
-    line-height: 1.8;
-    margin: 0 auto;
-    max-width: 800px;
-}
-
-/* 藝術區塊的特色列表 - 移除hover效果，保持簡潔 */
-.art-section .features-list {
-    margin: 2.5rem 0;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.art-section .feature-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem 0;
-    transition: none; /* 移除hover過渡效果 */
-}
-
-.art-section .feature-item:hover {
-    /* 移除所有hover效果 */
-    transform: none;
-    background: none;
-}
-
-.art-section .feature-bullet {
-    color: var(--color-primary);
-    font-size: 1.3rem;
-    margin-right: 1rem;
-    min-width: 20px;
-}
-
-.art-section .feature-item span:last-child {
-    font-size: 1.1rem;
-    color: var(--gray-light);
-    line-height: 1.6;
-    text-align: left;
-}
-
-/* 花朵圖片樣式 */
-.art-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 2rem;
-}
-
-.flower-image {
-    max-width: 100%;
-    height: auto;
-    max-height: 500px;
-    object-fit: contain;
-    /* 移除螢光色陰影 */
-}
-
-/* 移除圖片hover效果 */
-
-/* 響應式設計 */
-@media (max-width: 768px) {
-    .art-content {
-        padding: 0 1rem;
-    }
-    
-    .art-text .section-title {
-        font-size: 2rem;
-    }
-    
-    .art-text .section-text p {
-        font-size: 1.1rem;
-    }
-    
-    .flower-image {
-        max-height: 350px;
-    }
-}
