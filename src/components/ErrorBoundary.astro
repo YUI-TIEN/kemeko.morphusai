@@ -1,0 +1,156 @@
+---
+export interface Props {
+  fallback?: string;
+  showDetails?: boolean;
+}
+
+const { fallback = "Something went wrong", showDetails = false } = Astro.props;
+---
+
+<div class="error-boundary">
+  <div class="error-content">
+    <div class="error-icon">⚠️</div>
+    <h2 class="error-title">Oops! Something went wrong</h2>
+    <p class="error-message">{fallback}</p>
+    
+    {showDetails && (
+      <details class="error-details">
+        <summary>Technical Details</summary>
+        <div class="error-stack">
+          <slot name="error-details">
+            <p>An unexpected error occurred while rendering this component.</p>
+            <p>Please try refreshing the page or contact support if the problem persists.</p>
+          </slot>
+        </div>
+      </details>
+    )}
+    
+    <div class="error-actions">
+      <button class="error-button primary" onclick="window.location.reload()">
+        Retry
+      </button>
+      <button class="error-button secondary" onclick="window.history.back()">
+        Go Back
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .error-boundary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    padding: 2rem;
+    background: var(--color-background, #f8f9fa);
+    border-radius: 12px;
+    margin: 2rem 0;
+    border: 1px solid var(--color-border, #e9ecef);
+  }
+
+  .error-content {
+    text-align: center;
+    max-width: 500px;
+    padding: 2rem;
+  }
+
+  .error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+    color: var(--color-text-primary, #333);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .error-message {
+    color: var(--color-text-secondary, #666);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .error-details {
+    text-align: left;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface, #fff);
+    border-radius: 8px;
+    border: 1px solid var(--color-border, #e9ecef);
+  }
+
+  .error-details summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--color-text-primary, #333);
+    margin-bottom: 0.5rem;
+  }
+
+  .error-stack {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-secondary, #666);
+    line-height: 1.5;
+  }
+
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .error-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+  }
+
+  .error-button.primary {
+    background: var(--color-primary, #007bff);
+    color: white;
+  }
+
+  .error-button.primary:hover {
+    background: var(--color-primary-hover, #0056b3);
+    transform: translateY(-1px);
+  }
+
+  .error-button.secondary {
+    background: transparent;
+    color: var(--color-text-secondary, #666);
+    border-color: var(--color-border, #e9ecef);
+  }
+
+  .error-button.secondary:hover {
+    background: var(--color-surface, #f8f9fa);
+    color: var(--color-text-primary, #333);
+  }
+
+  @media (max-width: 768px) {
+    .error-boundary {
+      padding: 1rem;
+      margin: 1rem 0;
+    }
+
+    .error-content {
+      padding: 1rem;
+    }
+
+    .error-actions {
+      flex-direction: column;
+    }
+
+    .error-button {
+      width: 100%;
+    }
+  }
+</style>

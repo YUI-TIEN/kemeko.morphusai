@@ -1,6 +1,29 @@
 /**
  * KEMEKO Arrow Manager
  * @description Professional arrow animation management system with performance monitoring
+ * 
+ * Features:
+ * - Interactive arrow animations that follow mouse movement
+ * - Performance monitoring with frame rate tracking
+ * - Multiple animation modes (idle, static, mouse-follow, center-focus)
+ * - Accessibility support with reduced motion preferences
+ * - Error handling and logging
+ * - Memory efficient with proper cleanup
+ * 
+ * @example
+ * ```typescript
+ * const container = document.getElementById('arrow-section');
+ * const arrowManager = new ArrowManager(container);
+ * 
+ * // Start animation
+ * arrowManager.start();
+ * 
+ * // Change mode
+ * arrowManager.setMode('mouse-follow');
+ * 
+ * // Stop and cleanup
+ * arrowManager.stop();
+ * ```
  */
 
 import type { 

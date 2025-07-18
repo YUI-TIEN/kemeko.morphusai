@@ -76,10 +76,79 @@ export class ErrorHandler {
     // Console logging
     console.error('KEMEKO Error:', errorLog);
 
+    // Show user-friendly error notification
+    this.showUserNotification(message, error);
+
     // In production, you might want to send to a logging service
     if (import.meta.env.PROD) {
       this.sendToLoggingService(errorLog);
     }
+  }
+
+  /**
+   * Show user-friendly error notification
+   */
+  private showUserNotification(message: string, error: any): void {
+    // Create notification element if it doesn't exist
+    let notificationContainer = document.getElementById('error-notifications');
+    if (!notificationContainer) {
+      notificationContainer = document.createElement('div');
+      notificationContainer.id = 'error-notifications';
+      notificationContainer.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        max-width: 400px;
+        pointer-events: none;
+      `;
+      document.body.appendChild(notificationContainer);
+    }
+
+    // Create notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      background: #ff4444;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.3s ease;
+      pointer-events: auto;
+      cursor: pointer;
+    `;
+
+    notification.innerHTML = `
+      <div style="font-weight: 500; margin-bottom: 4px;">Something went wrong</div>
+      <div style="font-size: 0.9em; opacity: 0.9;">Please try again or refresh the page</div>
+    `;
+
+    // Add click to dismiss
+    notification.addEventListener('click', () => {
+      notification.style.opacity = '0';
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => notification.remove(), 300);
+    });
+
+    notificationContainer.appendChild(notification);
+
+    // Animate in
+    setTimeout(() => {
+      notification.style.opacity = '1';
+      notification.style.transform = 'translateX(0)';
+    }, 10);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => notification.remove(), 300);
+      }
+    }, 5000);
   }
 
   /**

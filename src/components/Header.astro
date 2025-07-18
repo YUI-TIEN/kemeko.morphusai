@@ -13,7 +13,7 @@ import { Astro } from 'astro';
             </li>
             <li class="nav__item">
                 <div class="nav-item-progress"></div>
-                <a href="#about" class="nav__link">關於</a>
+                <a href="#about" class="nav__link">關於她</a>
             </li>
             <li class="nav__item">
                 <div class="nav-item-progress"></div>
@@ -34,10 +34,6 @@ import { Astro } from 'astro';
             <li class="nav__item">
                 <div class="nav-item-progress"></div>
                 <a href="#pricing" class="nav__link">預購</a>
-            </li>
-            <li class="nav__item">
-                <div class="nav-item-progress"></div>
-                <a href="#arrow-section" class="nav__link">聯絡我們</a>
             </li>
             <li class="nav__item nav__item--lang">
                 <button class="nav__toggle" aria-label="語言切換">中文</button>
@@ -70,7 +66,7 @@ import { Astro } from 'astro';
             });
         }
 
-        // 平滑滾動至錨點 - 支援 Locomotive Scroll
+        // 平滑滾動至錨點 - 支援 Locomotive Scroll 和 Section Progress Tracker
         const navLinks = document.querySelectorAll('.nav__link[href^="#"]');
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -80,6 +76,11 @@ import { Astro } from 'astro';
                 if (targetId) {
                     const targetElement = document.getElementById(targetId);
                     if (targetElement) {
+                        // 通知 SectionProgressTracker 導航點擊
+                        if (sectionProgressTracker) {
+                            sectionProgressTracker.onNavigationClick(targetId);
+                        }
+                        
                         // 優先使用 Locomotive Scroll 的滾動方法
                         if (window.scroll) {
                             window.scroll.scrollTo(targetElement);
@@ -95,123 +96,21 @@ import { Astro } from 'astro';
             });
         });
 
-        // 滾動進度條 - 支援 Locomotive Scroll
-        const navItems = Array.from(document.querySelectorAll('.nav__item:not(.nav__item--lang)'));
-        const progressFillers = navItems.map(item => item.querySelector('.nav-item-progress'));
-        const links = navItems.map(item => item.querySelector('.nav__link'));
+        // 智能 Section 基礎進度條系統
+        // 動態載入 SectionProgressTracker
+        let sectionProgressTracker = null;
         
-        // 過濾掉沒有進度條的項目（如 logo）
-        const validItems = navItems.filter((item, index) => {
-            const filler = progressFillers[index];
-            const link = links[index];
-            const isLogo = link?.classList.contains('nav__link--logo');
-            return filler && link && !isLogo;
-        });
-
-        // 緩存 DOM 元素引用以提升性能
-        const validItemsData = validItems.map((item, index) => {
-            const originalIndex = navItems.indexOf(item);
-            return {
-                item,
-                filler: progressFillers[originalIndex],
-                link: links[originalIndex]
-            };
-        });
-
-        function updateProgressBar(locomotiveScrollData = null) {
-            if (validItemsData.length === 0) return;
-
-            // 獲取當前滾動位置
-            let currentScrollY = window.scrollY;
-            let scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-            
-            // 如果有 Locomotive Scroll 數據，使用它
-            if (locomotiveScrollData) {
-                currentScrollY = locomotiveScrollData.scroll.y;
-                scrollableHeight = locomotiveScrollData.limit.y;
-            }
-
-            const scrolledPercent = scrollableHeight > 0 ? (currentScrollY / scrollableHeight) : 0;
-            const totalItems = validItemsData.length;
-            const progressAcrossItems = scrolledPercent * totalItems;
-            const filledItems = Math.floor(progressAcrossItems);
-            const partialFillPercent = (progressAcrossItems - filledItems) * 100;
-
-            // 批量更新 DOM 以提升性能
-            validItemsData.forEach(({filler, link}, index) => {
-                if (!filler || !link) return;
-
-                let currentFill = 0;
-                if (index < filledItems) {
-                    currentFill = 100;
-                } else if (index === filledItems) {
-                    currentFill = partialFillPercent;
+        // 等待 SectionProgressTracker 載入完成
+        function initializeSectionProgressTracker() {
+            // 由於 SectionProgressTracker 會自動初始化，我們只需要處理點擊事件
+            setTimeout(() => {
+                // 獲取全域實例
+                if (window.getSectionProgressTracker) {
+                    sectionProgressTracker = window.getSectionProgressTracker();
                 }
-
-                // 只在值改變時更新 DOM
-                const fillerElement = filler as HTMLElement;
-                const linkElement = link as HTMLElement;
-                
-                const newWidth = currentFill + '%';
-                if (fillerElement.style.width !== newWidth) {
-                    fillerElement.style.width = newWidth;
-                }
-
-                const progressTextStart = currentFill + '%';
-                const currentProgressStart = linkElement.style.getPropertyValue('--progress-text-start');
-                if (currentProgressStart !== progressTextStart) {
-                    linkElement.style.setProperty('--progress-text-start', progressTextStart);
-                }
-
-                // 優化 class 切換
-                const shouldHaveFilled = currentFill === 100;
-                const hasFilled = linkElement.classList.contains('progress-filled');
-                if (shouldHaveFilled !== hasFilled) {
-                    linkElement.classList.toggle('progress-filled', shouldHaveFilled);
-                }
-            });
+            }, 100);
         }
-
-        // 設置滾動監聽器 - 支援 Locomotive Scroll
-        function setupScrollListeners() {
-            let isUpdating = false;
-            let lastScrollY = -1;
-            
-            function throttledUpdateProgressBar(locomotiveScrollData = null) {
-                if (isUpdating) return;
-                
-                // 檢查滾動位置是否有顯著變化（減少不必要的更新）
-                const currentScrollY = locomotiveScrollData ? locomotiveScrollData.scroll.y : window.scrollY;
-                if (Math.abs(currentScrollY - lastScrollY) < 10) return;
-                
-                lastScrollY = currentScrollY;
-                isUpdating = true;
-                
-                requestAnimationFrame(() => {
-                    updateProgressBar(locomotiveScrollData);
-                    isUpdating = false;
-                });
-            }
-            
-            // 監聽 Locomotive Scroll 的自定義事件
-            window.addEventListener('locomotiveScroll', (event) => {
-                throttledUpdateProgressBar(event.detail);
-            });
-            
-            // 回退到傳統滾動監聽器（降低頻率）
-            let scrollTimeout;
-            window.addEventListener('scroll', () => {
-                if (scrollTimeout) return;
-                scrollTimeout = setTimeout(() => {
-                    throttledUpdateProgressBar();
-                    scrollTimeout = null;
-                }, 16); // 約 60fps
-            }, { passive: true });
-            
-            // 初始化時更新一次
-            updateProgressBar();
-        }
-
-        setupScrollListeners();
+        
+        initializeSectionProgressTracker();
     });
 </script>

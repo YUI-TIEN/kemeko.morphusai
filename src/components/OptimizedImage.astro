@@ -1,0 +1,112 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  quality?: number;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+  class?: string;
+  format?: 'webp' | 'avif' | 'jpeg' | 'png';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  quality = 80,
+  loading = 'lazy',
+  sizes = '100vw',
+  class: className,
+  format = 'webp'
+} = Astro.props;
+
+// Generate responsive image sources
+const generateSrcSet = (baseSrc: string, width?: number) => {
+  if (!width) return baseSrc;
+  
+  const breakpoints = [320, 640, 768, 1024, 1280, 1536];
+  const relevantBreakpoints = breakpoints.filter(bp => bp <= width * 2);
+  
+  return relevantBreakpoints
+    .map(bp => `${baseSrc}?w=${bp}&q=${quality}&f=${format} ${bp}w`)
+    .join(', ');
+};
+
+const srcSet = generateSrcSet(src, width);
+const fallbackSrc = `${src}?w=${width || 800}&q=${quality}&f=jpeg`;
+---
+
+<picture class={className}>
+  {format === 'webp' && (
+    <source 
+      srcset={srcSet} 
+      sizes={sizes} 
+      type="image/webp" 
+    />
+  )}
+  {format === 'avif' && (
+    <source 
+      srcset={srcSet} 
+      sizes={sizes} 
+      type="image/avif" 
+    />
+  )}
+  
+  <img
+    src={fallbackSrc}
+    srcset={srcSet}
+    sizes={sizes}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+    class="optimized-image"
+  />
+</picture>
+
+<style>
+  .optimized-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    transition: var(--transition-smooth);
+  }
+  
+  .optimized-image:hover {
+    transform: scale(1.02);
+  }
+  
+  picture {
+    display: block;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+  }
+  
+  /* Lazy loading placeholder */
+  .optimized-image[loading="lazy"] {
+    background: linear-gradient(
+      90deg,
+      var(--color-surface) 0%,
+      var(--color-border) 50%,
+      var(--color-surface) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Responsive breakpoints */
+  @media (max-width: 768px) {
+    .optimized-image {
+      border-radius: var(--radius-sm);
+    }
+  }
+</style>

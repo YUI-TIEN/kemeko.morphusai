@@ -15,6 +15,24 @@ export default defineConfig({
   vite: {
     server: {
       host: true
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'animation': ['./src/utils/ArrowManager.ts'],
+            'scroll': ['locomotive-scroll']
+          }
+        }
+      },
+      sourcemap: true,
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true
+        }
+      }
     }
   }
 });

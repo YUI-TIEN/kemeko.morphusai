@@ -14,6 +14,11 @@
 
 /* KEMEKO 設計系統色彩方案 */
 :root {
+    /* 資源路徑 */
+    --base-url: '';
+    --images-path: '/kemeko.morphusai/images';
+    
+    /* 在開發模式中，可以通過 JavaScript 動態設定 */
     /* 主色系 - 雙主色概念 */
     --color-primary: #C2AFFF;  /* 薰衣草紫 - 表現KEMEKO本體與科技溫柔面向 */
     --color-secondary: #C18D8A; /* 乾燥玫瑰色 - 表現人文互動與情感連結 */
@@ -499,6 +504,7 @@ html {
     overflow: hidden;
     width: 100vw;
     margin-left: calc(-50vw + 50%);
+    margin-bottom: 0;
     padding: 6rem 2rem;
 }
 
@@ -998,6 +1004,7 @@ body {
     height: auto;
     position: relative;
     justify-content: center;
+    transition: var(--transition-fast);
     border-radius: var(--nav-border-radius);
     overflow: hidden; /* Clip the progress fill */
     transition: box-shadow 0.3s ease, transform 0.3s ease, z-index 0s; /* Add transition for shadow */
@@ -1049,9 +1056,26 @@ body {
     /* 遮罩效果將由 @supports 規則處理 */
 }
 
-/* 支援backdrop-filter的瀏覽器 */
+/* 當前活動的 Section 樣式 */
+.nav__link.active-section {
+    border-color: rgba(194, 175, 255, 0.6);
+    box-shadow: 
+        var(--nav-shadow-hover),
+        0 0 15px rgba(194, 175, 255, 0.4),
+        inset 0 0 10px rgba(194, 175, 255, 0.1);
+    text-shadow: 0 0 10px rgba(194, 175, 255, 0.5);
+    font-weight: 600;
+    transform: translate3d(0, 0, 0) scale(1.05);
+    /* 移除 backdrop-filter 避免文字模糊 */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    /* 使用邊框發光效果取代背景，避免遮住文字 */
+    position: relative;
+}
+
+/* 支援backdrop-filter的瀏覽器 - 但排除 active-section */
 @supports (backdrop-filter: blur(1px)) {
-    .nav__link,
+    .nav__link:not(.active-section),
     .nav__toggle {
         backdrop-filter: blur(var(--nav-blur)) saturate(120%);
         -webkit-backdrop-filter: blur(var(--nav-blur)) saturate(120%);
@@ -1060,7 +1084,20 @@ body {
 
 /* 支援 background-clip: text 的瀏覽器 */
 @supports (background-clip: text) or (-webkit-background-clip: text) {
-    .nav__link {
+    .nav__link:not(.active-section):not(.nav__link--logo) {
+        background-image: linear-gradient(90deg, 
+            var(--color-background) 0%, 
+            var(--color-background) var(--progress-text-start, 0%), 
+            var(--color-text-white) var(--progress-text-start, 0%), 
+            var(--color-text-white) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+    
+    /* active-section 使用特殊的文字顏色處理 */
+    .nav__link.active-section:not(.nav__link--logo) {
         background-image: linear-gradient(90deg, 
             var(--color-background) 0%, 
             var(--color-background) var(--progress-text-start, 0%), 
@@ -1082,6 +1119,10 @@ body {
     .nav__link.progress-filled {
         color: var(--color-background);
     }
+    
+    .nav__link.active-section {
+        color: var(--color-background);
+    }
 }
 
 /* 進度條完成時的樣式在 @supports 規則中處理 */
@@ -1101,10 +1142,15 @@ body {
 
 /* Logo專用樣式 */
 .nav__link--logo {
-    background: var(--color-text-white);
-    border-color: var(--color-text-white);
-    box-shadow: var(--nav-shadow-hover);
-    color: var(--color-background);
+    background: var(--color-text-white) !important;
+    border-color: var(--color-text-white) !important;
+    box-shadow: var(--nav-shadow-hover) !important;
+    color: var(--color-background) !important;
+    /* 確保 logo 不受進度條文字效果影響 */
+    background-image: none !important;
+    background-clip: initial !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: var(--color-background) !important;
 }
 
 .nav__link--logo:hover {
@@ -1600,7 +1646,7 @@ body {
     background: rgba(64, 68, 77, 0.4); /* 使用 surface 色彩 */
     border-radius: 20px;
     padding: 3rem;
-    margin-bottom: 3rem;
+    margin-bottom: 12rem;
     backdrop-filter: blur(15px);
     border: 1px solid rgba(227, 219, 248, 0.4); /* Hot Pink with transparency */
     transition: all 0.3s ease;
@@ -1969,7 +2015,7 @@ body {
     justify-content: center;
     text-align: center;
     position: relative;
-    background-image: url('images/21DSC_6386.png');
+    background-image: url('/kemeko.morphusai/images/21DSC_6386.png');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

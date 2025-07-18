@@ -19,8 +19,17 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         <link rel="icon" type="image/svg+xml" href="favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
-        <base href={import.meta.env.BASE_URL}> <!-- 添加 base 標籤 -->
-            <link rel="preconnect" href="https://fonts.googleapis.com">
+        <base href={import.meta.env.BASE_URL}>
+        
+        <!-- Content Security Policy - Development friendly -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; frame-src 'self' https:; media-src 'self' https: blob:;">
+        
+        <!-- Security Headers (Note: X-Frame-Options cannot be set via meta tag) -->
+        <meta http-equiv="X-Content-Type-Options" content="nosniff">
+        <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=LXGW+WenKai+TC&family=Noto+Sans+TC:wght@100..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet">
         
@@ -38,6 +47,263 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         
         <!-- Locomotive Scroll JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+        
+        <!-- Section Progress Tracker -->
+        <script type="module">
+            // 創建一個內聯的 Section Progress Tracker
+            class SectionProgressTracker {
+                constructor() {
+                    this.sections = [];
+                    this.currentSection = null;
+                    this.observer = null;
+                    this.isScrolling = false;
+                    this.scrollTimeout = null;
+                    this.INTERSECTION_THRESHOLD = 0.3;
+                    this.SCROLL_THROTTLE = 16;
+                    this.init();
+                }
+                
+                init() {
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', () => this.setup());
+                    } else {
+                        this.setup();
+                    }
+                }
+                
+                setup() {
+                    this.collectSections();
+                    this.setupIntersectionObserver();
+                    this.setupScrollListener();
+                    this.updateInitialState();
+                }
+                
+                collectSections() {
+                    const navItems = Array.from(document.querySelectorAll('.nav__item:not(.nav__item--lang)'));
+                    
+                    this.sections = navItems
+                        .map((navItem, index) => {
+                            const navLink = navItem.querySelector('.nav__link');
+                            const progressFiller = navItem.querySelector('.nav-item-progress');
+                            
+                            if (!navLink || !progressFiller) return null;
+                            if (navLink.classList.contains('nav__link--logo')) return null;
+                            
+                            const href = navLink.getAttribute('href');
+                            if (!href || !href.startsWith('#')) return null;
+                            
+                            const sectionId = href.substring(1);
+                            const sectionElement = document.getElementById(sectionId);
+                            
+                            if (!sectionElement) return null;
+                            
+                            return {
+                                id: sectionId,
+                                element: sectionElement,
+                                navItem: navItem,
+                                progressFiller,
+                                navLink,
+                                index
+                            };
+                        })
+                        .filter(Boolean);
+                }
+                
+                setupIntersectionObserver() {
+                    const options = {
+                        root: null,
+                        rootMargin: '-20% 0px -20% 0px',
+                        threshold: this.INTERSECTION_THRESHOLD
+                    };
+                    
+                    this.observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const sectionInfo = this.sections.find(s => s.element === entry.target);
+                                if (sectionInfo) {
+                                    this.setCurrentSection(sectionInfo);
+                                }
+                            }
+                        });
+                    }, options);
+                    
+                    this.sections.forEach(section => {
+                        this.observer.observe(section.element);
+                    });
+                }
+                
+                setupScrollListener() {
+                    window.addEventListener('locomotiveScroll', (event) => {
+                        this.handleScroll(event.detail);
+                    });
+                    
+                    window.addEventListener('scroll', () => {
+                        this.handleScroll({
+                            y: window.scrollY,
+                            limit: document.documentElement.scrollHeight - window.innerHeight,
+                            direction: 'down'
+                        });
+                    }, { passive: true });
+                }
+                
+                handleScroll(scrollInfo) {
+                    if (this.isScrolling) return;
+                    
+                    this.isScrolling = true;
+                    
+                    if (this.scrollTimeout) {
+                        clearTimeout(this.scrollTimeout);
+                    }
+                    
+                    this.scrollTimeout = setTimeout(() => {
+                        requestAnimationFrame(() => {
+                            this.updateProgress(scrollInfo);
+                            this.isScrolling = false;
+                        });
+                    }, this.SCROLL_THROTTLE);
+                }
+                
+                setCurrentSection(sectionInfo) {
+                    if (this.currentSection === sectionInfo) return;
+                    
+                    if (this.currentSection) {
+                        this.currentSection.navLink.classList.remove('active-section');
+                    }
+                    
+                    this.currentSection = sectionInfo;
+                    this.currentSection.navLink.classList.add('active-section');
+                    
+                    this.updateProgress();
+                }
+                
+                updateProgress(scrollInfo) {
+                    if (!this.currentSection) return;
+                    
+                    const sectionProgress = this.calculateSectionProgress(this.currentSection, scrollInfo);
+                    this.updateProgressDisplay(this.currentSection, sectionProgress);
+                }
+                
+                calculateSectionProgress(sectionInfo, scrollInfo) {
+                    const element = sectionInfo.element;
+                    const rect = element.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                    // 如果 section 完全在視窗上方，進度為 100%
+                    if (rect.bottom < 0) return 100;
+                    // 如果 section 完全在視窗下方，進度為 0%
+                    if (rect.top > windowHeight) return 0;
+                    
+                    // 重新設計的進度計算邏輯 - 更平滑且不會跑太快
+                    const sectionHeight = rect.height;
+                    const viewportHeight = windowHeight;
+                    
+                    // 計算進度的關鍵點
+                    const sectionTop = rect.top;
+                    const sectionBottom = rect.bottom;
+                    
+                    let progress = 0;
+                    
+                    // 階段1：section 進入視窗 (0% -> 30%)
+                    if (sectionTop > 0) {
+                        // section 還沒完全進入視窗
+                        const entryProgress = Math.max(0, (viewportHeight - sectionTop) / viewportHeight);
+                        progress = entryProgress * 30;
+                    }
+                    // 階段2：section 在視窗中滾動 (30% -> 85%)
+                    else if (sectionBottom > viewportHeight * 0.5) {
+                        // section 主要內容在視窗中
+                        const scrollDistance = Math.abs(sectionTop);
+                        const maxScrollForThisPhase = sectionHeight * 0.6; // 60% 的 section 高度
+                        const scrollProgress = Math.min(1, scrollDistance / maxScrollForThisPhase);
+                        progress = 30 + (scrollProgress * 55); // 30% + 55% = 85%
+                    }
+                    // 階段3：section 即將離開視窗 (85% -> 100%)
+                    else {
+                        // section 底部接近視窗底部
+                        const exitProgress = Math.max(0, (viewportHeight * 0.5 - sectionBottom) / (viewportHeight * 0.5));
+                        progress = 85 + (exitProgress * 15); // 85% + 15% = 100%
+                    }
+                    
+                    return Math.max(0, Math.min(100, progress));
+                }
+                
+                updateProgressDisplay(sectionInfo, progress) {
+                    const { progressFiller, navLink, index } = sectionInfo;
+                    
+                    this.sections.forEach((section, idx) => {
+                        if (section === sectionInfo) return;
+                        
+                        let fillPercent = 0;
+                        if (idx < index) {
+                            fillPercent = 100;
+                        } else if (idx > index) {
+                            fillPercent = 0;
+                        }
+                        
+                        section.progressFiller.style.width = fillPercent + '%';
+                        section.navLink.style.setProperty('--progress-text-start', fillPercent + '%');
+                        section.navLink.classList.toggle('progress-filled', fillPercent === 100);
+                    });
+                    
+                    progressFiller.style.width = progress + '%';
+                    navLink.style.setProperty('--progress-text-start', progress + '%');
+                    navLink.classList.toggle('progress-filled', progress === 100);
+                }
+                
+                updateInitialState() {
+                    const viewportCenter = window.innerHeight / 2;
+                    let closestSection = null;
+                    let closestDistance = Infinity;
+                    
+                    this.sections.forEach(section => {
+                        const rect = section.element.getBoundingClientRect();
+                        const sectionCenter = rect.top + rect.height / 2;
+                        const distance = Math.abs(sectionCenter - viewportCenter);
+                        
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            closestSection = section;
+                        }
+                    });
+                    
+                    if (closestSection) {
+                        this.setCurrentSection(closestSection);
+                    }
+                }
+                
+                onNavigationClick(targetSectionId) {
+                    const targetSection = this.sections.find(s => s.id === targetSectionId);
+                    if (!targetSection) return;
+                    
+                    this.setCurrentSection(targetSection);
+                    
+                    setTimeout(() => {
+                        this.updateProgress();
+                    }, 500);
+                }
+                
+                destroy() {
+                    if (this.observer) {
+                        this.observer.disconnect();
+                    }
+                    
+                    if (this.scrollTimeout) {
+                        clearTimeout(this.scrollTimeout);
+                    }
+                }
+            }
+            
+            // 全域實例
+            let sectionProgressTracker = null;
+            
+            // 自動初始化
+            document.addEventListener('DOMContentLoaded', () => {
+                sectionProgressTracker = new SectionProgressTracker();
+            });
+            
+            // 暴露到全域
+            window.getSectionProgressTracker = () => sectionProgressTracker;
+        </script>
         
         <script>
         // 初始化 Locomotive Scroll
