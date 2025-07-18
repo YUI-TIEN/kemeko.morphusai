@@ -49,8 +49,8 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
         <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
         
         <!-- Section Progress Tracker -->
-        <script type="module">
-            // 創建一個內聯的 Section Progress Tracker
+        <script>
+            // Section Progress Tracker - 內聯版本
             class SectionProgressTracker {
                 constructor() {
                     this.sections = [];
@@ -188,40 +188,29 @@ const { title = "KEMEKO - 一場有溫度的未來對話" } = Astro.props;
                     const rect = element.getBoundingClientRect();
                     const windowHeight = window.innerHeight;
                     
-                    // 如果 section 完全在視窗上方，進度為 100%
                     if (rect.bottom < 0) return 100;
-                    // 如果 section 完全在視窗下方，進度為 0%
                     if (rect.top > windowHeight) return 0;
                     
-                    // 重新設計的進度計算邏輯 - 更平滑且不會跑太快
                     const sectionHeight = rect.height;
                     const viewportHeight = windowHeight;
-                    
-                    // 計算進度的關鍵點
                     const sectionTop = rect.top;
                     const sectionBottom = rect.bottom;
                     
                     let progress = 0;
                     
-                    // 階段1：section 進入視窗 (0% -> 30%)
                     if (sectionTop > 0) {
-                        // section 還沒完全進入視窗
                         const entryProgress = Math.max(0, (viewportHeight - sectionTop) / viewportHeight);
                         progress = entryProgress * 30;
                     }
-                    // 階段2：section 在視窗中滾動 (30% -> 85%)
                     else if (sectionBottom > viewportHeight * 0.5) {
-                        // section 主要內容在視窗中
                         const scrollDistance = Math.abs(sectionTop);
-                        const maxScrollForThisPhase = sectionHeight * 0.6; // 60% 的 section 高度
+                        const maxScrollForThisPhase = sectionHeight * 0.6;
                         const scrollProgress = Math.min(1, scrollDistance / maxScrollForThisPhase);
-                        progress = 30 + (scrollProgress * 55); // 30% + 55% = 85%
+                        progress = 30 + (scrollProgress * 55);
                     }
-                    // 階段3：section 即將離開視窗 (85% -> 100%)
                     else {
-                        // section 底部接近視窗底部
                         const exitProgress = Math.max(0, (viewportHeight * 0.5 - sectionBottom) / (viewportHeight * 0.5));
-                        progress = 85 + (exitProgress * 15); // 85% + 15% = 100%
+                        progress = 85 + (exitProgress * 15);
                     }
                     
                     return Math.max(0, Math.min(100, progress));

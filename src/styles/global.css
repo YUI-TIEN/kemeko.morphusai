@@ -51,7 +51,7 @@
     
     /* 導航專用 - 重構後的設計系統 */
     --nav-z-index: 1000;
-    --nav-blur: 15px;
+    --nav-blur: 10px;
     --nav-bg-alpha: 0.05;
     --nav-border-alpha: 0.4;
     --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
@@ -171,7 +171,7 @@ html {
 
 .features-title {
     font-size: 3rem;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     text-align: center;
     margin-bottom: 4rem;
     font-weight: bold;
@@ -408,9 +408,13 @@ html {
 
 .amount {
     font-size: 3.5rem;
-    color: var(--color-secondary);
+    color: var(--color-primary);
     font-weight: bold;
     line-height: 1;
+}
+
+.nav__link.purple-text {
+    color: var(--color-primary);
 }
 
 .pricing-features {
@@ -965,27 +969,18 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    background: transparent;
+    right: 0;
     z-index: var(--nav-z-index);
-    padding: var(--spacing-sm) 0;
-    transition: var(--transition-fast);
-    pointer-events: all;
-    transform: translateY(0);
-    opacity: 1;
-    will-change: transform, opacity;
+    padding: 1rem 0;
+    pointer-events: none;
 }
 
 /* 導航容器 */
 .header__nav {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 var(--spacing-lg);
-    height: 80px;
-    gap: 2rem;
+    pointer-events: auto;
 }
 
 /* 導航列表 */
@@ -995,6 +990,8 @@ body {
     gap: 0.5rem;
     align-items: center;
     height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 /* 導航項目 */
@@ -1006,6 +1003,8 @@ body {
     justify-content: center;
     transition: var(--transition-fast);
     border-radius: var(--nav-border-radius);
+    backdrop-filter: blur(var(--nav-blur));
+    -webkit-backdrop-filter: blur(var(--nav-blur));
     overflow: hidden; /* Clip the progress fill */
     transition: box-shadow 0.3s ease, transform 0.3s ease, z-index 0s; /* Add transition for shadow */
 }

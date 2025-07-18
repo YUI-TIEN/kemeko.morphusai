@@ -194,7 +194,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <!-- 她能做什麼？ - 突破卡片限制的全寬設計 -->
     <section class="section features-fullwidth" id="features">
         <div class="features-background">
-            <h2 class="section-title features-title">她的可能</h2>
+            <h2 class="features-title section-title">她的可能</h2>
             
             <div class="features-layout">
                 <div class="features-content" data-scroll data-scroll-speed="1">
@@ -315,344 +315,306 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </BaseLayout>
 
 <script>
-interface ArrowDiv extends HTMLDivElement {
-    centerX: number;
-    centerY: number;
-    currentAngle: number;
-}
-// 箭頭背景效果
+// 箭頭動畫 - 內聯版本
 document.addEventListener('DOMContentLoaded', function() {
-    const arrowSection = document.getElementById('arrow-section')!;
-    const arrowBackground = document.getElementById('arrow-background')!;
-    const finalQuote = document.querySelector('.final-quote') as HTMLElement;
-    
-    if (!arrowSection || !arrowBackground || !finalQuote) return;
-    
-    let arrows: ArrowDiv[] = [];
-    let isAnimating = false;
-    let isHoveringQuote = false;
-    let animationId: number | null = null;
-    let lastMouseX = 0;
-    let lastMouseY = 0;
-    let animationMode: 'idle' | 'mouse' = 'idle';
-    
-    // 正確處理角度環形性質的過渡系統
-    function smoothAngleTransition(currentAngle: number, targetAngle: number, maxStep: number = 12): number {
-        // 將 targetAngle 調整到與 currentAngle 接近的範圍
-        // 這樣可以避免跨越 0/360 度邊界時的跳變
-        let adjustedTargetAngle = targetAngle;
-        while (adjustedTargetAngle - currentAngle > 180) {
-            adjustedTargetAngle -= 360;
-        }
-        while (adjustedTargetAngle - currentAngle < -180) {
-            adjustedTargetAngle += 360;
-        }
-
-        // 計算兩個角度之間的差異
-        let angleDiff = adjustedTargetAngle - currentAngle;
-
-        // 如果差異很小，直接到達目標
-        if (Math.abs(angleDiff) <= maxStep) {
-            return adjustedTargetAngle; // 返回調整後的目標角度
-        }
-
-        // 按步長移動
-        const step = angleDiff > 0 ? maxStep : -maxStep;
-        return currentAngle + step;
-    }
-    
-    // 創建箭頭網格
-    function createArrows() {
-        const sectionRect = arrowSection.getBoundingClientRect();
-        const arrowSpacing = 200; // 箭頭間距 (數值越大，密度越低)
-        const cols = Math.ceil(sectionRect.width / arrowSpacing);
-        const rows = Math.ceil(sectionRect.height / arrowSpacing);
+        const arrowSection = document.getElementById('arrow-section');
+        const arrowBackground = document.getElementById('arrow-background');
+        const finalQuote = document.querySelector('.final-quote');
         
-        arrowBackground.innerHTML = ''; // 清空現有箭頭
-        arrows = []; // 重置箭頭陣列
+        if (!arrowSection || !arrowBackground || !finalQuote) return;
         
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                const arrow = document.createElement('div') as ArrowDiv;
-                arrow.className = 'arrow';
-                const x = col * arrowSpacing + arrowSpacing / 2;
-                const y = row * arrowSpacing + arrowSpacing / 2;
-                arrow.style.left = x + 'px';
-                arrow.style.top = y + 'px';
-                
-                // 存儲箭頭位置以提高性能
-                arrow.centerX = x + 45; // 箭頭中心X (90px / 2)
-                arrow.centerY = y + 45; // 箭頭中心Y (90px / 2)
-                arrow.currentAngle = 0; // 初始角度
-                
-                arrowBackground.appendChild(arrow);
-                arrows.push(arrow);
+        let arrows = [];
+        let isAnimating = false;
+        let isHoveringQuote = false;
+        let animationId = null;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let animationMode = 'idle';
+        
+        // 正確處理角度環形性質的過渡系統
+        function smoothAngleTransition(currentAngle, targetAngle, maxStep = 12) {
+            let adjustedTargetAngle = targetAngle;
+            while (adjustedTargetAngle - currentAngle > 180) {
+                adjustedTargetAngle -= 360;
+            }
+            while (adjustedTargetAngle - currentAngle < -180) {
+                adjustedTargetAngle += 360;
+            }
+
+            let angleDiff = adjustedTargetAngle - currentAngle;
+
+            if (Math.abs(angleDiff) <= maxStep) {
+                return adjustedTargetAngle;
+            }
+
+            const step = angleDiff > 0 ? maxStep : -maxStep;
+            return currentAngle + step;
+        }
+        
+        // 創建箭頭網格
+        function createArrows() {
+            const sectionRect = arrowSection.getBoundingClientRect();
+            const arrowSpacing = 200; // 箭頭間距
+            const cols = Math.ceil(sectionRect.width / arrowSpacing);
+            const rows = Math.ceil(sectionRect.height / arrowSpacing);
+            
+            arrowBackground.innerHTML = '';
+            arrows = [];
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'arrow';
+                    const x = col * arrowSpacing + arrowSpacing / 2;
+                    const y = row * arrowSpacing + arrowSpacing / 2;
+                    arrow.style.left = x + 'px';
+                    arrow.style.top = y + 'px';
+                    
+                    // 存儲箭頭位置以提高性能 (120px / 2 = 60px)
+                    arrow.centerX = x + 60;
+                    arrow.centerY = y + 60;
+                    arrow.currentAngle = 0;
+                    
+                    arrowBackground.appendChild(arrow);
+                    arrows.push(arrow);
+                }
             }
         }
-    }
-    
-    // 統一的動畫管理系統
-    function startAnimation() {
-        if (animationId) {
-            cancelAnimationFrame(animationId);
-        }
         
-        isAnimating = true;
-        
-        function animate() {
-            if (!isAnimating) return;
+        // 統一的動畫管理系統
+        function startAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
             
-            const sectionRect = arrowSection.getBoundingClientRect();
-            const sectionX = sectionRect.left;
-            const sectionY = sectionRect.top;
+            isAnimating = true;
             
-            let shouldContinue = false;
-            
-            arrows.forEach(arrow => {
-                let targetAngle: number;
-                let targetOpacity: number;
-                let targetScale: number = 1;
+            function animate() {
+                if (!isAnimating) return;
                 
-                if (animationMode === 'mouse') {
-                    // 鼠標跟隨模式
-                    const deltaX = lastMouseX - (sectionX + arrow.centerX);
-                    const deltaY = lastMouseY - (sectionY + arrow.centerY);
-                    targetAngle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                const sectionRect = arrowSection.getBoundingClientRect();
+                const sectionX = sectionRect.left;
+                const sectionY = sectionRect.top;
+                
+                let shouldContinue = false;
+                
+                arrows.forEach(arrow => {
+                    let targetAngle;
+                    let targetOpacity;
+                    let targetScale = 1;
                     
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    const maxDistance = 400;
-                    const minOpacity = 0.1;
-                    const maxOpacity = 0.6;
-                    
-                    // 基礎透明度計算
-                    let baseOpacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
-                    baseOpacity = Math.max(minOpacity, Math.min(maxOpacity, baseOpacity));
-                    
-                    // 如果hover在文字上，降低透明度
-                    targetOpacity = isHoveringQuote ? baseOpacity * 0 : baseOpacity;
-                    
-                    // 使用適中的步長，避免過度旋轉
-                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 10);
-                    
-                    // 檢查是否需要繼續動畫
-                    if (Math.abs(arrow.currentAngle - targetAngle) > 3) {
-                        shouldContinue = true;
+                    if (animationMode === 'mouse') {
+                        const deltaX = lastMouseX - (sectionX + arrow.centerX);
+                        const deltaY = lastMouseY - (sectionY + arrow.centerY);
+                        targetAngle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+                        
+                        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        const maxDistance = 400;
+                        const minOpacity = 0.1;
+                        const maxOpacity = 0.6;
+                        
+                        let baseOpacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
+                        baseOpacity = Math.max(minOpacity, Math.min(maxOpacity, baseOpacity));
+                        
+                        targetOpacity = isHoveringQuote ? baseOpacity * 0 : baseOpacity;
+                        
+                        arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 10);
+                        
+                        if (Math.abs(arrow.currentAngle - targetAngle) > 3) {
+                            shouldContinue = true;
+                        }
+                        
+                    } else {
+                        targetAngle = 0;
+                        targetOpacity = isHoveringQuote ? 0.05 : 0.2;
+                        arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 8);
                     }
                     
-                } else {
-                    // 空閒模式
-                    targetAngle = 0;
-                    targetOpacity = isHoveringQuote ? 0.05 : 0.2;
-                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 8);
-                }
+                    arrow.style.transform = `rotate(${arrow.currentAngle}deg) scale(${targetScale})`;
+                    arrow.style.opacity = targetOpacity.toString();
+                });
                 
-                arrow.style.transform = `rotate(${arrow.currentAngle}deg) scale(${targetScale})`;
-                arrow.style.opacity = targetOpacity.toString();
-            });
+                if (shouldContinue || animationMode === 'mouse' || isHoveringQuote) {
+                    animationId = requestAnimationFrame(animate);
+                } else {
+                    isAnimating = false;
+                    animationId = null;
+                }
+            }
             
-            if (shouldContinue || animationMode === 'mouse' || isHoveringQuote) {
-                animationId = requestAnimationFrame(animate);
-            } else {
-                isAnimating = false;
-                animationId = null;
+            animate();
+        }
+        
+        // 設置動畫模式
+        function setAnimationMode(mode) {
+            if (animationMode !== mode) {
+                animationMode = mode;
+                
+                if (!isAnimating) {
+                    startAnimation();
+                }
             }
         }
         
-        animate();
-    }
-    
-    // 設置動畫模式
-    function setAnimationMode(mode: 'idle' | 'mouse') {
-        if (animationMode !== mode) {
-            animationMode = mode;
+        // 鼠標移動處理
+        let lastMouseUpdateTime = 0;
+        function updateArrows(mouseX, mouseY) {
+            const now = Date.now();
+            if (now - lastMouseUpdateTime < 16) return;
+            lastMouseUpdateTime = now;
             
+            if (Math.abs(mouseX - lastMouseX) < 5 && Math.abs(mouseY - lastMouseY) < 5) return;
+            
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+            setAnimationMode('mouse');
+        }
+        
+        // 文字hover處理
+        function handleQuoteHover() {
             if (!isAnimating) {
                 startAnimation();
             }
         }
-    }
-    
-    // 鼠標移動處理（節流版本）
-    let lastMouseUpdateTime = 0;
-    function updateArrows(mouseX: number, mouseY: number): void {
-        const now = Date.now();
-        if (now - lastMouseUpdateTime < 16) return; // 限制為 60fps
-        lastMouseUpdateTime = now;
         
-        // 檢查鼠標是否有顯著移動
-        if (Math.abs(mouseX - lastMouseX) < 5 && Math.abs(mouseY - lastMouseY) < 5) return;
-        
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
-        setAnimationMode('mouse');
-    }
-    
-    // 文字hover處理
-    function handleQuoteHover(): void {
-        if (!isAnimating) {
-            startAnimation();
+        // 鼠標離開時重置箭頭
+        function handleMouseLeave() {
+            setAnimationMode('idle');
         }
-    }
-    
-    // 鼠標離開時重置箭頭
-    function handleMouseLeave() {
-        setAnimationMode('idle');
-    }
-    
-    // 初始化
-    setTimeout(createArrows, 100); // 等待 DOM 完全載入
-    
-    // 文字區域 hover 事件 - 箭頭淡出效果
-    finalQuote.addEventListener('mouseenter', function() {
-        isHoveringQuote = true;
-        handleQuoteHover();
-    });
-    
-    finalQuote.addEventListener('mouseleave', function() {
-        isHoveringQuote = false;
-        handleQuoteHover();
-    });
-    
-    // 鼠標移動事件處理器
-    function handleMouseMove(event: MouseEvent) {
-        updateArrows(event.clientX, event.clientY);
-    }
-    
-    // 添加事件監聽器
-    arrowSection.addEventListener('mousemove', handleMouseMove);
-    arrowSection.addEventListener('mouseleave', handleMouseLeave);
-    
-    // 視窗大小改變時重新創建箭頭
-    window.addEventListener('resize', function() {
+        
+        // 初始化
         setTimeout(createArrows, 100);
+        
+        // 事件監聽器
+        finalQuote.addEventListener('mouseenter', function() {
+            isHoveringQuote = true;
+            handleQuoteHover();
+        });
+        
+        finalQuote.addEventListener('mouseleave', function() {
+            isHoveringQuote = false;
+            handleQuoteHover();
+        });
+        
+        function handleMouseMove(event) {
+            updateArrows(event.clientX, event.clientY);
+        }
+        
+        arrowSection.addEventListener('mousemove', handleMouseMove);
+        arrowSection.addEventListener('mouseleave', handleMouseLeave);
+        
+        window.addEventListener('resize', function() {
+            setTimeout(createArrows, 100);
+        });
     });
-});
 </script>
 
-<!-- 移除 VTuber 選項切換功能 - 已優化為靜態展示 -->
-
 <script>
-// 亂碼打字機效果
+// 打字機效果 - 內聯版本
 document.addEventListener('DOMContentLoaded', function() {
-    const finalQuoteElement = document.querySelector('.final-quote');
-    
-    if (!finalQuoteElement) return;
-    
-    // 原始文字內容
-    const originalTexts = Array.from(finalQuoteElement.querySelectorAll('p')).map(p => (p.textContent ?? '').trim());
-    
-    // 初始化時清空所有文字
-    finalQuoteElement.querySelectorAll('p').forEach(p => p.textContent = '');
-    
-    // 亂碼字符集 - 僅使用 morphusai 字符
-    const glitchChars = 'morphusai';
-    
-    let isAnimating = false;
-    let hasTriggered = false;
-    
-    // 生成隨機字符
-    function getRandomChar() {
-        return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-    }
-    
-    // 打字機動畫 - 從空白開始逐字顯示
-    async function typewriterEffect(element: HTMLElement, targetText: string, delay = 50) {
-        return new Promise((resolve) => {
-            let currentIndex = 0;
-            const totalLength = targetText.length;
-            
-            // 從空白開始
-            element.textContent = '';
-            
-            const typeInterval = setInterval(() => {
-                if (currentIndex >= totalLength) {
-                    clearInterval(typeInterval);
-                    element.textContent = targetText; // 確保最終文字正確
-                    resolve(true);
-                    return;
-                }
-                
-                // 構建顯示文字
-                let displayText = '';
-                
-                // 已經確定的字符
-                for (let i = 0; i < currentIndex; i++) {
-                    displayText += targetText[i];
-                }
-                
-                // 當前正在顯示的字符 - 隨機切換幾次後確定
-                if (currentIndex < totalLength) {
-                    // 70% 機率顯示正確字符，30% 機率顯示亂碼
-                    if (Math.random() > 0.3) {
-                        displayText += targetText[currentIndex];
-                    } else {
-                        displayText += getRandomChar();
-                    }
-                }
-                
-                element.textContent = displayText;
-                currentIndex++;
-            }, delay);
-        });
-    }
-    
-    // 觸發動畫
-    async function triggerGlitchTypewriter() {
-        if (isAnimating || hasTriggered) return;
+        const finalQuoteElement = document.querySelector('.final-quote');
+        
         if (!finalQuoteElement) return;
         
-        isAnimating = true;
-        hasTriggered = true;
+        const originalTexts = Array.from(finalQuoteElement.querySelectorAll('p')).map(p => (p.textContent || '').trim());
         
-        const paragraphs = finalQuoteElement.querySelectorAll('p');
+        finalQuoteElement.querySelectorAll('p').forEach(p => p.textContent = '');
         
-        // 為每個段落依序執行打字機效果
-        for (let i = 0; i < paragraphs.length; i++) {
-            const paragraph = paragraphs[i];
-            const targetText = originalTexts[i];
-            
-            // 第一段落60ms，第二段落50ms - 加快速度
-            const speed = i === 0 ? 60 : 50;
-            
-            await typewriterEffect(paragraph, targetText, speed);
-            
-            // 段落間停頓縮短為300ms
-            if (i < paragraphs.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 300));
-            }
+        const glitchChars = 'morphusai';
+        
+        let isAnimating = false;
+        let hasTriggered = false;
+        
+        function getRandomChar() {
+            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
         }
         
-        isAnimating = false;
-    }
-    
-    // 使用 Intersection Observer 檢測滾動到目標區域
-    const observerOptions = {
-        threshold: 0.3, // 當30%的區域可見時觸發
-        rootMargin: '0px 0px -100px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !hasTriggered) {
-                // 延遲縮短為100ms，讓效果更即時
-                setTimeout(() => {
-                    triggerGlitchTypewriter();
-                }, 100);
+        async function typewriterEffect(element, targetText, delay = 50) {
+            return new Promise((resolve) => {
+                let currentIndex = 0;
+                const totalLength = targetText.length;
+                
+                element.textContent = '';
+                
+                const typeInterval = setInterval(() => {
+                    if (currentIndex >= totalLength) {
+                        clearInterval(typeInterval);
+                        element.textContent = targetText;
+                        resolve(true);
+                        return;
+                    }
+                    
+                    let displayText = '';
+                    
+                    for (let i = 0; i < currentIndex; i++) {
+                        displayText += targetText[i];
+                    }
+                    
+                    if (currentIndex < totalLength) {
+                        if (Math.random() > 0.3) {
+                            displayText += targetText[currentIndex];
+                        } else {
+                            displayText += getRandomChar();
+                        }
+                    }
+                    
+                    element.textContent = displayText;
+                    currentIndex++;
+                }, delay);
+            });
+        }
+        
+        async function triggerGlitchTypewriter() {
+            if (isAnimating || hasTriggered) return;
+            if (!finalQuoteElement) return;
+            
+            isAnimating = true;
+            hasTriggered = true;
+            
+            const paragraphs = finalQuoteElement.querySelectorAll('p');
+            
+            for (let i = 0; i < paragraphs.length; i++) {
+                const paragraph = paragraphs[i];
+                const targetText = originalTexts[i];
+                
+                if (!targetText) continue;
+                
+                const speed = i === 0 ? 60 : 50;
+                
+                await typewriterEffect(paragraph, targetText, speed);
+                
+                if (i < paragraphs.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
             }
-        });
-    }, observerOptions);
-    
-    // 開始觀察最終引言區域
-    observer.observe(finalQuoteElement);
-    
-    // 調試功能 - 可以手動觸發效果
-    if (window.location.hash === '#debug') {
-        window.triggerGlitchEffect = () => {
-            hasTriggered = false;
+            
             isAnimating = false;
-            triggerGlitchTypewriter();
+        }
+        
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
         };
-        console.log('🐛 調試模式：使用 triggerGlitchEffect() 手動觸發效果');
-    }
-});
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasTriggered) {
+                    setTimeout(() => {
+                        triggerGlitchTypewriter();
+                    }, 100);
+                }
+            });
+        }, observerOptions);
+        
+        observer.observe(finalQuoteElement);
+        
+        if (window.location.hash === '#debug') {
+            window.triggerGlitchEffect = () => {
+                hasTriggered = false;
+                isAnimating = false;
+                triggerGlitchTypewriter();
+            };
+            console.log('🐛 調試模式：使用 triggerGlitchEffect() 手動觸發效果');
+        }
+    });
 </script>
