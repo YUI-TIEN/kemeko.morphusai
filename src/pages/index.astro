@@ -21,9 +21,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="container">
         <!-- KEMEKO 是什麼？ -->
-        <section class="section" id="about">
+        <section class="section about-section" id="about">
             <div class="content-section fade-in text-center-content" data-scroll data-scroll-speed="1">
-                <h2 class="section-title">KEMEKO 是什麼？</h2>
+                <h2 class="section-title">關於 KEMEKO</h2>
                 <h3 class="section-subtitle">一場有溫度的未來對話</h3>
 
                 <div class="section-text">
@@ -37,74 +37,78 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <!-- 留白呼吸區塊 -->
         <section class="section breathing-section">
             <div class="highlight-box" data-scroll data-scroll-speed="1">
-                <p class="highlight-text">KEMEKO 是虛擬角色的實體化載體，是未來共演的起點。</p>
+                <p class="highlight-text">KEMEKO 是虛擬靈魂的實體容器，是未來共演的序章。</p>
             </div>
         </section>
 
         <!-- 為何她被創造？ -->
-        <section class="section why-section">
-            <h2 class="section-title" data-scroll data-scroll-speed="1">為何她被創造？</h2>
-            <h3 class="section-subtitle" data-scroll data-scroll-speed="1">在人與科技之間，種下一朵花</h3>
-            <div class="why-layout fade-in">
-                    <div class="why-content" data-scroll data-scroll-speed="1">
-                        <div class="section-text">
-                            <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
+        <section class="section why-section" id="why">
+            <div class="why-container" data-scroll data-scroll-speed="1">
+                <div class="why-header">
+                    <h2 class="section-title">創造之由</h2>
+                    <h3 class="section-subtitle">讓科技與人性之間開出一朵花</h3>
+                </div>
+                
+                <div class="why-content">
+                    <div class="why-intro">
+                        <p>在高度數位化卻日益孤獨的時代，KEMEKO 的誕生不是為了替代誰，而是為了成為你的心靈共鳴者。</p>
+                    </div>
+                    
+                    <div class="why-features">
+                        <div class="feature-card">
+                            <div class="feature-icon">👂</div>
+                            <h4 class="feature-title">傾聽你的話語</h4>
+                            <p class="feature-description">真正的傾聽者，理解你的每一個字</p>
                         </div>
-                        
-                        <div class="features-list">
-                            <div class="feature-item">
-                                <div class="feature-content">
-                                    <div class="feature-icon">👂</div>
-                                    <div class="feature-text">傾聽你的話語</div>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-content">
-                                    <div class="feature-icon">💝</div>
-                                    <div class="feature-text">感受你的情緒</div>
-                                </div>
-                            </div>
-                            <div class="feature-item">
-                                <div class="feature-content">
-                                    <div class="feature-icon">🌸</div>
-                                    <div class="feature-text">陪伴你的角色，活在你身邊</div>
-                                </div>
-                            </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">💝</div>
+                            <h4 class="feature-title">感受你的情緒</h4>
+                            <p class="feature-description">敏銳感知，與你情感同頻</p>
                         </div>
-                        
-                        <div class="section-text">
-                            <p>她不是冷冰冰的科技產品，她是一個能理解你的 AI 存在。</p>
+                        <div class="feature-card">
+                            <div class="feature-icon">🌸</div>
+                            <h4 class="feature-title">陪伴你的角色，活在你身邊</h4>
+                            <p class="feature-description">虛擬與現實的完美結合</p>
                         </div>
                     </div>
-                    <div class="why-visual" data-scroll data-scroll-speed="1">
-                        <div class="why-accent-graphic">
-                            <div class="accent-circle"></div>
-                            <div class="accent-line"></div>
-                            <div class="accent-dot"></div>
-                        </div>
+                    
+                    <div class="why-conclusion">
+                        <p>她不是冰冷的裝置，而是一份溫柔理解。</p>
                     </div>
                 </div>
+            </div>
         </section>
+    </div>
 
-        <!-- 全寬圖片展示 -->
-        <section class="full-width-image-section">
-            <img src="images/1DSC_5155.png" alt="KEMEKO 全寬展示圖 1" class="full-width-image">
-            <img src="images/5DSC_6336.png" alt="KEMEKO 全寬展示圖 2" class="full-width-image">
-            <img src="images/9DSC_6367.png" alt="KEMEKO 全寬展示圖 3" class="full-width-image">
-        </section>
+    <!-- 層疊圖片展示 - 獨立於 container 外 -->
+        <div class="image_cards_wrap">
+            <div class="image_cards_wrap__card">
+                <div class="image_cards_wrap__card-stick image1">
+                </div> 
+            </div>
+            <div class="image_cards_wrap__card">
+                <div class="image_cards_wrap__card-stick image2">
+                </div> 
+            </div>
+            <div class="image_cards_wrap__card">
+                <div class="image_cards_wrap__card-stick image3">
+                </div> 
+            </div>
+    </div>
 
+    <div class="container">
         <!-- AI Vtuber 的實體舞台與展示 -->
         <section class="section vtuber-demo-section" id="vtuber">
             <div class="vtuber-demo-container" data-scroll data-scroll-speed="1">
                 <div class="vtuber-demo-content fade-in">
                     <div class="centered-heading">
-                        <h2 class="section-title">AI Vtuber 的實體舞台</h2>
-                        <h3 class="section-subtitle">你曾想過，Vtuber 也能走到你面前嗎？</h3>
+                        <h2 class="section-title text-purple">Vtuber 的真實舞台</h2>
+                        <h3 class="section-subtitle">想像中的她，如今近在咫尺。</h3>
                     </div>
                     
                     <div class="vtuber-intro">
                         <div class="section-text">
-                            <p>KEMEKO 完整支援 AI 虛擬角色的實體化展演，見證虛擬與現實的完美融合。</p>
+                            <p>你曾想過，Vtuber 也能走到你面前嗎？</p>
                         </div>
                     </div>
                     
@@ -145,8 +149,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                     </div>
                     
                     <div class="vtuber-closing">
-                        <div class="section-text highlight-text">
-                            <p>這不只是一個展示，而是一場科技與藝術的完美融合。</p>
+                        <div class="section-text highlight-text text-purple">
+                            <p>這不只是一個展示，而是一場科技與藝術的交響盛宴。</p>
                         </div>
                     </div>
                 </div>
@@ -155,10 +159,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
     
     <!-- 藝術 × 靈魂 × 科技美學 - 獨立區塊，不使用container -->
-    <section class="art-section" id="art" data-scroll data-scroll-speed="1">
+    <section class="art-section" id="art">
         <div class="art-content fade-in">
-            <div class="art-text">
-                <h2 class="section-title">藝術 × 靈魂 × 科技美學</h2>
+            <div class="art-text" data-scroll data-scroll-speed="1">
+                <h2 class="section-title">靈魂科技 × 藝術美學</h2>
                 
                 <div class="section-text">
                     <p>KEMEKO 的外型靈感來自「鋼鐵新娘」，融合了神話、儀式與未來感。</p>
@@ -177,7 +181,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 </div>
                 
                 <div class="section-text">
-                    <p>她不只是功能性的載體，更是一種詩意的存在宣言。</p>
+                    <p>她，是一場詩意的存在宣言</p>
                 </div>
             </div>
             
@@ -185,15 +189,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
     </section>
     
-    <div class="container" data-scroll data-scroll-speed="1">
+    <div class="container">
     
     <!-- 她能做什麼？ - 突破卡片限制的全寬設計 -->
     <section class="section features-fullwidth" id="features">
         <div class="features-background">
-            <h2 class="section-title features-title">她能做什麼？</h2>
+            <h2 class="section-title features-title">她的可能</h2>
             
             <div class="features-layout">
-                <div class="features-content features-left">
+                <div class="features-content" data-scroll data-scroll-speed="1">
                     <div class="specs-table">
                         <div class="spec-row">
                             <div class="spec-name">語音辨識</div>
@@ -213,10 +217,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                         </div>
                     </div>
                 </div>
-                <div class="features-image">
+                <div class="features-image" data-scroll data-scroll-speed="1">
                     <img src="images/tech.png" alt="KEMEKO 機器" class="machine-image">
                 </div>
-                <div class="features-content features-right">
+                <div class="features-content" data-scroll data-scroll-speed="1">
                     <div class="specs-table">
                         <div class="spec-row">
                             <div class="spec-name">整合系統</div>
@@ -240,27 +244,57 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
     </section>
     
-    <div class="container" data-scroll data-scroll-speed="1">
+    <div class="container">
 
         <!-- 預購資訊 -->
-        <section class="section" id="pricing">
-            <div class="content-section fade-in">
-                <h2 class="section-title">預購資訊</h2>
+        <section class="section pricing-section" id="pricing">
+            <div class="pricing-container" data-scroll data-scroll-speed="1">
+                <div class="pricing-header">
+                    <h2 class="section-title">預購資訊</h2>
+                    <h3 class="section-subtitle">你的未來旅程，從此刻出發</h3>
+                </div>
                 
-                <div class="pricing-content">
-                    <div class="price-display">
-                        <div class="price-label">預售價格</div>
-                        <div class="price-amount">NTD 350,000</div>
+                <div class="pricing-layout" data-scroll data-scroll-speed="1">
+                    <div class="pricing-image">
+                        <div class="product-showcase">
+                            <img src="images/4DSC_6333.png" alt="KEMEKO 產品展示" class="product-image">
+                        </div>
                     </div>
                     
-                    <div class="price-includes">
-                        <p>含基本硬體、智慧模組與虛擬人格整合服務</p>
-                        <p>提供角色客製、語音風格訓練、動作同步等方案</p>
-                    </div>
-                    
-                    <div class="cta-buttons">
-                        <a href="#" class="cta-button cta-primary">立即預購</a>
-                        <a href="#contact" class="cta-button cta-secondary">聯絡我們</a>
+                    <div class="pricing-info">
+                        <div class="pricing-card">
+                            <div class="pricing-header-card">
+                                <div class="price-label">預售價格</div>
+                                <div class="price-amount">
+                                    <span class="currency">NTD</span>
+                                    <span class="amount">350,000</span>
+                                </div>
+                            </div>
+                            
+                            <div class="pricing-features">
+                                <div class="feature-item">
+                                    <div class="feature-icon">🎯</div>
+                                    <div class="feature-text">基本硬體與智慧模組</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">🤖</div>
+                                    <div class="feature-text">虛擬人格整合服務</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">✨</div>
+                                    <div class="feature-text">角色客製化與語音訓練</div>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon">🎭</div>
+                                    <div class="feature-text">動作同步技術支援</div>
+                                </div>
+                            </div>
+                            
+                            <div class="pricing-actions">
+                                <a href="#" class="cta-button cta-primary">立即預購</a>
+                                <a href="#contact" class="cta-button cta-secondary">了解更多</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -272,9 +306,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <section class="section arrow-section" id="arrow-section">
         <div class="arrow-background" id="arrow-background"></div>
         <div class="final-thought fade-in">
-            <div class="final-quote">
-                <p>KEMEKO 是否將成為數位靈魂的第一則神話？</p>
-                <p>未來不是幻想，而是等待你共創的真實現場。</p>
+            <div class="final-quote" data-scroll data-scroll-speed="1">
+                <p>她，是否是數位靈魂的第一則傳奇？</p>
+                <p>未來，不是遙遠夢想，而是你我共譜的現在。</p>
             </div>
         </div>
     </section>
@@ -300,45 +334,37 @@ document.addEventListener('DOMContentLoaded', function() {
     let animationId: number | null = null;
     let lastMouseX = 0;
     let lastMouseY = 0;
-    let animationMode: 'idle' | 'mouse' | 'quote' = 'idle';
+    let animationMode: 'idle' | 'mouse' = 'idle';
     
-    // 穩健的角度過渡系統
-    function smoothAngleTransition(currentAngle: number, targetAngle: number, maxStep: number = 8): number {
-        // 正規化角度到 -180 到 180 範圍
-        const normalizeAngle = (angle: number) => {
-            let normalized = angle % 360;
-            if (normalized > 180) normalized -= 360;
-            if (normalized < -180) normalized += 360;
-            return normalized;
-        };
-        
-        const current = normalizeAngle(currentAngle);
-        const target = normalizeAngle(targetAngle);
-        
-        // 計算最短路徑差異
-        let diff = target - current;
-        
-        // 確保選擇最短路徑
-        if (diff > 180) {
-            diff -= 360;
-        } else if (diff < -180) {
-            diff += 360;
+    // 正確處理角度環形性質的過渡系統
+    function smoothAngleTransition(currentAngle: number, targetAngle: number, maxStep: number = 12): number {
+        // 將 targetAngle 調整到與 currentAngle 接近的範圍
+        // 這樣可以避免跨越 0/360 度邊界時的跳變
+        let adjustedTargetAngle = targetAngle;
+        while (adjustedTargetAngle - currentAngle > 180) {
+            adjustedTargetAngle -= 360;
         }
-        
+        while (adjustedTargetAngle - currentAngle < -180) {
+            adjustedTargetAngle += 360;
+        }
+
+        // 計算兩個角度之間的差異
+        let angleDiff = adjustedTargetAngle - currentAngle;
+
         // 如果差異很小，直接到達目標
-        if (Math.abs(diff) <= maxStep) {
-            return target;
+        if (Math.abs(angleDiff) <= maxStep) {
+            return adjustedTargetAngle; // 返回調整後的目標角度
         }
-        
-        // 否則按步長移動
-        const step = diff > 0 ? maxStep : -maxStep;
-        return normalizeAngle(current + step);
+
+        // 按步長移動
+        const step = angleDiff > 0 ? maxStep : -maxStep;
+        return currentAngle + step;
     }
     
     // 創建箭頭網格
     function createArrows() {
         const sectionRect = arrowSection.getBoundingClientRect();
-        const arrowSpacing = 150; // 增加箭頭間距以降低密度和計算負擔
+        const arrowSpacing = 200; // 箭頭間距 (數值越大，密度越低)
         const cols = Math.ceil(sectionRect.width / arrowSpacing);
         const rows = Math.ceil(sectionRect.height / arrowSpacing);
         
@@ -355,8 +381,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 arrow.style.top = y + 'px';
                 
                 // 存儲箭頭位置以提高性能
-                arrow.centerX = x + 35; // 箭頭中心X (70px / 2)
-                arrow.centerY = y + 35; // 箭頭中心Y (70px / 2)
+                arrow.centerX = x + 45; // 箭頭中心X (90px / 2)
+                arrow.centerY = y + 45; // 箭頭中心Y (90px / 2)
                 arrow.currentAngle = 0; // 初始角度
                 
                 arrowBackground.appendChild(arrow);
@@ -387,40 +413,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let targetOpacity: number;
                 let targetScale: number = 1;
                 
-                if (animationMode === 'quote' && isHoveringQuote) {
-                    // 文字指向模式
-                    const quoteRect = finalQuote.getBoundingClientRect();
-                    const quoteCenterX = quoteRect.left + quoteRect.width / 2;
-                    const quoteCenterY = quoteRect.top + quoteRect.height / 2;
-                    
-                    const deltaX = quoteCenterX - (sectionX + arrow.centerX);
-                    const deltaY = quoteCenterY - (sectionY + arrow.centerY);
-                    targetAngle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-                    
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    const centerRadius = 450;
-                    const fadeWidth = 150;
-                    
-                    targetOpacity = 0.15;
-                    if (distance <= centerRadius) {
-                        const fadeStart = centerRadius - fadeWidth;
-                        if (distance >= fadeStart) {
-                            const fadeProgress = (centerRadius - distance) / fadeWidth;
-                            targetOpacity = 0.15 + (0.65 * fadeProgress);
-                            targetScale = 1 + (0.2 * fadeProgress);
-                        } else {
-                            targetOpacity = 0.8;
-                            targetScale = 1.2;
-                        }
-                    }
-                    
-                    const newAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 5);
-                    if (Math.abs(newAngle - targetAngle) > 1) {
-                        shouldContinue = true;
-                    }
-                    arrow.currentAngle = newAngle;
-                    
-                } else if (animationMode === 'mouse') {
+                if (animationMode === 'mouse') {
                     // 鼠標跟隨模式
                     const deltaX = lastMouseX - (sectionX + arrow.centerX);
                     const deltaY = lastMouseY - (sectionY + arrow.centerY);
@@ -431,15 +424,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     const minOpacity = 0.1;
                     const maxOpacity = 0.6;
                     
-                    targetOpacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
-                    targetOpacity = Math.max(minOpacity, Math.min(maxOpacity, targetOpacity));
+                    // 基礎透明度計算
+                    let baseOpacity = maxOpacity - (distance / maxDistance) * (maxOpacity - minOpacity);
+                    baseOpacity = Math.max(minOpacity, Math.min(maxOpacity, baseOpacity));
                     
-                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 12);
+                    // 如果hover在文字上，降低透明度
+                    targetOpacity = isHoveringQuote ? baseOpacity * 0 : baseOpacity;
+                    
+                    // 使用適中的步長，避免過度旋轉
+                    arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 10);
+                    
+                    // 檢查是否需要繼續動畫
+                    if (Math.abs(arrow.currentAngle - targetAngle) > 3) {
+                        shouldContinue = true;
+                    }
                     
                 } else {
                     // 空閒模式
                     targetAngle = 0;
-                    targetOpacity = 0.2;
+                    targetOpacity = isHoveringQuote ? 0.05 : 0.2;
                     arrow.currentAngle = smoothAngleTransition(arrow.currentAngle, targetAngle, 8);
                 }
                 
@@ -447,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 arrow.style.opacity = targetOpacity.toString();
             });
             
-            if (shouldContinue || animationMode === 'mouse') {
+            if (shouldContinue || animationMode === 'mouse' || isHoveringQuote) {
                 animationId = requestAnimationFrame(animate);
             } else {
                 isAnimating = false;
@@ -459,9 +462,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 設置動畫模式
-    function setAnimationMode(mode: 'idle' | 'mouse' | 'quote') {
+    function setAnimationMode(mode: 'idle' | 'mouse') {
         if (animationMode !== mode) {
             animationMode = mode;
+            
             if (!isAnimating) {
                 startAnimation();
             }
@@ -483,9 +487,11 @@ document.addEventListener('DOMContentLoaded', function() {
         setAnimationMode('mouse');
     }
     
-    // 文字指向處理
-    function pointToQuote(): void {
-        setAnimationMode('quote');
+    // 文字hover處理
+    function handleQuoteHover(): void {
+        if (!isAnimating) {
+            startAnimation();
+        }
     }
     
     // 鼠標離開時重置箭頭
@@ -496,15 +502,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化
     setTimeout(createArrows, 100); // 等待 DOM 完全載入
     
-    // 文字區域 hover 事件 - 昇華效果
+    // 文字區域 hover 事件 - 箭頭淡出效果
     finalQuote.addEventListener('mouseenter', function() {
         isHoveringQuote = true;
-        pointToQuote();
+        handleQuoteHover();
     });
     
     finalQuote.addEventListener('mouseleave', function() {
         isHoveringQuote = false;
-        handleMouseLeave();
+        handleQuoteHover();
     });
     
     // 鼠標移動事件處理器
